@@ -25,7 +25,7 @@ public:
 	
 	
 public:
-	SolverVEM2D(std::function<real(Point<2,real>&)> inputForceTerm):SolverVEM<2,2,Polygon<2,real>,Monomial2D<real>,real>::SolverVEM(inputForceTerm) {};
+	SolverVEM2D(std::function<real(const Point<2,real>&)> inputForceTerm):SolverVEM<2,2,Polygon<2,real>,Monomial2D<real>,real>::SolverVEM(inputForceTerm) {};
 	
 	virtual real computeKnownTerm(const shared_ptr<Polygon<2,real>>& element,const shared_ptr<MeshPoint<2,real>>& point);
 	
@@ -78,7 +78,12 @@ Matrix<real,3,Dynamic> SolverVEM2D<real>::computeB(const shared_ptr<Polygon<2,re
 
 template <typename real>
 real SolverVEM2D<real>::computeKnownTerm(const shared_ptr<Polygon<2,real>>& element,const shared_ptr<MeshPoint<2,real>>& point) {
-	real fValue=this->forceTerm(*element->point(0)); // calcola la f nel primo punto di ogni poliedro, credo che basti essendo piecewise constant
+	real fValue=this->forceTerm(element->getCentroid()); // calcola la f nel primo punto di ogni poliedro, credo che basti essendo piecewise constant
+	
+//	for (int i=0;i<element->numberOfPoints;i++) {
+//		fValue+=this->forceTerm(*element->point(i));
+//	}
+//	fValue/=element->numberOfPoints;
 	real vhCoefficient=1.0/(element->numberOfPoints); // e' il P0 di ogni vh, sempre lo stesso per ogni vh
 	real area=element->getArea(); // lo salva per non dovervi accedere per ogni punto
 	return area*vhCoefficient*fValue;

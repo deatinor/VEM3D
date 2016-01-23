@@ -23,17 +23,42 @@
 #include "SolverVEM3D.h"
 #include "SolverVEM2D.h"
 #include "Eigen/Dense"
+//#include "muParser.h"
+//#include "muParserBase.h"
+#include "/home/stefano/muparser-2.2.5/src/muParser.cpp"
+#include "/home/stefano/muparser-2.2.5/src/muParserBase.cpp"
+#include "/home/stefano/muparser-2.2.5/src/muParserBytecode.cpp"
+#include "/home/stefano/muparser-2.2.5/src/muParserCallback.cpp"
+#include "/home/stefano/muparser-2.2.5/src/muParserError.cpp"
+#include "/home/stefano/muparser-2.2.5/src/muParserTokenReader.cpp" 
+
+
+
+using namespace mu;
+
+// FUNZIONI MUPARSER
+template <typename real=double> 
+real forceTerm3D(const Point<3,real>& inputPoint) {
+	auto ro=inputPoint.norm();
+	auto x=inputPoint.x()
+
+}
+
 
 // FUNZIONI
 template <long embedded,typename real=double>
 real forceTermSphere(const Point<embedded,real>& inputPoint) {
 	auto ro=inputPoint.norm();
+		
 	
+
 //	return -2*exp(ro)/ro+5*exp(ro)+6*ro*exp(ro)+ro*ro*exp(ro);
 	
 	return 6;
 	
 }
+
+
 
 template <long embedded,typename real=double>
 real forceTermSquare(const Point<embedded,real>& inputPoint) {
@@ -41,10 +66,10 @@ real forceTermSquare(const Point<embedded,real>& inputPoint) {
 		auto x=inputPoint[0];
 		auto y=inputPoint[1];
 		
-//		if (abs(x)<1e-10) {
-//			return 0;
-//		}
-//		return pow(x, 3)/abs(x);
+		if (abs(x)<1e-10) {
+			return 0;
+		}
+		return pow(x, 3)/abs(x);
 		
 		
 		return M_PI*M_PI/2*cos(M_PI*x/2)*cos(M_PI*y/2);
@@ -95,10 +120,10 @@ real solutionSquare(const Point<embedded,real>& inputPoint) {
 		auto y=inputPoint[1];
 		
 		
-//		if (abs(x)<1e-10) {
-//			return 0;
-//		}
-//		return pow(x, 5)/abs(x);
+		if (abs(x)<1e-10) {
+			return 0;
+		}
+		return pow(x, 5)/abs(x);
 		
 		return cos(x*M_PI/2)*cos(y*M_PI/2);
 		
@@ -116,6 +141,161 @@ real solutionSquare(const Point<embedded,real>& inputPoint) {
 }
 
 int main(int argc, const char * argv[]) {
+	
+	
+	// PUNTI DI TEST
+//	
+//	auto p1=make_shared<MeshPoint<3>>(0,0,0);
+//	auto p2=make_shared<MeshPoint<3>>(2,0,0);
+//	auto p3=make_shared<MeshPoint<3>>(3,0,0);
+//	auto p4=make_shared<MeshPoint<3>>(1.5,3,0);
+//	auto p5=make_shared<MeshPoint<3>>(0,0,1);
+//	auto p6=make_shared<MeshPoint<3>>(1,0,1);
+//	auto p7=make_shared<MeshPoint<3>>(1,1,1);
+//	auto p8=make_shared<MeshPoint<3>>(0,1,1);
+//
+//
+//	
+//	
+//	clock_t startTime;
+//	double duration;
+//	startTime=clock();
+
+	
+	// TIPI DIVERSI DI MESH, LASCIARE SCOMMENTATA SOLO QUELLA CHE SI VUOLE, PER LAPLACE TUTTO UGUALE
+	
+//	Mesh3D<> mesh("/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Sphere3D/p_0_10.txt","/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Sphere3D/t_0_10.txt",TETRAHEDRON);
+//	Mesh3D<> mesh("/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh3/Mesh3/points.point","/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh3/Mesh3/connections.conn",ANYTHING3D);
+
+	
+//	Mesh3D<> mesh("/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Test/point0.txt","/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Test/conn0.txt",TETRAHEDRON);
+
+//	Mesh3D<> mesh("/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Test/point1.txt","/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Test/conn1.txt",ANYTHING3D);
+
+//	Mesh3D<> mesh("/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Test/point5.txt","/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Test/conn5.txt",ANYTHING3D);
+	
+//	mesh.writePoints();
+//	mesh.writeConnections();
+	
+	
+	
+	
+	
+//	duration = ( clock() - startTime ) / (double) CLOCKS_PER_SEC;
+//	cout<<"Completed: "<<duration<<endl<<endl;
+
+	// TEST SULLA MESH
+	
+//	auto& pointVector=mesh.pointVector;
+//	for (int i=0; i<pointVector.size(); i++) {
+////		if (pointVector[i]->isBoundary==true) {
+//		
+//			cout<<pointVector[i]->pointID<<"     "<<pointVector[i]->isBoundary<<endl;
+////		}
+//	}
+
+	// CREO UN POLIEDRO, ORA POSSO FARLO ANCHE USANDO UN .txt E CREANDO LA MESH
+	
+//	shared_ptr<Polygon<3>> pp1=make_shared_Polygon<3>(p1,p2,p3,p4);
+//	auto pp2=make_shared_Polygon<3>(p1,p2,p6,p5);
+//	auto pp3=make_shared_Polygon<3>(p2,p3,p7,p6);
+//	auto pp4=make_shared_Polygon<3>(p3,p4,p8,p7);
+//	auto pp5=make_shared_Polygon<3>(p4,p1,p5,p8);
+//	auto pp6=make_shared_Polygon<3>(p5,p6,p7,p8);
+////	cout<<"ok";
+//	auto pp7=make_shared_Polygon<3>(p1,p2,p3);
+//	auto pp8=make_shared_Polygon<3>(p1,p2,p4);
+//	auto pp9=make_shared_Polygon<3>(p1,p3,p4);
+//	auto pp10=make_shared_Polygon<3>(p2,p3,p4);
+
+
+
+//	auto poly=make_shared_Polyhedron<3>(pp1,pp2,pp3,pp4,pp5,pp6);
+	
+	
+//	auto poly2=make_shared_Polyhedron<3>(pp7,pp8,pp9,pp10);
+
+	
+	
+	
+	/// PROBLEMA SUL POLIEDRO CREATO
+	
+	//	Monomials<3, Polyhedron<3>> monomial(poly2);
+	//	auto G=problem.computeG(monomial);
+	////	cout<<"G"<<endl<<endl<<G<<endl<<endl;
+	//	auto D=problem.computeD(monomial);
+	////	cout<<"D"<<endl<<endl<<D<<endl<<endl;
+	//	auto B=problem.computeB(poly2, monomial);
+	////	cout<<"B"<<endl<<endl<<B<<endl<<endl;
+	//	auto PIStar=problem.computePIStar(G, B);
+	////	cout<<"PIStar"<<endl<<endl<<PIStar<<endl<<endl;
+	//	auto PI=problem.computePI(PIStar, D);
+	////	cout<<"PI"<<endl<<endl<<PI<<endl<<endl;
+	//	auto K=problem.computeK(G, PIStar, PI, poly2->diameter());
+	////	cout<<"K"<<endl<<endl<<K<<endl<<endl;
+	
+	//	cout<<"test"<<endl<<endl;
+	//	cout<<B*D<<endl<<endl;
+	
+	
+	// PROBLEM LAPLACE
+//	
+//	
+//	Laplace<3,Mesh3D<>,SolverVEM3D<>,Dirichlet3D<>> problem(mesh,forceTerm<3>,boundaryFunction<3>,1);
+//	problem();
+//	
+	
+//	cout<<problem.stiffnessMatrix;
+	
+//	problem.computeKnownTerm();
+	
+	
+	
+
+	
+//	problem();
+//	problem.displayError(realSolution<3>);
+	
+//	cout<<mesh;
+	
+	
+//	Mesh2D<> mesh2("/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Mesh2D/point2.txt","/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Mesh2D/conn2.txt",ANYTHING2D);
+//	Mesh2D<> mesh2("/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh3/Mesh3/points.point","/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh3/Mesh3/connections.conn",ANYTHING2D);
+
+
+//	cout<<mesh2;
+	
+//	mesh2.writePoints();
+//	mesh2.writeConnections();
+	
+//	Laplace<2, Mesh2D<>, SolverVEM2D<>, Dirichlet2D<>> problem2(mesh2,forceTerm2D<2,double>,boundaryFunction<2,double>,1);
+//	problem2();
+//	problem2.displayError(realSolution2D<2,double>);
+//	mesh.writeConnections();
+
+	// ANALISI FINALI
+//	auto& pointVector3=mesh2.pointVector;
+//	for (int i=0;i<pointVector3.size();i++) {
+//		cout<<*pointVector3[i];
+//		cout<<pointVector3[i]->pointID<<"   "<<pointVector3[i]->isBoundary<<endl<<endl<<endl;
+//	}
+//
+//	cout<<mesh.numberOfBoundaryPoints<<endl;
+
+
+//		SolverVEM3D<double> prova(forceTerm<3>);
+//	prova.computeLocalK(mesh.elementVector[0]);
+	
+//	MonomialsPolygon<double> monomial(pp1);
+	
+//	auto G=prova.computeGPolygon(monomial);
+//	cout<<"G: "<<endl<<G<<endl;
+	
+	
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	
 	
 	
 	
@@ -232,7 +412,7 @@ int main(int argc, const char * argv[]) {
 	auto forceTermSquare3D=forceTermSquare<3,double>;
 	auto forceTermSquare2D=forceTermSquare<2,double>;
 	auto solutionSphere3D=solutionSphere<3,double>;
-	auto solutionSphere2D=solutionSphere<2,double>;
+	auto solutionSphare2D=solutionSphere<2,double>;
 	auto solutionSquare3D=solutionSquare<3,double>;
 	auto solutionSquare2D=solutionSquare<2,double>;
 	
@@ -241,12 +421,20 @@ int main(int argc, const char * argv[]) {
 		if (meshType=="Mesh3D") {
 			
 			Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
+		
+//				auto& pointVector=newMesh.pointVector;
+//				for (int i=0; i<pointVector.size(); i++) {
+//			//		if (pointVector[i]->isBoundary==true) {
+//			
+//						cout<<pointVector[i]->pointID<<"     "<<pointVector[i]->isBoundary<<*pointVector[i]<<endl;
+//			//		}
+//				}
 
 			cout<<"mesh finita"<<endl;
 			
-			Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSquare3D,solutionSquare3D,1);
+			Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSphere3D,boundaryFunction<3>,1);
 			problem3();
-			problem3.displayError(solutionSquare3D);
+			problem3.displayError(solutionSphere3D);
 			
 			if (outputPoint!="") {
 				problem3.write(outputPoint,outputConnection,outputSolution);
@@ -294,7 +482,29 @@ int main(int argc, const char * argv[]) {
 	
 	
 	
+	
+	
+	
+//	const Point<3> ciao(1,1,1);
+//	const Point<3> ciao2(2,2,2);
+//	
+//	cout<<ciao[0]+ciao[1];
+	
+	
+	
+	
+	string stringa;
+	getline(cin,stringa);
+	cout<<stringa<<endl;
+	
+	
 
+	double fval=1;
+	using namespace mu;
+	Parser p;
+	p.DefineVar("a",&fval);
+	p.SetExpr("2*a+20");
+	cout<<p.Eval()<<endl<<endl;
 	
 	
 	

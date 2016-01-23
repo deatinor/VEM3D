@@ -22,10 +22,10 @@ using Monomial3D=Monomials<3,Polyhedron<3,real>,real>;
 template <long embedded,typename baseElement,typename MatrixType,typename real>
 class Solver {
 protected:
-	std::function<real(Point<embedded,real>&)> forceTerm;
+	std::function<real(const Point<embedded,real>&)> forceTerm;
 	
 public:
-	Solver(std::function<real(Point<embedded,real>&)> inputForceTerm):forceTerm(inputForceTerm) {};
+	Solver(std::function<real(const Point<embedded,real>&)> inputForceTerm):forceTerm(inputForceTerm) {};
 	
 	virtual MatrixType computeLocalK(const shared_ptr<baseElement>& element)=0;
 	
@@ -42,7 +42,7 @@ protected:
 	virtual Matrix<real,Dynamic,Dynamic> computePI(Matrix<real,elementDimension+1,Dynamic>&PIStar,Matrix<real,Dynamic,elementDimension+1>&D);
 	
 public:
-	SolverVEM(std::function<real(Point<embedded,real>&)> inputForceTerm):Solver<embedded,baseElement,Matrix<real, Dynamic, Dynamic>,real>::Solver(inputForceTerm) {};
+	SolverVEM(std::function<real(const Point<embedded,real>&)> inputForceTerm):Solver<embedded,baseElement,Matrix<real, Dynamic, Dynamic>,real>::Solver(inputForceTerm) {};
 	
 	virtual Matrix<real,Dynamic,Dynamic> computeLocalK(const shared_ptr<baseElement>& element);
 	virtual real computeKnownTerm(const shared_ptr<baseElement>& element,const shared_ptr<MeshPoint<embedded,real>>& point)=0;

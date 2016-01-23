@@ -487,10 +487,6 @@ template <long embedded,typename real>
 MeshPoint<embedded,real>::MeshPoint(const array<real,embedded>& inputArray):Point<embedded,real>(inputArray),pointID(0),value(0),isBoundary(0),polygonVector({}),polyhedronVector({}) {
 }
 
-//template <long embedded,typename real>
-//MeshPoint<embedded,real>::MeshPoint(const Point<embedded,real>& inputPoint):Point<embedded,real>(inputPoint),pointID(0),value(0),isBoundary(0),polygonVector({}),polyhedronVector({}) {
-//}
-
 
 
 ///////////////////////

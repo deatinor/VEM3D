@@ -25,7 +25,7 @@ public:
 	virtual Matrix<real,3,Dynamic> computePIStarPolygon(Matrix<real,3,3>&G,Matrix<real,3,Dynamic>&B);
 	
 public:
-	SolverVEM3D(std::function<real(Point<3,real>&)> inputForceTerm):SolverVEM<3,3,Polyhedron<3,real>,Monomial3D<real>,real>::SolverVEM(inputForceTerm) {};
+	SolverVEM3D(std::function<real(const Point<3,real>&)> inputForceTerm):SolverVEM<3,3,Polyhedron<3,real>,Monomial3D<real>,real>::SolverVEM(inputForceTerm) {};
 	
 	virtual real computeKnownTerm(const shared_ptr<Polyhedron<3,real>>& element,const shared_ptr<MeshPoint<3,real>>& point);
 	
@@ -36,7 +36,14 @@ public:
 template <typename real>
 real SolverVEM3D<real>::computeKnownTerm(const shared_ptr<Polyhedron<3,real>>& element,const shared_ptr<MeshPoint<3,real>>& point) {
 	
-	real fValue=this->forceTerm(*element->point(0)); // calcola la f nel primo punto di ogni poliedro, credo che basti essendo piecewise constant
+	real fValue=this->forceTerm(element->getCentroid()); // calcola la f nel primo punto di ogni poliedro, credo che basti essendo piecewise constant
+	
+//	for (int i=0;i<element->numberOfPoints;i++) {
+//		fValue+=this->forceTerm(*element->point(i));
+//	}
+	
+//	fValue/=element->numberOfPoints;
+	
 	real vhCoefficient=1.0/(element->numberOfPoints); // e' il P0 di ogni vh, sempre lo stesso per ogni vh
 	real volume=element->getVolume(); // lo salva per non dovervi accedere per ogni punto
 	

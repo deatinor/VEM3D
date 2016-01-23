@@ -56,14 +56,14 @@ public:
 	// PROPERTIES
 	long numberOfPoints;
 	
-protected:
+public:
 	// CONSTRUCTORS
-	Polygon(const vector<shared_ptr<MeshPoint<embedded,real>>>& vertexVector);
+	Polygon(const privateStruct &,const vector<shared_ptr<MeshPoint<embedded,real>>>& vertexVector);
 //	Polygon(const Polygon<embedded,real>& inputPolygon);
-	Polygon():pointVector({}),numberOfPoints(0),polyhedronVector({}),isBoundary(false),area(0){};
+	Polygon(const privateStruct&):pointVector({}),numberOfPoints(0),polyhedronVector({}),isBoundary(false),area(0){};
 	//costruttore con variadic template: http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
 	template <typename... Args>
-	Polygon(Args... arguments):pointVector{arguments...},polyhedronVector({}),area(0),isBoundary(false) {
+	Polygon(const privateStruct&,Args... arguments):pointVector{arguments...},polyhedronVector({}),area(0),isBoundary(false) {
 		if (sizeof...(Args)<3) {
 			cout<<endl<<endl<<"Minimum 3 points required"<<endl<<endl;
 		}
@@ -73,7 +73,7 @@ protected:
 public:
 	template <typename... Args>
 	static shared_ptr<Polygon<embedded,real>> make_shared_Polygon(Args... arguments) {
-		shared_ptr<Polygon<embedded,real>> polygon=make_shared<Polygon<embedded,real>>(arguments...);
+		shared_ptr<Polygon<embedded,real>> polygon=make_shared<Polygon<embedded,real>>(privateStruct{},arguments...);
 		polygon->initialize();
 		return polygon;
 	}
@@ -144,7 +144,7 @@ public:
 //////////////////
 			
 template <long embedded, typename real>
-Polygon<embedded,real>::Polygon(const vector<shared_ptr<MeshPoint<embedded,real>>>& vertexVector):pointVector(vertexVector),polyhedronVector({}),isBoundary(false) {
+Polygon<embedded,real>::Polygon(const privateStruct&,const vector<shared_ptr<MeshPoint<embedded,real>>>& vertexVector):pointVector(vertexVector),polyhedronVector({}),isBoundary(false) {
 	numberOfPoints=(long)pointVector.size();
 }
 

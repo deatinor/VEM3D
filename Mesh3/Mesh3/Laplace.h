@@ -103,11 +103,15 @@ void Problem<embedded,MeshType,real>::operator()() {
 
 }
 
-// showError
+// displayError
 template <long embedded,typename MeshType,typename real>
 void Problem<embedded,MeshType,real>::displayError(std::function<real(Point<embedded,real>&)> realSolutionFunction) {
 	Error<embedded,real> error(solution,mesh.getPointVector(),realSolutionFunction,stiffnessMatrix);
+	
+	cout<<"prima"<<endl;
 	error.displayError();
+	
+	cout<<"dopo"<<endl;
 }
 
 // write
@@ -154,7 +158,7 @@ public:
 	SolverType solver;
 	
 	// CONSTRUCTORS
-	Laplace(const MeshType& inputMesh,std::function<real(Point<embedded,real>&)> inputForceTerm,std::function<real(Point<embedded,real>&)> inputBoundaryFunction,real inputDiffusionCoeff=1):Problem<embedded,MeshType,real>(inputMesh,inputDiffusionCoeff),numberOfElements(inputMesh.numberOfElements),tripletList({}),boundaryCondition(inputMesh,inputBoundaryFunction),solver(inputForceTerm) {}
+	Laplace(const MeshType& inputMesh,std::function<real(const Point<embedded,real>&)> inputForceTerm,std::function<real(const Point<embedded,real>&)> inputBoundaryFunction,real inputDiffusionCoeff=1):Problem<embedded,MeshType,real>(inputMesh,inputDiffusionCoeff),numberOfElements(inputMesh.numberOfElements),tripletList({}),boundaryCondition(inputMesh,inputBoundaryFunction),solver(inputForceTerm) {}
 	
 	// STANDARD METHODS
 	void computeStiffnessMatrix(); // fatta, da controllare

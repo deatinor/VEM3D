@@ -161,7 +161,7 @@ void Mesh3D<real>::setAnything3DMesh(string connection) {
 			facesVector.push_back(face);
 		}
 		
-		auto polyhedron=make_shared_Polyhedron<3,real>(facesVector);
+		auto polyhedron=Polyhedron<3,real>::make_shared_Polyhedron(facesVector);
 		this->elementVector.push_back(polyhedron);
 		
 		
@@ -265,7 +265,7 @@ void Mesh3D<real>::setTetrahedronMesh(string connection) {
 		
 		
 		counter++;
-		auto polyhedron=make_shared_Polyhedron<3,real>(poly1,poly2,poly3,poly4);
+		auto polyhedron=Polyhedron<3,real>::make_shared_Polyhedron(poly1,poly2,poly3,poly4);
 		
 		
 		this->elementVector.push_back(polyhedron);

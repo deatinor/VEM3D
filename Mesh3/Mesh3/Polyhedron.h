@@ -11,12 +11,12 @@
 
 #include <algorithm>
 
-template <long embedded,typename real=double,typename ...Args>
-shared_ptr<Polyhedron<embedded, real>> make_shared_Polyhedron(Args... arguments) {
-	auto polyhedron=make_shared<Polyhedron<embedded,real>>(arguments...);
-	polyhedron->initialize();
-	return polyhedron;
-}
+//template <long embedded,typename real=double,typename ...Args>
+//shared_ptr<Polyhedron<embedded, real>> make_shared_Polyhedron(Args... arguments) {
+//	auto polyhedron=make_shared<Polyhedron<embedded,real>>(arguments...);
+//	polyhedron->initialize();
+//	return polyhedron;
+//}
 
 //template <long embedded,typename real=double,typename ...Args>
 //Polyhedron<embedded, real> make_Polyhedron(Args... arguments) {
@@ -27,6 +27,9 @@ shared_ptr<Polyhedron<embedded, real>> make_shared_Polyhedron(Args... arguments)
 
 template <long embedded, typename real=double>
 class Polyhedron: public enable_shared_from_this<Polyhedron<embedded,real>> {
+private:
+	struct privateStruct {};
+
 protected:
 	// PROPERTIES
 	vector<shared_ptr<Polygon<embedded,real>>> polygonVector;
@@ -44,19 +47,26 @@ public:
 	long numberOfPolygons;
 	
 	// CONSTRUCTORS
-	Polyhedron(const vector<shared_ptr<Polygon<embedded,real>>>& inputPolygonVector):polygonVector(inputPolygonVector),numberOfPolygons(inputPolygonVector.size()),isBoundary(false),pointVector({}),volume(0) {
+	Polyhedron(const privateStruct&,const vector<shared_ptr<Polygon<embedded,real>>>& inputPolygonVector):polygonVector(inputPolygonVector),numberOfPolygons(inputPolygonVector.size()),isBoundary(false),pointVector({}),volume(0) {
 	};
 //	Polyhedron(const Polyhedron<embedded,real>& inputPolyhedron):polygonVector(inputPolyhedron.polygonVector),numberOfPolygons(inputPolyhedron.numberOfPolygons),pointVector(inputPolyhedron.pointVector),isBoundary(inputPolyhedron.isBoundary),volume(0) {
 //	};
-	Polyhedron():polygonVector({}),numberOfPolygons(0),isBoundary(false),pointVector({}),volume(0){};
+	Polyhedron(const privateStruct&):polygonVector({}),numberOfPolygons(0),isBoundary(false),pointVector({}),volume(0){};
 	//costruttore con variadic template: http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
 	template <typename... Args>
-	Polyhedron(Args... arguments):polygonVector{arguments...},pointVector({}),volume(0),isBoundary(false) {
+	Polyhedron(const privateStruct&,Args... arguments):polygonVector{arguments...},pointVector({}),volume(0),isBoundary(false) {
 		if (sizeof...(Args)<4) {
 			cout<<endl<<endl<<"Minimum 4 polygons required"<<endl<<endl;
 		}
 		numberOfPolygons=sizeof...(Args);
 	};
+	
+	template <typename ...Args>
+	static shared_ptr<Polyhedron<embedded, real>> make_shared_Polyhedron(Args... arguments) {
+		auto polyhedron=make_shared<Polyhedron<embedded,real>>(privateStruct{},arguments...);
+		polyhedron->initialize();
+		return polyhedron;
+	}
 	
 	// STANDARD METHODS
 	void addPolygon(shared_ptr<Polygon<embedded,real>>& inputPolygon);

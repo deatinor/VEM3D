@@ -52,7 +52,7 @@ public:
 template <typename real>
 template <typename... Args>
 shared_ptr<Polygon<2,real>> Mesh2D<real>::newPolygon(Args ...arguments) {
-	auto newPolygon=make_shared_Polygon<2,real>(arguments...);
+	auto newPolygon=Polygon<2,real>::make_shared_Polygon(arguments...);
 	return newPolygon;
 	
 //	auto& point1=*newPolygon->pointVector[0];
@@ -138,7 +138,7 @@ void Mesh2D<real>::setAnything2DMesh(string connection) {
 		}
 			
 		// creo la faccia
-		auto polygon=make_shared_Polygon<2,real>(vertexPointerVector);
+		auto polygon=Polygon<2,real>::make_shared_Polygon(vertexPointerVector);
 		
 		//			cout<<face->isBoundary;
 		//			cout<<*face;
