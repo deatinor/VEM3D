@@ -6,8 +6,10 @@
 !*.*
 ###########################################################
 
-# Ignore */build directories and their content
+# Ignore */build directories and Mesh and their content
 build/
+Mesh/
+Mesh3.xcodeproj/ 
 
 # Do not ignore Makefiles
 !Makefile
