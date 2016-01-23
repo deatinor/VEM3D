@@ -23,8 +23,8 @@ class Point:
 		return output
 		
 
-file="/Users/stefano/Dropbox/Programmazione/PACS/ProgettoGithub/Mesh/Cube/CubeWithoutPart/point-1.txt"
-connection="/Users/stefano/Dropbox/Programmazione/PACS/ProgettoGithub/Mesh/Cube/CubeWithoutPart/conn-1.txt"
+file="/Users/stefano/Dropbox/Programmazione/PACS/ProgettoGithub/Mesh/Cube/CubeWithoutPart/point-4.txt"
+connection="/Users/stefano/Dropbox/Programmazione/PACS/ProgettoGithub/Mesh/Cube/CubeWithoutPart/conn-4.txt"
 
 
 f=open(file)
@@ -49,6 +49,8 @@ connections=[]
 
 content=f.read().splitlines()
 line=content[0]
+
+print content
 
 line=line.split(';')
 	
@@ -83,19 +85,33 @@ print len(points)
 
 j=0
 
-for face in connections:
+print 0
+
+for i in content:
+	line=i
+
+
+	line=line.split(';')
 	
+	print line
 	
-	print i
-	
-	for j in range(len(face)):
+	connections=[]
+	for j in line:
+		poly=j.split(',')
+		poly=[int(k) for k in poly]
+		connections.append(poly)
+
+
+	for face in connections:
+			
+		for j in range(len(face)):
 
 		
-		x=[points[face[j]-1].x, points[face[(j+1)%len(face)]-1].x]
-		y=[points[face[j]-1].y, points[face[(j+1)%len(face)]-1].y]
-		z=[points[face[j]-1].z, points[face[(j+1)%len(face)]-1].z]
+			x=[points[face[j]-1].x, points[face[(j+1)%len(face)]-1].x]
+			y=[points[face[j]-1].y, points[face[(j+1)%len(face)]-1].y]
+			z=[points[face[j]-1].z, points[face[(j+1)%len(face)]-1].z]
 
-		ax.plot(x,y,z,'r')
+			ax.plot(x,y,z,'r')
 
 	
 

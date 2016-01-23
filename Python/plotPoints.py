@@ -23,7 +23,7 @@ class Point:
 		return output
 		
 
-file="/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Test/dodecaedro.txt"
+file="point-2.txt"
 # connection="/Users/stefano/Dropbox/Condivise/Ste-Nico/Progetto/Mesh/Test/dodecaedro.txt"
 
 
