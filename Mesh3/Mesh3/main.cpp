@@ -213,20 +213,12 @@ int main(int argc, const char * argv[]) {
 		if (meshType=="Mesh3D") {
 			
 			Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
-		
-//				auto& pointVector=newMesh.pointVector;
-//				for (int i=0; i<pointVector.size(); i++) {
-//			//		if (pointVector[i]->isBoundary==true) {
-//			
-//						cout<<pointVector[i]->pointID<<"     "<<pointVector[i]->isBoundary<<*pointVector[i]<<endl;
-//			//		}
-//				}
 
 			cout<<"mesh finita"<<endl;
 			
-			Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSphere3D,boundaryFunction<3>,1);
+			Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSquare3D,solutionSquare3D,1);
 			problem3();
-			problem3.displayError(solutionSphere3D);
+			problem3.displayError(solutionSquare3D);
 			
 			if (outputPoint!="") {
 				problem3.write(outputPoint,outputConnection,outputSolution);
