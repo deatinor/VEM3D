@@ -1,0 +1,277 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7B25E95C1B6CE841000334E2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B25E95B1B6CE841000334E2 /* main.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7B25E9561B6CE841000334E2 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		7B25E9581B6CE841000334E2 /* Mesh3 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Mesh3; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B25E95B1B6CE841000334E2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		7B25E9621B6CE86B000334E2 /* Point.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Point.h; sourceTree = "<group>"; };
+		7B25E9631B6CE86B000334E2 /* Polygon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Polygon.h; sourceTree = "<group>"; };
+		7B25E9641B6CE86B000334E2 /* Polyhedron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Polyhedron.h; sourceTree = "<group>"; };
+		7B25E9651B6CE86B000334E2 /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
+		7B3C9DE31B73F7B6000A8DF7 /* Monomials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Monomials.h; sourceTree = "<group>"; };
+		7B52044F1B7B48F1001D4B48 /* Laplace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Laplace.h; sourceTree = "<group>"; };
+		7B5204501B808FD1001D4B48 /* Solver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Solver.h; sourceTree = "<group>"; };
+		7BBA40371B80DCDC0065C2B5 /* BoundaryCondition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BoundaryCondition.h; sourceTree = "<group>"; };
+		7BBA40381B81F5D40065C2B5 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
+		7BBA40391B8223380065C2B5 /* Mesh2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh2D.h; sourceTree = "<group>"; };
+		7BBA403A1B823B530065C2B5 /* Mesh3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh3D.h; sourceTree = "<group>"; };
+		7BBA403B1B827BEF0065C2B5 /* SolverVEM3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SolverVEM3D.h; sourceTree = "<group>"; };
+		7BBA403C1B827C400065C2B5 /* SolverVEM2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SolverVEM2D.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7B25E9551B6CE841000334E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7B25E94F1B6CE841000334E2 = {
+			isa = PBXGroup;
+			children = (
+				7B25E95A1B6CE841000334E2 /* Mesh3 */,
+				7B25E9591B6CE841000334E2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7B25E9591B6CE841000334E2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7B25E9581B6CE841000334E2 /* Mesh3 */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7B25E95A1B6CE841000334E2 /* Mesh3 */ = {
+			isa = PBXGroup;
+			children = (
+				7B25E95B1B6CE841000334E2 /* main.cpp */,
+				7B25E9621B6CE86B000334E2 /* Point.h */,
+				7B25E9631B6CE86B000334E2 /* Polygon.h */,
+				7B25E9641B6CE86B000334E2 /* Polyhedron.h */,
+				7B25E9651B6CE86B000334E2 /* Mesh.h */,
+				7BBA40391B8223380065C2B5 /* Mesh2D.h */,
+				7BBA403A1B823B530065C2B5 /* Mesh3D.h */,
+				7B3C9DE31B73F7B6000A8DF7 /* Monomials.h */,
+				7B52044F1B7B48F1001D4B48 /* Laplace.h */,
+				7B5204501B808FD1001D4B48 /* Solver.h */,
+				7BBA403C1B827C400065C2B5 /* SolverVEM2D.h */,
+				7BBA403B1B827BEF0065C2B5 /* SolverVEM3D.h */,
+				7BBA40371B80DCDC0065C2B5 /* BoundaryCondition.h */,
+				7BBA40381B81F5D40065C2B5 /* Error.h */,
+			);
+			path = Mesh3;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7B25E9571B6CE841000334E2 /* Mesh3 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B25E95F1B6CE841000334E2 /* Build configuration list for PBXNativeTarget "Mesh3" */;
+			buildPhases = (
+				7B25E9541B6CE841000334E2 /* Sources */,
+				7B25E9551B6CE841000334E2 /* Frameworks */,
+				7B25E9561B6CE841000334E2 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Mesh3;
+			productName = Mesh3;
+			productReference = 7B25E9581B6CE841000334E2 /* Mesh3 */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7B25E9501B6CE841000334E2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = Stefano;
+				TargetAttributes = {
+					7B25E9571B6CE841000334E2 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+				};
+			};
+			buildConfigurationList = 7B25E9531B6CE841000334E2 /* Build configuration list for PBXProject "Mesh3" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7B25E94F1B6CE841000334E2;
+			productRefGroup = 7B25E9591B6CE841000334E2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7B25E9571B6CE841000334E2 /* Mesh3 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7B25E9541B6CE841000334E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B25E95C1B6CE841000334E2 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7B25E95D1B6CE841000334E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		7B25E95E1B6CE841000334E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		7B25E9601B6CE841000334E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"OTHER_CPLUSPLUSFLAGS[arch=*]" = (
+					"-I",
+					/usr/local/bin/,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7B25E9611B6CE841000334E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"OTHER_CPLUSPLUSFLAGS[arch=*]" = (
+					"-I",
+					/usr/local/bin/,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7B25E9531B6CE841000334E2 /* Build configuration list for PBXProject "Mesh3" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B25E95D1B6CE841000334E2 /* Debug */,
+				7B25E95E1B6CE841000334E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B25E95F1B6CE841000334E2 /* Build configuration list for PBXNativeTarget "Mesh3" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B25E9601B6CE841000334E2 /* Debug */,
+				7B25E9611B6CE841000334E2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7B25E9501B6CE841000334E2 /* Project object */;
+}

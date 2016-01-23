@@ -1,0 +1,35 @@
+# Ignore all files without extension (Ignore all except
+# those containing a dot or between slashes)
+# THIS PART MUST REMAIN AT THE BEGINNING OF .gitignore!
+*
+!/**/
+!*.*
+###########################################################
+
+# Ignore */build directories and their content
+build/
+
+# Do not ignore Makefiles
+!Makefile
+
+# Ignore all .wbproj files
+*.wbproj
+
+# Ignore all temporary files
+*~
+
+# Ignore all DS_Store (for mac)
+*.DS_Store
+
+# Ignore LaTeX stuff
+*.pdf
+*.log
+*.aux
+*.gz
+
+# Ignore all txt and same files
+*.txt
+*.point
+*.conn
+*.out
+
