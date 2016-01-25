@@ -1,8 +1,3 @@
-// GUIDA
-
-// Classe Point
-// Memorizza la posizione del punto, la soluzione calcolata in esso.
-
 
 #ifndef Point_h
 #define Point_h
@@ -37,24 +32,40 @@ class Mesh3D;
 template <typename real>
 class Mesh2D;
 
+/*! \brief Class to store the position of a point.
+ *
+ *	Virtually any dimensions allowed. Some methods are available only for d=2 or d=3.
+ *	Any vector can be seen as a point.
+ *  Some appropriate typedef (Vector2D, Vector3D, Vector<embedded>, Vector<embedded,real>) are implemented.
+ *
+ */
+
 template <long embedded,typename real=double>
 class Point {
 	
 protected:
 	// PROPERTIES
-	array<real,embedded> coordinates;
+	array<real,embedded> coordinates; //!< It stores the coordinates of the point
 		
 public:
 	// CONSTRUCTORS
-	Point(const array<real,embedded>& inputArray);
-	Point(const Point<embedded,real>& inputPoint);
-	Point(const MeshPoint<embedded,real>& inputPoint);
+	Point(const array<real,embedded>& inputArray);	//!< Constructor from std::array
+	Point(const Point<embedded,real>& inputPoint);	//!< Copy constructor
+	Point(const MeshPoint<embedded,real>& inputPoint);	//!< Copy constructor from MeshPoint
+	
+	/** Empty constructor
+	 */
 	Point():coordinates({}) {
 		for (int i=0; i<embedded; i++) {
 			coordinates[i]=0;
 		}
 	};
-	//constructor with variadic template: http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
+	
+	/** Constructor with variadic template
+	 *
+	 *  Source:
+	 *  http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
+	 */
 	template <typename... Args>
 	Point(Args... arguments):coordinates{static_cast<real>(arguments)...} {
 		static_assert(sizeof...(Args)==embedded,"wrong number of input paramethers");
@@ -62,49 +73,74 @@ public:
 	
 	
 	// STANDARD METHOS
-	long maxIndex() const;
-	long maxAbsIndex() const;
-	real norm() const;  // L2 norm of the vector
-	real normL1() const; // L1 norm of the vector
+	long maxIndex() const;	//!< Maximum index of the point
+	long maxAbsIndex() const;	//!< Maximum index of the point with absolute value
+	real norm() const;  //!< L2 norm of the vector
+	real normL1() const; //!< L1 norm of the vector
+	/** Output to string
+	 *
+	 *	\return std::string representing the Point
+	 *
+	 */
 	string write() const;
 	
-	real& x();
-	real x() const;
-	real& y();
-	real y() const;
-	real& z();
-	real z() const;
+	real& x();	//!< Get the first element by reference
+	real x() const; //!< Get the first element by value
+	real& y();	//!< Get the second element by reference
+	real y() const; //!< Get the second element by value
+	real& z();	//!< Get the third element by reference
+	real z() const;	//!< Get the third element by value
 	
 	
 	// OPERATORS
-	Point<embedded,real>& operator=(Point<embedded,real> inputPoint); // be careful, it copies only the coordinates, not the other things
-	bool operator==(const Point<embedded,real>& inputPoint) const; // It compares only coordinates
+	/** Equal operator
+	 *
+	 * Be careful, it copies only the coordinates, not the other things
+	 */
+	Point<embedded,real>& operator=(Point<embedded,real> inputPoint);
+	/** Check if they are equals
+	 *
+	 * It compares only coordinates
+	 */
+	bool operator==(const Point<embedded,real>& inputPoint) const;
+	/** Check if they are different
+	 *
+	 * It compares only coordinates
+	 */
 	bool operator!=(const Point<embedded,real>& inputPoint) const; // It compares only coordinates
-	real& operator[](long index);
-	real operator[](long index) const;
+	real& operator[](long index);	//!< Get an element by reference
+	real operator[](long index) const;	//!< Get an element by value
 
 	
 	
 	// EXTERNAL METHODS
-	// Operators mainly. They work in the usual way
 	template<long embedded2,typename real2>
-	friend ostream& operator<<(ostream& os,const Point<embedded2,real2>&point);
+	friend ostream& operator<<(ostream& os,const Point<embedded2,real2>&point); //!< Output operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator+(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2);
+	friend Point<embedded2,real2> operator+(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2); //!< Sum operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator-(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2);
+	friend Point<embedded2,real2> operator-(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2); //!< Difference operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator-(const Point<embedded2,real2>& point1);
+	friend Point<embedded2,real2> operator-(const Point<embedded2,real2>& point1); //!< Difference operator
 	template <long embedded2,typename real2>
-	friend real2 operator*(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2);
+	friend real2 operator*(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2); //!< Product operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator*(long double coefficient,const Point<embedded2,real2>& point);
+	friend Point<embedded2,real2> operator*(long double coefficient,const Point<embedded2,real2>& point); //!< Product operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator*(const Point<embedded2,real2>& point,long double coefficient);
+	friend Point<embedded2,real2> operator*(const Point<embedded2,real2>& point,long double coefficient); //!< Product operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator/(const Point<embedded2,real2>& point,long double coefficient);
+	friend Point<embedded2,real2> operator/(const Point<embedded2,real2>& point,long double coefficient); //!< Dividing operator
 	template <long embedded2,typename real2>
+	/** Cross product of 2 vector
+	 *
+	 * \return The resulting vector of the cross product
+	 * Here Point is intended as Vector.
+	 * Cross product keeping sign into consideration
+	 */
 	friend Point<embedded2,real2> cross(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2);
+	/** Product term by term
+	 *	\return A point with component i being the product of the i components of the 2 vectors
+	 */
 	template <long embedded2,typename real2>
 	friend Point<embedded2,real2> prodTermByTerm(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2);
 
@@ -403,7 +439,6 @@ using PointLong3D=Point<3,long double>;
 // A Point can be seen as a vector (for example this is useful for surfaces normals)
 using Vector2D=Point<2>;
 using Vector3D=Point<3>;
-using Vector4D=Point<4>;
 
 template <long embedded,typename real>
 using Vector =Point<embedded,real>;

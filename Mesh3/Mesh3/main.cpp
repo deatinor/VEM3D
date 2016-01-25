@@ -245,9 +245,9 @@ int main(int argc, const char * argv[]) {
 
 			cout<<"mesh finita"<<endl;
 			
-			Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSquare3D,solutionSquare3D,1);
+			Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSphere3D,solutionSphere3D,1);
 			problem3();
-			problem3.displayError(solutionSquare3D);
+			problem3.displayError(solutionSphere3D);
 			
 			if (outputPoint!="") {
 				problem3.write(outputPoint,outputConnection,outputSolution);

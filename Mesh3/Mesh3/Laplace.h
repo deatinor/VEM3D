@@ -22,10 +22,6 @@
 #include "Dirichlet3D.h"
 
 
-//#include <Eigen/SparseCholesky>
-//#include <Eigen/SparseLU>
-//#include <Eigen/UmfPackSupport>
-
 
 using namespace Eigen;
 
