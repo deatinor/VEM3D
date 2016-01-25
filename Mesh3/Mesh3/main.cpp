@@ -10,6 +10,7 @@
 #include <iostream>
 #include <random>
 #include "Point.h"
+#include "MeshPoint.h"
 #include "Polygon.h"
 #include "Polyhedron.h"
 #include "Mesh.h"
