@@ -1,10 +1,3 @@
-//
-//  Mesh.h
-//  Mesh2
-//
-//  Created by Stefano on 31/07/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
 
 #ifndef Mesh2_Mesh_h
 #define Mesh2_Mesh_h

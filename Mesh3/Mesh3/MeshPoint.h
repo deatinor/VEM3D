@@ -1,10 +1,3 @@
-//
-//  MeshPoint.h
-//  Mesh3
-//
-//  Created by Stefano on 25/01/16.
-//  Copyright © 2016 Stefano. All rights reserved.
-//
 
 #ifndef MeshPoint_h
 #define MeshPoint_h

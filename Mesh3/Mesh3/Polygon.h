@@ -1,10 +1,3 @@
-//
-//  Polygon.h
-//  Mesh
-//
-//  Created by Stefano on 15/07/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
 
 #ifndef Mesh_Polygon_h
 #define Mesh_Polygon_h

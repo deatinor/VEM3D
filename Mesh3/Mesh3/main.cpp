@@ -1,11 +1,3 @@
-//
-//  main.cpp
-//  Mesh3
-//
-//  Created by Stefano on 01/08/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
-
 
 #include <iostream>
 #include <random>
@@ -16,6 +8,7 @@
 #include "Mesh.h"
 #include "Laplace.h"
 #include "Monomials.h"
+#include "MonomialsPolygon.h"
 #include "Solver.h"
 #include "BoundaryCondition.h"
 #include "Error.h"

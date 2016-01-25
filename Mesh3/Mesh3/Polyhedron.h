@@ -1,10 +1,3 @@
-//
-//  Polyhedron.h
-//  Mesh2
-//
-//  Created by Stefano on 31/07/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
 
 #ifndef Mesh2_Polyhedron_h
 #define Mesh2_Polyhedron_h
