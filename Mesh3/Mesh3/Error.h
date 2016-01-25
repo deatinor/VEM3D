@@ -16,6 +16,10 @@ using namespace Eigen;
 template <typename real=double>
 using VectorX=Matrix<real, Dynamic, 1>;
 
+/** Class to compute and display the error
+ *
+ *	It computes the values only in the points
+ */
 template <long embedded,typename real=double>
 class Error {
 protected:
@@ -27,15 +31,22 @@ protected:
 	
 	SparseMatrix<real>& stiffnessMatrix;
 	
-	void computeRealSolution();
+	void computeRealSolution(); //!< This computes the exact solution, from realSolutionFunction
 	
 public:
+	/** Standard constructor
+	 *
+	 *	\param inputSolution solution computed
+	 *	\param inputPointVector pointVector used before
+	 *	\param inputRealSolutionFunction function that expresses the real solution
+	 *	\param inputStiffnessMatrix used for H1 discrete norm
+	 */
 	Error(const VectorX<real>& inputSolution,const vector<shared_ptr<MeshPoint<embedded,real>>>& inputPointVector,std::function<real(Point<embedded,real>&)> inputRealSolutionFunction,SparseMatrix<real>& inputStiffnessMatrix);
 	
-	real LInfinity();
-	real H1Discrete();
+	real LInfinity(); //!< It computes the L infinity norm
+	real H1Discrete();	//!< It computes the H1 discrete norm
 	
-	void displayError();
+	void displayError();	//!< Print the computer error
 	
 };
 
@@ -45,20 +56,6 @@ template <long embedded,typename real>
 Error<embedded,real>::Error(const VectorX<real>& inputSolution,const vector<shared_ptr<MeshPoint<embedded,real>>>& inputPointVector,std::function<real(Point<embedded,real>&)> inputRealSolutionFunction,SparseMatrix<real>& inputStiffnessMatrix):solution(inputSolution),pointVector(inputPointVector),realSolutionFunction(inputRealSolutionFunction),stiffnessMatrix(inputStiffnessMatrix),realSolution(solution.size()),difference(solution.size()) {
 	computeRealSolution();
 	
-	
-	
-	// non c'entra
-//	vector<real> diffVector({});
-//	for (int i=0; i<pointVector.size(); i++) {
-//		diffVector.push_back(difference[i]);
-////		cout<<diffVector[i]<<"   "<<difference[i]<<endl;
-//		
-//	}
-//	
-//	sort(diffVector.begin(),diffVector.end());
-//	for (int i=0;i<pointVector.size();i++) {
-//		cout<<diffVector[i]<<endl;
-//	}
 }
 
 

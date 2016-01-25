@@ -13,6 +13,13 @@
 
 using namespace Eigen;
 
+/** Class for Dirichlet boundary condition
+ *
+ *	\param embedded Dimension of the space
+ *	\param MeshType the kind of Mesh I have
+ *	\param MeshElement Polygon or Polyhedron
+ *	\param real double or long double
+ */
 template <long embedded,typename MeshType,typename MeshElement,typename real=double>
 class Dirichlet: public BoundaryCondition<embedded,MeshType,MeshElement,real> {
 	long numberOfPoints;
@@ -20,11 +27,20 @@ class Dirichlet: public BoundaryCondition<embedded,MeshType,MeshElement,real> {
 	
 	
 public:
+	/** Standard constructor
+	 */
 	Dirichlet(const MeshType& mesh,std::function<real(Point<embedded,real>&)> boundaryFunction):BoundaryCondition<embedded,MeshType,MeshElement,real>::BoundaryCondition(mesh,boundaryFunction),numberOfPoints(mesh.numberOfPoints),numberOfBoundaryPoints(mesh.numberOfBoundaryPoints) {};
 	
-	
+	/** This is to decide if to add the Kloc computed to the matrix. It depends on the boundary condition.
+	 */
 	virtual void addToTripletList(Matrix<real,Dynamic,Dynamic>& Kloc,MeshElement& element,vector<Triplet<real>>& tripletList);
+	
+	/** Changes the stiffnessMatrix to keep into account the boundary condition.
+	 */
 	virtual void assignBoundaryConditionOnStiffnessMatrix(vector<Triplet<real>>& tripletList);
+	
+	/** Changes the known term to keep into account the boundary condition
+	 */
 	virtual void assignBoundaryConditionOnKnownTerm(VectorX<real>& knownTerm);
 	
 	

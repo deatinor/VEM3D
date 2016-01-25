@@ -21,13 +21,12 @@ using namespace Eigen;
 template <typename real>
 using VectorX=Matrix<real, Dynamic, 1>;
 
-/** Virtual clas for BoundaryCondition
+/** Virtual class for BoundaryCondition
  *
  *	\param embedded Dimension of the space
  *	\param MeshType the kind of Mesh I have
  *	\param MeshElement Polygon or Polyhedron
  *	\param real double or long double
-
  */
 template <long embedded,typename MeshType,typename MeshElement,typename real=double>
 class BoundaryCondition {
