@@ -6,6 +6,7 @@
 #include "Polygon.h"
 #include "Polyhedron.h"
 #include "Mesh.h"
+#include "Problem.h"
 #include "Laplace.h"
 #include "Monomials.h"
 #include "MonomialsPolygon.h"
@@ -17,6 +18,7 @@
 #include "SolverVEM3D.h"
 #include "SolverVEM2D.h"
 #include "Eigen/Dense"
+#include "SolverVEM.h"
 
 // FUNZIONI
 template <long embedded,typename real=double>
