@@ -19,6 +19,7 @@
 #include "SolverVEM2D.h"
 #include "Eigen/Dense"
 #include "SolverVEM.h"
+#include "Dirichlet.h"
 
 // FUNZIONI
 template <long embedded,typename real=double>

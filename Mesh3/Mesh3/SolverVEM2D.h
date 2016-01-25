@@ -1,10 +1,3 @@
-//
-//  SolverVEM2D.h
-//  Mesh3
-//
-//  Created by Stefano on 17/08/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
 
 #ifndef Mesh3_SolverVEM2D_h
 #define Mesh3_SolverVEM2D_h
