@@ -54,7 +54,7 @@ public:
 			coordinates[i]=0;
 		}
 	};
-	//costruttore con variadic template: http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
+	//constructor with variadic template: http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
 	template <typename... Args>
 	Point(Args... arguments):coordinates{static_cast<real>(arguments)...} {
 		static_assert(sizeof...(Args)==embedded,"wrong number of input paramethers");
@@ -64,8 +64,8 @@ public:
 	// STANDARD METHOS
 	long maxIndex() const;
 	long maxAbsIndex() const;
-	real norm() const;  // norma L2 del vettore
-	real normL1() const; // norma L1 del vettore
+	real norm() const;  // L2 norm of the vector
+	real normL1() const; // L1 norm of the vector
 	string write() const;
 	
 	real& x();
@@ -77,15 +77,16 @@ public:
 	
 	
 	// OPERATORS
-	Point<embedded,real>& operator=(Point<embedded,real> inputPoint); // attenzione, copia solo le coordinate, non tutto il resto!
-	bool operator==(const Point<embedded,real>& inputPoint) const; // confronta solo le coordinate
-	bool operator!=(const Point<embedded,real>& inputPoint) const; // confronta solo le coordinate
+	Point<embedded,real>& operator=(Point<embedded,real> inputPoint); // be careful, it copies only the coordinates, not the other things
+	bool operator==(const Point<embedded,real>& inputPoint) const; // It compares only coordinates
+	bool operator!=(const Point<embedded,real>& inputPoint) const; // It compares only coordinates
 	real& operator[](long index);
 	real operator[](long index) const;
 
 	
 	
 	// EXTERNAL METHODS
+	// Operators mainly. They work in the usual way
 	template<long embedded2,typename real2>
 	friend ostream& operator<<(ostream& os,const Point<embedded2,real2>&point);
 	template <long embedded2,typename real2>
@@ -165,21 +166,21 @@ long Point<embedded,real>::maxAbsIndex() const{
 // norm
 template <long embedded,typename real>
 real Point<embedded,real>::norm() const{
-	double somma=0;
+	double sum=0;
 	for (int i=0; i<embedded; i++) {
-		somma+=coordinates[i]*coordinates[i];
+		sum+=coordinates[i]*coordinates[i];
 	}
-	return sqrt(somma);
+	return sqrt(sum);
 }
 
 // normL1
 template <long embedded,typename real>
 real Point<embedded,real>::normL1() const{
-	double somma=0;
+	double sum=0;
 	for (int i=0; i<embedded; i++) {
-		somma+=abs(coordinates[i]);
+		sum+=abs(coordinates[i]);
 	}
-	return somma;
+	return sum;
 }
 
 // write
@@ -215,13 +216,11 @@ real Point<embedded,real>::x() const{
 template <long embedded,typename real>
 real& Point<embedded,real>::y() {
 	static_assert(embedded>=2,"embedded lower than 2");
-
 	return coordinates[1];
 }
 template <long embedded,typename real>
 real Point<embedded,real>::y() const{
 	static_assert(embedded>=2,"embedded lower than 2");
-	
 	return coordinates[1];
 }
 
@@ -369,15 +368,12 @@ Point<embedded,real> operator/(const Point<embedded,real>& point,long double coe
 template <long embedded,typename real>
 Point<embedded,real> cross(const Point<embedded,real>& point1,const Point<embedded,real>& point2) {
 	
-	
 	real component1=point1[1]*point2[2]-point1[2]*point2[1];
 	real component2=point1[2]*point2[0]-point1[0]*point2[2];
 	real component3=point1[0]*point2[1]-point1[1]*point2[0];
 	Point<embedded,real> returnVector(component1,component2,component3);
-
 	
 	return returnVector;
-	
 }
 
 //prodTermByTerm
@@ -404,7 +400,7 @@ using PointLong3D=Point<3,long double>;
 
 
 
-//un Point può essere visto come un vector (utile per le normali alle superfici per esempio)
+// A Point can be seen as a vector (for example this is useful for surfaces normals)
 using Vector2D=Point<2>;
 using Vector3D=Point<3>;
 using Vector4D=Point<4>;
@@ -449,16 +445,15 @@ protected:
 public:
 	// CONSTRUCTORS
 	MeshPoint(const array<real,embedded>& inputArray);
-//	MeshPoint(const Point<embedded,real>& inputPoint);
 	MeshPoint():Point<embedded,real>(),pointID(0),value(0),isBoundary(0),polygonVector({}),polyhedronVector({}) {};
 	
-	//costruttore con variadic template: http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
+	// constructor with variadic template: http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
 	template <typename... Args>
 	MeshPoint(Args... arguments):Point<embedded,real>(arguments...),pointID(0),value(0),isBoundary(false),polygonVector({}),polyhedronVector({}) {
 	};
 	
 	// STANDARD METHODS
-	void addPolygon(weak_ptr<Polygon<embedded,real>> inputPolygon); // inserisce in polygon vector un nuovo poligono
+	void addPolygon(weak_ptr<Polygon<embedded,real>> inputPolygon); // It insert in polygon vector a new Polygon
 	void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> inputPolyhedron);
 	
 	void shrink_to_fit();
@@ -473,8 +468,8 @@ public:
 	const weak_ptr<Polygon<embedded,real>>& polygon(long index) const {return polygonVector[index%numberOfPolygons()];};
 	const weak_ptr<Polyhedron<embedded,real>>& polyhedron(long index) const {return polyhedronVector[index%numberOfPolyhedrons()];};
 	
-//	// OPERATOR
-	bool operator<(MeshPoint<embedded,real>& inputPoint); // confronta i pointID
+ 	// OPERATOR
+	bool operator<(MeshPoint<embedded,real>& inputPoint); // it compares pointID
 
 	
 };
@@ -512,7 +507,7 @@ void MeshPoint<embedded,real>::shrink_to_fit() {
 	polygonVector.shrink_to_fit();
 	polyhedronVector.shrink_to_fit();
 }
-//
+
 // operator <
 template <long embedded,typename real>
 bool MeshPoint<embedded,real>::operator<(MeshPoint<embedded,real>& inputPoint) {
