@@ -1,10 +1,3 @@
-//
-//  SolverVEM2D.h
-//  Mesh3
-//
-//  Created by Stefano on 17/08/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
 
 #ifndef Mesh3_SolverVEM2D_h
 #define Mesh3_SolverVEM2D_h
@@ -12,21 +5,21 @@
 template <typename real=double>
 using Monomial2D=Monomials<2,Polygon<2,real>,real>;
 
+/** Specilized class to solve VEM in 2D
+ *
+ *	It only implements computeB and computeKnownTerm
+ */
 template <typename real=double>
 class SolverVEM2D: public SolverVEM<2,2,Polygon<2,real>,Monomial2D<real>,real> {
 public:
-//	virtual Matrix<real,3,3> computeG(Monomial2D<real>& monomial);  // fatta
 	virtual Matrix<real,3,Dynamic> computeB(const shared_ptr<Polygon<2,real>>& polygon,Monomial2D<real>& monomial); // sistemare l'integrale al bordo
-//	virtual Matrix<real,Dynamic,3> computeD(Monomial2D<real>& monomial); // fatta
+	public:
+	/** Standard constructor
+	 */
+	SolverVEM2D(std::function<real(const Point<2,real>&)> inputForceTerm):SolverVEM<2,2,Polygon<2,real>,Monomial2D<real>,real>::SolverVEM(inputForceTerm) {};
 	
-	
-//	virtual Matrix<real,3,Dynamic> computePIStar(Matrix<real,3,3>&G,Matrix<real,3,Dynamic>&B); // fatta
-//	virtual Matrix<real,Dynamic,Dynamic> computePI(Matrix<real,3,Dynamic>&PIStar,Matrix<real,Dynamic,3>&D); // fatta
-	
-	
-public:
-	SolverVEM2D(std::function<real(Point<2,real>&)> inputForceTerm):SolverVEM<2,2,Polygon<2,real>,Monomial2D<real>,real>::SolverVEM(inputForceTerm) {};
-	
+	/** Computes the known term of the element
+	 */
 	virtual real computeKnownTerm(const shared_ptr<Polygon<2,real>>& element,const shared_ptr<MeshPoint<2,real>>& point);
 	
 };
@@ -50,7 +43,6 @@ Matrix<real,3,Dynamic> SolverVEM2D<real>::computeB(const shared_ptr<Polygon<2,re
 	}
 	
 	// calcolo l'integrale al bordo per gli altri termini
-//	auto& pointVector=polygon->pointVector;
 	real gradient=monomial.gradient;
 	for (int j=0; j<numberOfPoints; j++) {
 		// considero i due lati connessi al grado di libertà j
@@ -78,7 +70,12 @@ Matrix<real,3,Dynamic> SolverVEM2D<real>::computeB(const shared_ptr<Polygon<2,re
 
 template <typename real>
 real SolverVEM2D<real>::computeKnownTerm(const shared_ptr<Polygon<2,real>>& element,const shared_ptr<MeshPoint<2,real>>& point) {
-	real fValue=this->forceTerm(*element->point(0)); // calcola la f nel primo punto di ogni poliedro, credo che basti essendo piecewise constant
+	real fValue=this->forceTerm(element->getCentroid()); // calcola la f nel primo punto di ogni poliedro, credo che basti essendo piecewise constant
+	
+//	for (int i=0;i<element->numberOfPoints;i++) {
+//		fValue+=this->forceTerm(*element->point(i));
+//	}
+//	fValue/=element->numberOfPoints;
 	real vhCoefficient=1.0/(element->numberOfPoints); // e' il P0 di ogni vh, sempre lo stesso per ogni vh
 	real area=element->getArea(); // lo salva per non dovervi accedere per ogni punto
 	return area*vhCoefficient*fValue;

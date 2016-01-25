@@ -1,10 +1,3 @@
-//
-//  Mesh2D.h
-//  Mesh3
-//
-//  Created by Stefano on 17/08/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
 
 #ifndef Mesh3_Mesh2D_h
 #define Mesh3_Mesh2D_h
@@ -20,15 +13,21 @@ static bool lessPair(const pair<long,long>& pair1,const pair<long,long>& pair2) 
 	return pair1.first<pair2.first;
 }
 
+/** Specialized class for 2D Mesh
+ *
+ *	BaseElement is a Polygon
+ *
+ */
 template <typename real=double>
 class Mesh2D: public Mesh<2,Polygon<2,real>,OPEN,real> {
 private:
-	vector<pair<long,long>> pairVector; // serve solo per ottenere i punti interni ed esterni
+	vector<pair<long,long>> pairVector; //!< This is to obtain internal and external points
 
 public:
 	long numberOfBoundaryPoints;
 	
-	
+	/** Constructor with input file
+	 */
 	Mesh2D(string pointFile,string connectionFile,MeshType meshType=ANYTHING2D):Mesh<2,Polygon<2,real>,OPEN,real>::Mesh(),numberOfBoundaryPoints(0) {
 		this->initialize(pointFile,connectionFile,meshType);
 		
@@ -36,13 +35,13 @@ public:
 	
 	// STANDARD METHODS
 	template <typename... Args >
-	shared_ptr<Polygon<2,real>> newPolygon(Args... arguments);
+	shared_ptr<Polygon<2,real>> newPolygon(Args... arguments); //!< Method to add a Polygon to the Mesh after having read it
 	
-	virtual void setAnything2DMesh(string connection);
+	virtual void setAnything2DMesh(string connection);	//!< Specilization of the method to read ANYTHING2D file.
 	
 	
-	virtual void setBoundaryElements();
-	virtual void setRemainingThings();
+	virtual void setBoundaryElements();	//!< Specilization of the method
+	virtual void setRemainingThings();	//!< Specilization of the method
 	
 	void shrink_to_fit();
 	
@@ -52,33 +51,8 @@ public:
 template <typename real>
 template <typename... Args>
 shared_ptr<Polygon<2,real>> Mesh2D<real>::newPolygon(Args ...arguments) {
-	auto newPolygon=make_shared_Polygon<2,real>(arguments...);
+	auto newPolygon=Polygon<2,real>::make_shared_Polygon(arguments...);
 	return newPolygon;
-	
-//	auto& point1=*newPolygon->pointVector[0];
-//	for (int i=0; i<point1.polygonVector.size(); i++) {
-//		auto weakPolygon=point1.polygonVector[i];
-//		if (auto polygon=weakPolygon.lock()) {
-//			if (*polygon==*newPolygon && polygon!=newPolygon) { // puntatori diversi ma poligoni uguali
-//				polygon->isBoundary=false;
-//				newPolygon->isBoundary=false;
-//				polygonVector.push_back(newPolygon);
-//				return newPolygon;
-//			}
-//			
-//		} else {
-//			cout<<"Polygon is expired"<<endl;
-//		}
-//		
-//		
-//	}
-//	
-//	//	cout<<4<<endl;
-//	
-//	newPolygon->isBoundary=true;
-//	polygonVector.push_back(newPolygon);
-//	return newPolygon;
-	
 }
 
 
@@ -138,7 +112,7 @@ void Mesh2D<real>::setAnything2DMesh(string connection) {
 		}
 			
 		// creo la faccia
-		auto polygon=make_shared_Polygon<2,real>(vertexPointerVector);
+		auto polygon=Polygon<2,real>::make_shared_Polygon(vertexPointerVector);
 		
 		//			cout<<face->isBoundary;
 		//			cout<<*face;

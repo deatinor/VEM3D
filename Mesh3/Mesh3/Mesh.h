@@ -1,10 +1,3 @@
-//
-//  Mesh.h
-//  Mesh2
-//
-//  Created by Stefano on 31/07/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
 
 #ifndef Mesh2_Mesh_h
 #define Mesh2_Mesh_h
@@ -33,54 +26,78 @@ enum MeshType{TETRAHEDRON,TRIANGLE,ANYTHING3D,ANYTHING2D,FILETYPE1,FILETYPE2};
 //////////                MESH                        //////////
 ////////////////////////////////////////////////////////////////
 
+/** Basic class for creating a Mesh
+ *	
+ *	\param embedded It can be 2D or 3D
+ *	\param baseElement typically Polygon or Polyhedron
+ *  \param isOpen typically open. It can be closed for a surface embedded in a 3D space
+ *	\param real double or long double
+ */
 template <long embedded,typename baseElement,OpenEnum isOpen=OPEN,typename real=double>
 class Mesh {
 
 protected:
 	
-	vector<shared_ptr<baseElement>> elementVector;
-	vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;
+	vector<shared_ptr<baseElement>> elementVector;	//!< Vector of Polygon or Polyhedron
+	vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;	//!< Vector of the vertexes of each element
 	
 public:
 	long numberOfElements;
 	long numberOfPoints;
 	
-	const shared_ptr<baseElement>& element(long index) const;
-	const shared_ptr<MeshPoint<embedded,real>>& point(long index) const;
+	const shared_ptr<baseElement>& element(long index) const;	//!< \return the element with particular index
+	const shared_ptr<MeshPoint<embedded,real>>& point(long index) const;	//!< \return the MeshPoint with a particular index
 	const vector<shared_ptr<MeshPoint<embedded,real>>>& getPointVector() const {return pointVector;};
 
-	virtual real hTriangle();
+	virtual real hTriangle();	//!< paramether h of the Mesh
 	
+	/** Method that calls the functions that read the file
+	 *
+	 *	\param pointFile the file with the position of the Points
+	 *	\param connection file with th econnection between points
+	 *	\param meshType format of the file type
+	 */
 	void initialize(string pointFile,string connection,MeshType meshType=ANYTHING3D);
-	// queste 4 funzioni sono chiamate in successione dal costruttore, possono essere specializzate se necessario
-	virtual void setPointVector(string file);
-	virtual void setElementVector(string connections, MeshType meshType); // può essere specializzato nel caso si volesse espandere la classe
-	virtual void setBoundaryElements() {cout<<"fail"<<endl;};
-	virtual void setRemainingThings() {}; // usato per settare i pointID, se specializzato per fare anche altro
+	
+	// These 4 function are called one after the other by the constructor, they can be specialized if necessary
+	virtual void setPointVector(string file);	//!< It obtains the pointVector from file
+	/** It obtains the elementVector from connections
+	 *
+	 *	Then it calls the appropriate method to read the connection file
+	 */
+	virtual void setElementVector(string connections, MeshType meshType);
+	/** Virtual method to keep into account the boundary elements
+	 *
+	 */
+	virtual void setBoundaryElements()=0;
+	/**	Virtual method used to set other things, like pointIDs
+	 *
+	 */
+	virtual void setRemainingThings()=0;
 	
 	
 	// metodi per settare l'elementVector, vanno implementati poi nell child class, solo quelli necessari
-	virtual void setTetrahedronMesh(string connection) {};
-	virtual void setTriangleMesh(string connection) {};
-	virtual void setAnything3DMesh(string connection) {};
-	virtual void setAnything2DMesh(string connection) {};
-	virtual void setFileType1Mesh(string connection) {};
-	virtual void setFileType2Mesh(string connection) {};
+	virtual void setTetrahedronMesh(string connection) {}; //!< Read tetrahedron file type
+	virtual void setTriangleMesh(string connection) {};	//!< Read Triangle file type
+	virtual void setAnything3DMesh(string connection) {};	//!< Read general polyhedron file type
+	virtual void setAnything2DMesh(string connection) {};	//!< Read general polygon file type
+	virtual void setFileType1Mesh(string connection) {};	//!< Need to be specialized
+	virtual void setFileType2Mesh(string connection) {};	//!< Need to be specialized
 
-	virtual void sort(); // riordina il pointVector in base ai pointID
+	virtual void sort(); //!< Sort the pointVector based on pointID
 	
 	void shrink_to_fit();
-	virtual void write(string outputPoints="points.point",string outputConnections="connections.conn") const;
-	virtual void writePoints(string outputFile="points.point") const;
-	virtual void writeConnections(string outputFile="connections.conn") const;
+	virtual void write(string outputPoints="points.point",string outputConnections="connections.conn") const;	//!< Full output to file
+	virtual void writePoints(string outputFile="points.point") const;	//!< Point output to file
+	virtual void writeConnections(string outputFile="connections.conn") const;	//!< Connection output to file
 	
 protected: // costruttori protetti, non deve essere inizializzata questa classe, sebbene non possa essere definita abstract
 
 	
-	Mesh():elementVector({}),pointVector({}){};
+	Mesh():elementVector({}),pointVector({}){};	//!< Empty constructor
 	
 	template <long embedded2,typename baseElement2,OpenEnum isOpen2,typename real2>
-	friend ostream& operator<<(ostream& os,const Mesh<embedded2,baseElement2,isOpen2,real2>& mesh);
+	friend ostream& operator<<(ostream& os,const Mesh<embedded2,baseElement2,isOpen2,real2>& mesh); //!< Output operator
 	
 };
 
@@ -270,9 +287,6 @@ ostream& operator<<(ostream& os,const Mesh<embedded,baseElement,isOpen,real>& me
 	cout<<endl<<"There are "<<mesh.elementVector.size()<<" elements"<<endl<<endl;
 	
 	return os;
-	
-	
-	
 }
 
 

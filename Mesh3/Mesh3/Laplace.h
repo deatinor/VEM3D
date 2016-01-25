@@ -1,10 +1,3 @@
-//
-//  Laplace.h
-//  Mesh3
-//
-//  Created by Stefano on 06/08/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
 
 #ifndef Mesh3_Laplace_h
 #define Mesh3_Laplace_h
@@ -20,11 +13,8 @@
 #include "BoundaryCondition.h"
 #include "Error.h"
 #include "Dirichlet3D.h"
+#include "Problem.h"
 
-
-//#include <Eigen/SparseCholesky>
-//#include <Eigen/SparseLU>
-//#include <Eigen/UmfPackSupport>
 
 
 using namespace Eigen;
@@ -32,112 +22,25 @@ using namespace Eigen;
 template <typename real>
 using VectorX=Matrix<real, Dynamic, 1>;
 
-
-template <long embedded,typename MeshType,typename real=double>
-class Problem {
-	
-protected:
-	const MeshType& mesh;
-	
-public:
-	SparseMatrix<real> stiffnessMatrix;
-	VectorX<real> knownTerm;
-	VectorX<real> solution;
-	
-	real diffusionCoeff;
-	
-//	BoundaryCondition<embedded, MeshType, MeshElement,real>& boundaryCondition;
-	
-public:
-	Problem(const MeshType& inputMesh,real inputDiffusionCoeff=1):mesh(inputMesh),stiffnessMatrix((int)inputMesh.numberOfPoints,(int)inputMesh.numberOfPoints),knownTerm(inputMesh.numberOfPoints),solution(inputMesh.numberOfPoints),diffusionCoeff(inputDiffusionCoeff){
-		// inizializzo lo knownTerm a 0
-		for (long i=0; i<inputMesh.numberOfPoints; i++) {
-			knownTerm[i]=0;
-		}
-		
-		
-	};
-	
-	virtual void computeStiffnessMatrix()=0;
-	virtual void computeKnownTerm()=0;
-	virtual void computeSolution();
-	virtual void operator()();
-	
-	virtual void displayError(std::function<real(Point<embedded,real>&)> realSolutionFunction);
-	virtual void write(string outputPoints="points.point",string outputConnections="connections.conn",string outputSolution="solution.sol");
-	virtual void writeSolution(string outputSolution="solution.sol");
-	
-};
-
-// computeSolution
 template <long embedded,typename MeshType,typename real>
-void Problem<embedded,MeshType,real>::computeSolution() {
-	
-	BiCGSTAB<SparseMatrix<real>> solver;
-	solution=solver.compute(stiffnessMatrix).solve(knownTerm);
-	
-}
+class Problem;
 
-// operator()
-template <long embedded,typename MeshType,typename real>
-void Problem<embedded,MeshType,real>::operator()() {
-	
-	clock_t startTime;
-	double duration;
-	cout<<endl<<endl<<"Assembling..."<<endl;
-	startTime=clock();
-	computeStiffnessMatrix();
-	computeKnownTerm();
-	duration = ( clock() - startTime ) / (double) CLOCKS_PER_SEC;
-	cout<<"Completed: "<<duration<<endl<<endl;
-	
-	
-	
-	cout<<"Solving..."<<endl;
-	startTime=clock();
-	computeSolution();
-	duration = ( clock() - startTime ) / (double) CLOCKS_PER_SEC;
-	cout<<"Completed: "<<duration<<endl<<endl;
-	
-	cout<<"nonZeros: "<<stiffnessMatrix.nonZeros()<<endl;
-
-}
-
-// showError
-template <long embedded,typename MeshType,typename real>
-void Problem<embedded,MeshType,real>::displayError(std::function<real(Point<embedded,real>&)> realSolutionFunction) {
-	Error<embedded,real> error(solution,mesh.getPointVector(),realSolutionFunction,stiffnessMatrix);
-	error.displayError();
-}
-
-// write
-template <long embedded,typename MeshType,typename real>
-void Problem<embedded,MeshType,real>::write(string outputPoints,string outputConnections,string outputSolution) {
-	mesh.write(outputPoints,outputConnections);
-	writeSolution(outputSolution);
-}
-
-// writeSolution
-template <long embedded,typename MeshType,typename real>
-void Problem<embedded,MeshType,real>::writeSolution(string outputSolution) {
-	ofstream file;
-	file.open(outputSolution);
-	for (int i=0; i<solution.size(); i++) {
-		file<<solution[i];
-		file<<"\n";
-	}
-	file.close();
-}
-
+template <typename real>
+using Monomial3D=Monomials<3,Polyhedron<3,real>,real>;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /////////////					       Laplace							//////////////
 //////////////////////////////////////////////////////////////////////////////////////////
 
-template <typename real>
-using Monomial3D=Monomials<3,Polyhedron<3,real>,real>;
 
-
+/**	Class to solve a Laplacian Problem
+ *
+ *	\param embedded Dimension of the space
+ *	\param MeshType Type of the file to read
+ *	\param SolverType Kind of Solver to use. Any subclass of Solver is allowed.
+ *	\param BoundaryConditionType Kind of BoundaryCondition to use. Any subclass of BoundaryCondition is allowed.
+ *	\param real double or long double
+ */
 template <long embedded,typename MeshType,typename SolverType,typename BoundaryConditionType,typename real=double>
 class Laplace: public Problem<embedded,MeshType,real> {
 private:
@@ -148,17 +51,23 @@ private:
 	
 public:
 	// PROPERTIES
-	vector<Triplet<real>> tripletList;
+	vector<Triplet<real>> tripletList; //!< Vector used to fast build the stifnessMatrix. Triplet is a class used by Eigen library.
 	long numberOfElements;
 	BoundaryConditionType boundaryCondition;
 	SolverType solver;
 	
 	// CONSTRUCTORS
-	Laplace(const MeshType& inputMesh,std::function<real(Point<embedded,real>&)> inputForceTerm,std::function<real(Point<embedded,real>&)> inputBoundaryFunction,real inputDiffusionCoeff=1):Problem<embedded,MeshType,real>(inputMesh,inputDiffusionCoeff),numberOfElements(inputMesh.numberOfElements),tripletList({}),boundaryCondition(inputMesh,inputBoundaryFunction),solver(inputForceTerm) {}
+	/** Standard constructor
+	 *
+	 * \param inputMesh Mesh on which the problem is defined
+	 * \param inputForceTerm ForceTerm std::function
+	 * \param inputBoundaryFunction std::function that expresses the boundary conditions
+	 */
+	Laplace(const MeshType& inputMesh,std::function<real(const Point<embedded,real>&)> inputForceTerm,std::function<real(const Point<embedded,real>&)> inputBoundaryFunction,real inputDiffusionCoeff=1):Problem<embedded,MeshType,real>(inputMesh,inputDiffusionCoeff),numberOfElements(inputMesh.numberOfElements),tripletList({}),boundaryCondition(inputMesh,inputBoundaryFunction),solver(inputForceTerm) {}
 	
 	// STANDARD METHODS
-	void computeStiffnessMatrix(); // fatta, da controllare
-	void computeKnownTerm(); // fatta, da controllare
+	void computeStiffnessMatrix(); //<! General method. It invokes the methods of the Solver.
+	void computeKnownTerm(); //!< General method. It invokes the methods of the Solver and BoundaryCondition.
 
 	
 };

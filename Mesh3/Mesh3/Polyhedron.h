@@ -1,80 +1,99 @@
-//
-//  Polyhedron.h
-//  Mesh2
-//
-//  Created by Stefano on 31/07/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
 
 #ifndef Mesh2_Polyhedron_h
 #define Mesh2_Polyhedron_h
 
 #include <algorithm>
 
-template <long embedded,typename real=double,typename ...Args>
-shared_ptr<Polyhedron<embedded, real>> make_shared_Polyhedron(Args... arguments) {
-	auto polyhedron=make_shared<Polyhedron<embedded,real>>(arguments...);
-	polyhedron->initialize();
-	return polyhedron;
-}
-
-//template <long embedded,typename real=double,typename ...Args>
-//Polyhedron<embedded, real> make_Polyhedron(Args... arguments) {
-//	Polyhedron<embedded,real> polyhedron(arguments...);
-//	polyhedron->initialize();
-//	return polyhedron;
-//}
-
+/** Class to represent a Polyhedron in 3D
+ *	
+ *	The only way to initialize it is to call make_shared_Polygon
+ *	Volume, faces orientation, normal orientation and centroid are computed during initialization and saved.
+ *	Inheritance from enable_shared_from_this to obtain a shared_ptr from this.
+ *
+ */
 template <long embedded, typename real=double>
 class Polyhedron: public enable_shared_from_this<Polyhedron<embedded,real>> {
+private:
+	struct privateStruct {}; //!< Don't change, needed for make_shared_Polygon
+
 protected:
 	// PROPERTIES
-	vector<shared_ptr<Polygon<embedded,real>>> polygonVector;
+	vector<shared_ptr<Polygon<embedded,real>>> polygonVector; //!< Stores the faces of the Polyhedron
 	
-	bool isBoundary;
-	real volume;
-	Point<embedded,real> centroid;
+	bool isBoundary;	//!< Tells if the Polygon is on the boundary
+	real volume;	//!< \return the volume of the Polyhedron
+	Point<embedded,real> centroid;	//!< Not the real centroid, only the mean of the vertexes \return the centroid of the Polyhedron
 
-	vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;
+	vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;	//!< Stores the vertexes of the Polyhedron
 
 	
 public:
 	//PROPERTIES
-	long numberOfPoints;
-	long numberOfPolygons;
+	long numberOfPoints;	//!< Number of vertexes
+	long numberOfPolygons;	//!< Number of faces
 	
 	// CONSTRUCTORS
-	Polyhedron(const vector<shared_ptr<Polygon<embedded,real>>>& inputPolygonVector):polygonVector(inputPolygonVector),numberOfPolygons(inputPolygonVector.size()),isBoundary(false),pointVector({}),volume(0) {
+	/** Constructor from a vector of shared_ptr. DO NOT USE.
+	 *
+	 *	Called by make_shared_Polyhedron
+	 */
+	Polyhedron(const privateStruct&,const vector<shared_ptr<Polygon<embedded,real>>>& inputPolygonVector):polygonVector(inputPolygonVector),numberOfPolygons(inputPolygonVector.size()),isBoundary(false),pointVector({}),volume(0) {
 	};
-//	Polyhedron(const Polyhedron<embedded,real>& inputPolyhedron):polygonVector(inputPolyhedron.polygonVector),numberOfPolygons(inputPolyhedron.numberOfPolygons),pointVector(inputPolyhedron.pointVector),isBoundary(inputPolyhedron.isBoundary),volume(0) {
-//	};
-	Polyhedron():polygonVector({}),numberOfPolygons(0),isBoundary(false),pointVector({}),volume(0){};
-	//costruttore con variadic template: http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
+	
+	/** Empty constructor. DO NOT USE.
+	 *
+	 *	Called by make_shared_Polyhedron
+	 */
+	Polyhedron(const privateStruct&):polygonVector({}),numberOfPolygons(0),isBoundary(false),pointVector({}),volume(0){};
+	/** Constructor with variadic template. DO NOT USE.
+	 *
+	 *	Source:
+	 *	http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
+	 *	Called by make_shared_Polyhedron
+	 */
 	template <typename... Args>
-	Polyhedron(Args... arguments):polygonVector{arguments...},pointVector({}),volume(0),isBoundary(false) {
+	Polyhedron(const privateStruct&,Args... arguments):polygonVector{arguments...},pointVector({}),volume(0),isBoundary(false) {
 		if (sizeof...(Args)<4) {
 			cout<<endl<<endl<<"Minimum 4 polygons required"<<endl<<endl;
 		}
 		numberOfPolygons=sizeof...(Args);
 	};
 	
+	/** The <b>only</b> constructor for Polyhedron
+	 *
+	 *	Using the variadic template it accepts as input a vector of shared_ptr to MeshPoints or a sequence of MeshPoints.
+	 *	Then it calls the right constructor. It initialize the Polyhedron calling the method initialize
+	 *
+	 *	\return A shared pointer to the Polyhedron
+	 */
+	template <typename ...Args>
+	static shared_ptr<Polyhedron<embedded, real>> make_shared_Polyhedron(Args... arguments) {
+		auto polyhedron=make_shared<Polyhedron<embedded,real>>(privateStruct{},arguments...);
+		polyhedron->initialize();
+		return polyhedron;
+	}
+	
 	// STANDARD METHODS
-	void addPolygon(shared_ptr<Polygon<embedded,real>>& inputPolygon);
-	void addPoint(shared_ptr<MeshPoint<embedded,real>>& inputPoint);
-	Point<embedded,real> computeCentroid();
-	real computeVolume();
-	real getDiameter();
-	void fixExternalNormal();
-	void fixFacesOrientation();
-	real hTriangle();
-	void initialize();
-	void linkPoints();
-	void linkPolygons();
-//	void putSharedFacesInFront();
+	void addPolygon(shared_ptr<Polygon<embedded,real>>& inputPolygon);	//!< Add a new vertex to the Polygon
+	void addPoint(shared_ptr<MeshPoint<embedded,real>>& inputPoint);	//!< Add a new Polyhedron having this as face
+	Point<embedded,real> computeCentroid();	//!< \return the centroid
+	real computeVolume();	//!< \return the volume of the Polyhedron
+	real getDiameter();		//!< \return the maximum distance between 2 Points
+	void fixExternalNormal();	//!< Makes the normal to each face pointing towards the external of the Polyhedron
+	void fixFacesOrientation();	//!< Makes the normal of each face pointing in the same direction (or inward or outward)
+	real hTriangle();	//!< \return The maximum distance between vertexes. Necessary for the mesh.
+	void initialize();	//<! Put this Polyhedron to the polyhedronVector in each MeshPoint and Polygon. Computes volume, normal and centroid
+	void linkPoints();	//<! Makes all vertexes pointing to this
+	void linkPolygons();	//!< Makes all Polygons pointing to this
 	void shrink_to_fit();
-	real space() {return volume;} // serve per ritornare il volume se dall'esterno non è chiaro se è un poligono o un poliedro
-	void switchFacesOrientation();
-	void updatePointVector();
+	real space() {return volume;} // This is a common method to Polygon and Polyhedron. In this way one of two can be passed as a template paramether and this method can be called to get area in case of Polygon and volume in case of Polyhedron
+	void switchFacesOrientation();	//!< Invert the orientation of all faces
+	void updatePointVector();	//!< If a new face is added, also his vertexes are added to the pointVector
+	/** Output to string
+	 *
+	 *	\return std::string representing the Point
+	 *
+	 */
 	string write();
 	
 	// GET-SET METHODS
@@ -82,16 +101,23 @@ public:
 	void setIsBoundary(bool inputIsBoundary) {isBoundary=inputIsBoundary;};
 	real getVolume() const {return volume;};
 	const Point<embedded, real>& getCentroid() const {return centroid;};
+	/** Get a shared pointer to a Point in pointVector
+	 */
 	const shared_ptr<MeshPoint<embedded,real>>& point(long index) const {return pointVector[index%numberOfPoints];};
+	
+	/** Get a shared pointer to a Polygon in polygonVector
+	 */
 	const shared_ptr<Polygon<embedded,real>>& polygon(long index) const {return polygonVector[index%numberOfPolygons];};
 	
 	// OPERATORS
+	/** Get the MeshPoint with a particular index
+	 */
 	shared_ptr<Polygon<embedded,real>> operator [](long index);
 
 
 	// EXTERNAL METHODS
 	template<long embedded2,typename real2>
-	friend ostream& operator<<(ostream& os,const Polyhedron<embedded2,real2>&polyhedron);
+	friend ostream& operator<<(ostream& os,const Polyhedron<embedded2,real2>&polyhedron);	//!< Output operator
 };
 
 //////////////////////
@@ -127,31 +153,21 @@ real Polyhedron<embedded,real>::computeVolume() {
 	static_assert(embedded==3,"computing volume possible only for embedded=3");
 
 	real volume=0;
-//	cout<<"volume start"<<endl;
 	
 	for (int i=0;i<numberOfPolygons;i++) {
-//		cout<<"face: "<<i<<endl;
 		auto& face=*polygonVector[i];
 		real normalX=face.getNormal().x();
-//		cout<<"normal and centroid: "<<endl<<face.normal<<face.centroid();
-//		real x=0;
-//		for (int j=0;j<face.numberOfPoints;j++) {
 		real x=face.getCentroid().x();
-//		cout<<"centroid x: "<<x<<endl;
-//		}
-		x=x*face.getArea();//face.numberOfPoints;
-//		cout<<"area: "<<face.area<<endl;
+		x=x*face.getArea();
 		volume+=normalX*x;
 	}
 	
-//	cout<<"volume end: "<<volume<<endl;
 	return abs(volume);
 }
 			
 // diameter
 template <long embedded,typename real>
 real Polyhedron<embedded,real>::getDiameter() {
-//	return 1;  // ATTENZIONE CAMBIA!!!
 	real diameter=0;
 	real norm=0;
 	for (int i=0; i<pointVector.size();i++) {
@@ -172,7 +188,7 @@ void Polyhedron<embedded,real>::fixExternalNormal() {
 	
 	auto& face1=*polygonVector[0];
 	auto& normal1=face1.getNormal();
-	// controlla che non ci siano altri poliedri con faccia in comune a questo: nel caso prende la normale opposta
+	// check if there are other Polyhedrons with a common face: in case it takes the opposite normal
 	for (int j=0; j<polygonVector.size(); j++) {
 		auto facePointer=polygonVector[j];
 		auto& facePoint=*(*facePointer)[0];
@@ -183,8 +199,6 @@ void Polyhedron<embedded,real>::fixExternalNormal() {
 						switchFacesOrientation();
 						return;
 					} else {
-//						cout<<(facePointer->normal-face2Pointer->normal).norm();
-//						cout<<2<<endl;
 						return;
 					}
 				}
@@ -195,7 +209,7 @@ void Polyhedron<embedded,real>::fixExternalNormal() {
 	
 	// attenzione! questo punto dovrebbe essere selezionato casualmente nell'inviluppo convesso della faccia 1,
 	// si deve controllare che sia dentro la faccia per evitare problemi al bordo
-	Point<3,real> p1(0,0,0);//*(*polygonVector[0])[0];
+	Point<3,real> p1(0,0,0);
 
 
 	// guardo quante facce interseca
@@ -449,20 +463,9 @@ void Polyhedron<embedded,real>::initialize()  {
 	linkPolygons();
 	linkPoints();
 	fixFacesOrientation();
-//	cout<<*this;
-//	switchFacesOrientation();
 	
 	fixExternalNormal();
 	
-//	cout<<*this<<endl;
-	
-//	for (int i=0;i<numberOfPolygons; i++) {
-//		cout<<polygonVector[i]->normal;
-//	}
-//	cout<<*polygonVector[0];
-//	cout<<polygonVector[0]->computeNormal()<<endl;
-//	cout<<*polygonVector[1];
-//	cout<<polygonVector[1]->normal;
 	volume=computeVolume();
 	centroid=computeCentroid();
 }

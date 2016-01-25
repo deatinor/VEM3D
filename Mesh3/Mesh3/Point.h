@@ -1,11 +1,6 @@
-// GUIDA
 
-// Classe Point
-// Memorizza la posizione del punto, la soluzione calcolata in esso.
-
-
-#ifndef Mesh_Point_h
-#define Mesh_Point_h
+#ifndef Point_h
+#define Point_h
 
 
 
@@ -15,7 +10,7 @@
 #include <memory>
 #include <cmath>
 #include "Mesh.h"
-
+#include "MeshPoint.h"
 
 using namespace std;
 
@@ -37,24 +32,40 @@ class Mesh3D;
 template <typename real>
 class Mesh2D;
 
+/*! \brief Class to store the position of a point.
+ *
+ *	Virtually any dimensions allowed. Some methods are available only for d=2 or d=3.
+ *	Any vector can be seen as a point.
+ *  Some appropriate typedef (Vector2D, Vector3D, Vector<embedded>, Vector<embedded,real>) are implemented.
+ *
+ */
+
 template <long embedded,typename real=double>
 class Point {
 	
 protected:
 	// PROPERTIES
-	array<real,embedded> coordinates;
+	array<real,embedded> coordinates; //!< It stores the coordinates of the point
 		
 public:
 	// CONSTRUCTORS
-	Point(const array<real,embedded>& inputArray);
-	Point(const Point<embedded,real>& inputPoint);
-	Point(const MeshPoint<embedded,real>& inputPoint);
+	Point(const array<real,embedded>& inputArray);	//!< Constructor from std::array
+	Point(const Point<embedded,real>& inputPoint);	//!< Copy constructor
+	Point(const MeshPoint<embedded,real>& inputPoint);	//!< Copy constructor from MeshPoint
+	
+	/** Empty constructor
+	 */
 	Point():coordinates({}) {
 		for (int i=0; i<embedded; i++) {
 			coordinates[i]=0;
 		}
 	};
-	//costruttore con variadic template: http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
+	
+	/** Constructor with variadic template
+	 *
+	 *  Source:
+	 *  http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
+	 */
 	template <typename... Args>
 	Point(Args... arguments):coordinates{static_cast<real>(arguments)...} {
 		static_assert(sizeof...(Args)==embedded,"wrong number of input paramethers");
@@ -62,48 +73,74 @@ public:
 	
 	
 	// STANDARD METHOS
-	long maxIndex() const;
-	long maxAbsIndex() const;
-	real norm() const;  // norma L2 del vettore
-	real normL1() const; // norma L1 del vettore
+	long maxIndex() const;	//!< Maximum index of the point
+	long maxAbsIndex() const;	//!< Maximum index of the point with absolute value
+	real norm() const;  //!< L2 norm of the vector
+	real normL1() const; //!< L1 norm of the vector
+	/** Output to string
+	 *
+	 *	\return std::string representing the Point
+	 *
+	 */
 	string write() const;
 	
-	real& x();
-	real x() const;
-	real& y();
-	real y() const;
-	real& z();
-	real z() const;
+	real& x();	//!< Get the first element by reference
+	real x() const; //!< Get the first element by value
+	real& y();	//!< Get the second element by reference
+	real y() const; //!< Get the second element by value
+	real& z();	//!< Get the third element by reference
+	real z() const;	//!< Get the third element by value
 	
 	
 	// OPERATORS
-	Point<embedded,real>& operator=(Point<embedded,real> inputPoint); // attenzione, copia solo le coordinate, non tutto il resto!
-	bool operator==(const Point<embedded,real>& inputPoint) const; // confronta solo le coordinate
-	bool operator!=(const Point<embedded,real>& inputPoint) const; // confronta solo le coordinate
-	real& operator[](long index);
-	real operator[](long index) const;
+	/** Equal operator
+	 *
+	 * Be careful, it copies only the coordinates, not the other things
+	 */
+	Point<embedded,real>& operator=(Point<embedded,real> inputPoint);
+	/** Check if they are equals
+	 *
+	 * It compares only coordinates
+	 */
+	bool operator==(const Point<embedded,real>& inputPoint) const;
+	/** Check if they are different
+	 *
+	 * It compares only coordinates
+	 */
+	bool operator!=(const Point<embedded,real>& inputPoint) const; // It compares only coordinates
+	real& operator[](long index);	//!< Get an element by reference
+	real operator[](long index) const;	//!< Get an element by value
 
 	
 	
 	// EXTERNAL METHODS
 	template<long embedded2,typename real2>
-	friend ostream& operator<<(ostream& os,const Point<embedded2,real2>&point);
+	friend ostream& operator<<(ostream& os,const Point<embedded2,real2>&point); //!< Output operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator+(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2);
+	friend Point<embedded2,real2> operator+(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2); //!< Sum operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator-(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2);
+	friend Point<embedded2,real2> operator-(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2); //!< Difference operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator-(const Point<embedded2,real2>& point1);
+	friend Point<embedded2,real2> operator-(const Point<embedded2,real2>& point1); //!< Difference operator
 	template <long embedded2,typename real2>
-	friend real2 operator*(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2);
+	friend real2 operator*(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2); //!< Product operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator*(long double coefficient,const Point<embedded2,real2>& point);
+	friend Point<embedded2,real2> operator*(long double coefficient,const Point<embedded2,real2>& point); //!< Product operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator*(const Point<embedded2,real2>& point,long double coefficient);
+	friend Point<embedded2,real2> operator*(const Point<embedded2,real2>& point,long double coefficient); //!< Product operator
 	template <long embedded2,typename real2>
-	friend Point<embedded2,real2> operator/(const Point<embedded2,real2>& point,long double coefficient);
+	friend Point<embedded2,real2> operator/(const Point<embedded2,real2>& point,long double coefficient); //!< Dividing operator
 	template <long embedded2,typename real2>
+	/** Cross product of 2 vector
+	 *
+	 * \return The resulting vector of the cross product
+	 * Here Point is intended as Vector.
+	 * Cross product keeping sign into consideration
+	 */
 	friend Point<embedded2,real2> cross(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2);
+	/** Product term by term
+	 *	\return A point with component i being the product of the i components of the 2 vectors
+	 */
 	template <long embedded2,typename real2>
 	friend Point<embedded2,real2> prodTermByTerm(const Point<embedded2,real2>& point1,const Point<embedded2,real2>& point2);
 
@@ -165,21 +202,21 @@ long Point<embedded,real>::maxAbsIndex() const{
 // norm
 template <long embedded,typename real>
 real Point<embedded,real>::norm() const{
-	double somma=0;
+	double sum=0;
 	for (int i=0; i<embedded; i++) {
-		somma+=coordinates[i]*coordinates[i];
+		sum+=coordinates[i]*coordinates[i];
 	}
-	return sqrt(somma);
+	return sqrt(sum);
 }
 
 // normL1
 template <long embedded,typename real>
 real Point<embedded,real>::normL1() const{
-	double somma=0;
+	double sum=0;
 	for (int i=0; i<embedded; i++) {
-		somma+=abs(coordinates[i]);
+		sum+=abs(coordinates[i]);
 	}
-	return somma;
+	return sum;
 }
 
 // write
@@ -215,13 +252,11 @@ real Point<embedded,real>::x() const{
 template <long embedded,typename real>
 real& Point<embedded,real>::y() {
 	static_assert(embedded>=2,"embedded lower than 2");
-
 	return coordinates[1];
 }
 template <long embedded,typename real>
 real Point<embedded,real>::y() const{
 	static_assert(embedded>=2,"embedded lower than 2");
-	
 	return coordinates[1];
 }
 
@@ -369,15 +404,12 @@ Point<embedded,real> operator/(const Point<embedded,real>& point,long double coe
 template <long embedded,typename real>
 Point<embedded,real> cross(const Point<embedded,real>& point1,const Point<embedded,real>& point2) {
 	
-	
 	real component1=point1[1]*point2[2]-point1[2]*point2[1];
 	real component2=point1[2]*point2[0]-point1[0]*point2[2];
 	real component3=point1[0]*point2[1]-point1[1]*point2[0];
 	Point<embedded,real> returnVector(component1,component2,component3);
-
 	
 	return returnVector;
-	
 }
 
 //prodTermByTerm
@@ -404,10 +436,9 @@ using PointLong3D=Point<3,long double>;
 
 
 
-//un Point può essere visto come un vector (utile per le normali alle superfici per esempio)
+// A Point can be seen as a vector (for example this is useful for surfaces normals)
 using Vector2D=Point<2>;
 using Vector3D=Point<3>;
-using Vector4D=Point<4>;
 
 template <long embedded,typename real>
 using Vector =Point<embedded,real>;
@@ -416,112 +447,6 @@ using VectorD=Point<embedded,double>;
 
 
 
-/////////////////////////////////////////////////////////////////////
-//////////                MESHPOINT                        //////////
-/////////////////////////////////////////////////////////////////////
-
-
-template <long embedded,typename real=double>
-class MeshPoint: public Point<embedded,real> {
-//	template <long embedded2,typename baseElement,OpenEnum isOpen,typename real2>
-//	friend class Mesh;
-//	template <typename real2>
-//	friend class Mesh3D;
-//	template <typename real2>
-//	friend class Mesh2D;
-//	template <long embedded2,typename real2>
-//	friend class Polygon;
-//	template <long embedded2,typename real2>
-//	friend class Polyhedron;
-	
-protected:
-	
-	// PROPERTIES
-	long pointID;
-	real value;
-	bool isBoundary;
-	
-	
-	vector<weak_ptr<Polygon<embedded, real>>> polygonVector;
-	vector<weak_ptr<Polyhedron<embedded,real>>> polyhedronVector;
-	
-	
-public:
-	// CONSTRUCTORS
-	MeshPoint(const array<real,embedded>& inputArray);
-//	MeshPoint(const Point<embedded,real>& inputPoint);
-	MeshPoint():Point<embedded,real>(),pointID(0),value(0),isBoundary(0),polygonVector({}),polyhedronVector({}) {};
-	
-	//costruttore con variadic template: http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
-	template <typename... Args>
-	MeshPoint(Args... arguments):Point<embedded,real>(arguments...),pointID(0),value(0),isBoundary(false),polygonVector({}),polyhedronVector({}) {
-	};
-	
-	// STANDARD METHODS
-	void addPolygon(weak_ptr<Polygon<embedded,real>> inputPolygon); // inserisce in polygon vector un nuovo poligono
-	void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> inputPolyhedron);
-	
-	void shrink_to_fit();
-	
-	// GET-SET METHODS
-	long getPointID() const {return pointID;};
-	void setPointID(long inputPointID) {pointID=inputPointID;};
-	bool getIsBoundary() const {return isBoundary;};
-	void setIsBoundary(bool inputIsBoundary) {isBoundary=inputIsBoundary;};
-	long numberOfPolygons() const {return polygonVector.size();};
-	long numberOfPolyhedrons() const {return polyhedronVector.size();};
-	const weak_ptr<Polygon<embedded,real>>& polygon(long index) const {return polygonVector[index%numberOfPolygons()];};
-	const weak_ptr<Polyhedron<embedded,real>>& polyhedron(long index) const {return polyhedronVector[index%numberOfPolyhedrons()];};
-	
-//	// OPERATOR
-	bool operator<(MeshPoint<embedded,real>& inputPoint); // confronta i pointID
-
-	
-};
-
-///////////////////
-// CONSTRUCTORS  //
-///////////////////
-
-template <long embedded,typename real>
-MeshPoint<embedded,real>::MeshPoint(const array<real,embedded>& inputArray):Point<embedded,real>(inputArray),pointID(0),value(0),isBoundary(0),polygonVector({}),polyhedronVector({}) {
-}
-
-//template <long embedded,typename real>
-//MeshPoint<embedded,real>::MeshPoint(const Point<embedded,real>& inputPoint):Point<embedded,real>(inputPoint),pointID(0),value(0),isBoundary(0),polygonVector({}),polyhedronVector({}) {
-//}
-
-
-
-///////////////////////
-// STANDARD METHODS  //
-///////////////////////
-
-
-// addPolygon
-template <long embedded, typename real>
-void MeshPoint<embedded,real>::addPolygon(weak_ptr<Polygon<embedded, real>> inputPolygon) {
-	polygonVector.push_back(inputPolygon);
-}
-
-// addPolyhedron
-template <long embedded,typename real>
-void MeshPoint<embedded,real>::addPolyhedron(weak_ptr<Polyhedron<embedded, real> > inputPolyhedron) {
-	polyhedronVector.push_back(inputPolyhedron);
-}
-
-// shrink_to_fit
-template <long embedded,typename real>
-void MeshPoint<embedded,real>::shrink_to_fit() {
-	polygonVector.shrink_to_fit();
-	polyhedronVector.shrink_to_fit();
-}
-//
-// operator <
-template <long embedded,typename real>
-bool MeshPoint<embedded,real>::operator<(MeshPoint<embedded,real>& inputPoint) {
-	return this->pointID<inputPoint.pointID;
-}
 
 #endif
 

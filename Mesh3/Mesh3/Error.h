@@ -44,6 +44,21 @@ public:
 template <long embedded,typename real>
 Error<embedded,real>::Error(const VectorX<real>& inputSolution,const vector<shared_ptr<MeshPoint<embedded,real>>>& inputPointVector,std::function<real(Point<embedded,real>&)> inputRealSolutionFunction,SparseMatrix<real>& inputStiffnessMatrix):solution(inputSolution),pointVector(inputPointVector),realSolutionFunction(inputRealSolutionFunction),stiffnessMatrix(inputStiffnessMatrix),realSolution(solution.size()),difference(solution.size()) {
 	computeRealSolution();
+	
+	
+	
+	// non c'entra
+//	vector<real> diffVector({});
+//	for (int i=0; i<pointVector.size(); i++) {
+//		diffVector.push_back(difference[i]);
+////		cout<<diffVector[i]<<"   "<<difference[i]<<endl;
+//		
+//	}
+//	
+//	sort(diffVector.begin(),diffVector.end());
+//	for (int i=0;i<pointVector.size();i++) {
+//		cout<<diffVector[i]<<endl;
+//	}
 }
 
 
@@ -58,6 +73,11 @@ void Error<embedded,real>::computeRealSolution() {
 		
 		
 		difference[i]=abs(realSolution[i]-solution[i]);
+
+		cout<<*pointVector[i]<<solution[i]<<"   "<<realSolution[i]<<"   "<<difference[i]<<endl;
+		
+		
+
 	}
 	
 }
@@ -70,7 +90,7 @@ real Error<embedded,real>::LInfinity() {
 template <long embedded,typename real>
 real Error<embedded,real>::H1Discrete() {
 	real error=difference.transpose()*stiffnessMatrix*difference;
-	return error;
+	return sqrt(error);
 	
 }
 

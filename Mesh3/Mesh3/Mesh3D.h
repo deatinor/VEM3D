@@ -1,10 +1,3 @@
-//
-//  Mesh3D.h
-//  Mesh3
-//
-//  Created by Stefano on 17/08/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
 
 #ifndef Mesh3_Mesh3D_h
 #define Mesh3_Mesh3D_h
@@ -13,7 +6,11 @@
 #include <sstream>
 #include "Mesh.h"
 
-
+/** Specialized class for 3D Mesh
+ *
+ *	BaseElement is a Polyhedron
+ *
+ */
 template <typename real=double>
 class Mesh3D : public Mesh<3, Polyhedron<3,real>, OPEN, real> {
 	
@@ -21,40 +18,40 @@ class Mesh3D : public Mesh<3, Polyhedron<3,real>, OPEN, real> {
 protected:
 	
 	// PROPERTIES
-	vector<shared_ptr<Polygon<3,real>>> polygonVector;  // vettore di tutte le facce dei poliedri
+	vector<shared_ptr<Polygon<3,real>>> polygonVector;  //!< Vector of all the Polyhedron faces
 	
 public:
 	long numberOfPolygons;
 	long numberOfBoundaryPoints;
 	
-	// CONSTRUCTORS
-	//	Mesh3D():Mesh<3,Polyhedron<3,real>,OPEN,real>::Mesh(),polygonVector({}),numberOfPolygons(0),numberOfBoundaryPoints(0){};
+	/** Constructor with input file
+	 */
 	Mesh3D(string pointFile,string connectionFile,MeshType meshType=ANYTHING3D):Mesh<3,Polyhedron<3,real>,OPEN,real>::Mesh(),polygonVector({}),numberOfPolygons(0),numberOfBoundaryPoints(0) {
 		this->initialize(pointFile,connectionFile,meshType);
 		
 	};
 	
 	// STANDARD METHODS
+	/** Method to create a Polygon after having read it
+	 */
 	template <typename... Args >
 	shared_ptr<Polygon<3,real>> newFace(Args... arguments);
 	
-	// specializzo le funzioni della classe padre
-	virtual void setBoundaryElements();
-	virtual void setRemainingThings(); // usato per settare i pointID, se specializzato per fare anche altro
+	// specialization of the parent class functions
+	virtual void setBoundaryElements();	//!< Specilization of the method
+	virtual void setRemainingThings(); //!< Specilization of the method
 	
 	
-	// metodi per settare l'elementVector, vanno implementati poi nell child class, solo quelli necessari
-	virtual void setTetrahedronMesh(string connection);
-	virtual void setAnything3DMesh(string connection);
+	// methods to set the elementVector
+	virtual void setTetrahedronMesh(string connection);	//!< Mesh of TETRAHEDRON type
+	virtual void setAnything3DMesh(string connection);	//!< Mesh of ANYTHING3D type
 	
 	void shrink_to_fit();
 	
 	// GET-SET METHODS
+	/** Get Polygon with index
+	 */
 	const shared_ptr<Polygon<3,real>>& polygon(long index) const {return polygonVector[index%numberOfPolygons];};
-	
-	// EXTERNAL METHODS
-	//	template <typename real2>
-	//	friend ostream& operator<<(ostream& os,const Mesh3D<real2>&mesh3d);
 	
 };
 
@@ -161,7 +158,7 @@ void Mesh3D<real>::setAnything3DMesh(string connection) {
 			facesVector.push_back(face);
 		}
 		
-		auto polyhedron=make_shared_Polyhedron<3,real>(facesVector);
+		auto polyhedron=Polyhedron<3,real>::make_shared_Polyhedron(facesVector);
 		this->elementVector.push_back(polyhedron);
 		
 		
@@ -265,7 +262,7 @@ void Mesh3D<real>::setTetrahedronMesh(string connection) {
 		
 		
 		counter++;
-		auto polyhedron=make_shared_Polyhedron<3,real>(poly1,poly2,poly3,poly4);
+		auto polyhedron=Polyhedron<3,real>::make_shared_Polyhedron(poly1,poly2,poly3,poly4);
 		
 		
 		this->elementVector.push_back(polyhedron);

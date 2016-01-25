@@ -1,18 +1,17 @@
-//
-//  SolverVEM3D.h
-//  Mesh3
-//
-//  Created by Stefano on 17/08/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
 
 #ifndef Mesh3_SolverVEM3D_h
 #define Mesh3_SolverVEM3D_h
 
 #include "Solver.h"
+#include "SolverVEM.h"
 
 
 
+/** Specilized class to solve VEM in 3D
+ *
+ *	It only implements computeB and computeKnownTerm from the parent class.
+ *	Then it has to add the Polygon version of the methods to compute the boundary terms.
+ */
 template <typename real=double>
 class SolverVEM3D: public SolverVEM<3,3,Polyhedron<3,real>,Monomial3D<real>,real> {
 public:
@@ -25,8 +24,11 @@ public:
 	virtual Matrix<real,3,Dynamic> computePIStarPolygon(Matrix<real,3,3>&G,Matrix<real,3,Dynamic>&B);
 	
 public:
-	SolverVEM3D(std::function<real(Point<3,real>&)> inputForceTerm):SolverVEM<3,3,Polyhedron<3,real>,Monomial3D<real>,real>::SolverVEM(inputForceTerm) {};
-	
+	/** Standard constructor
+	 */
+	SolverVEM3D(std::function<real(const Point<3,real>&)> inputForceTerm):SolverVEM<3,3,Polyhedron<3,real>,Monomial3D<real>,real>::SolverVEM(inputForceTerm) {};
+	/** 3D version of comuteKnownTerm
+	 */
 	virtual real computeKnownTerm(const shared_ptr<Polyhedron<3,real>>& element,const shared_ptr<MeshPoint<3,real>>& point);
 	
 };
@@ -36,7 +38,14 @@ public:
 template <typename real>
 real SolverVEM3D<real>::computeKnownTerm(const shared_ptr<Polyhedron<3,real>>& element,const shared_ptr<MeshPoint<3,real>>& point) {
 	
-	real fValue=this->forceTerm(*element->point(0)); // calcola la f nel primo punto di ogni poliedro, credo che basti essendo piecewise constant
+	real fValue=this->forceTerm(element->getCentroid()); // calcola la f nel primo punto di ogni poliedro, credo che basti essendo piecewise constant
+	
+//	for (int i=0;i<element->numberOfPoints;i++) {
+//		fValue+=this->forceTerm(*element->point(i));
+//	}
+	
+//	fValue/=element->numberOfPoints;
+	
 	real vhCoefficient=1.0/(element->numberOfPoints); // e' il P0 di ogni vh, sempre lo stesso per ogni vh
 	real volume=element->getVolume(); // lo salva per non dovervi accedere per ogni punto
 	
