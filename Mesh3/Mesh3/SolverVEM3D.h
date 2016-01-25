@@ -14,6 +14,11 @@
 
 
 
+/** Specilized class to solve VEM in 3D
+ *
+ *	It only implements computeB and computeKnownTerm from the parent class.
+ *	Then it has to add the Polygon version of the methods to compute the boundary terms.
+ */
 template <typename real=double>
 class SolverVEM3D: public SolverVEM<3,3,Polyhedron<3,real>,Monomial3D<real>,real> {
 public:
@@ -26,8 +31,11 @@ public:
 	virtual Matrix<real,3,Dynamic> computePIStarPolygon(Matrix<real,3,3>&G,Matrix<real,3,Dynamic>&B);
 	
 public:
+	/** Standard constructor
+	 */
 	SolverVEM3D(std::function<real(const Point<3,real>&)> inputForceTerm):SolverVEM<3,3,Polyhedron<3,real>,Monomial3D<real>,real>::SolverVEM(inputForceTerm) {};
-	
+	/** 3D version of comuteKnownTerm
+	 */
 	virtual real computeKnownTerm(const shared_ptr<Polyhedron<3,real>>& element,const shared_ptr<MeshPoint<3,real>>& point);
 	
 };

@@ -12,21 +12,21 @@
 template <typename real=double>
 using Monomial2D=Monomials<2,Polygon<2,real>,real>;
 
+/** Specilized class to solve VEM in 2D
+ *
+ *	It only implements computeB and computeKnownTerm
+ */
 template <typename real=double>
 class SolverVEM2D: public SolverVEM<2,2,Polygon<2,real>,Monomial2D<real>,real> {
 public:
-//	virtual Matrix<real,3,3> computeG(Monomial2D<real>& monomial);  // fatta
 	virtual Matrix<real,3,Dynamic> computeB(const shared_ptr<Polygon<2,real>>& polygon,Monomial2D<real>& monomial); // sistemare l'integrale al bordo
-//	virtual Matrix<real,Dynamic,3> computeD(Monomial2D<real>& monomial); // fatta
-	
-	
-//	virtual Matrix<real,3,Dynamic> computePIStar(Matrix<real,3,3>&G,Matrix<real,3,Dynamic>&B); // fatta
-//	virtual Matrix<real,Dynamic,Dynamic> computePI(Matrix<real,3,Dynamic>&PIStar,Matrix<real,Dynamic,3>&D); // fatta
-	
-	
-public:
+	public:
+	/** Standard constructor
+	 */
 	SolverVEM2D(std::function<real(const Point<2,real>&)> inputForceTerm):SolverVEM<2,2,Polygon<2,real>,Monomial2D<real>,real>::SolverVEM(inputForceTerm) {};
 	
+	/** Computes the known term of the element
+	 */
 	virtual real computeKnownTerm(const shared_ptr<Polygon<2,real>>& element,const shared_ptr<MeshPoint<2,real>>& point);
 	
 };
@@ -50,7 +50,6 @@ Matrix<real,3,Dynamic> SolverVEM2D<real>::computeB(const shared_ptr<Polygon<2,re
 	}
 	
 	// calcolo l'integrale al bordo per gli altri termini
-//	auto& pointVector=polygon->pointVector;
 	real gradient=monomial.gradient;
 	for (int j=0; j<numberOfPoints; j++) {
 		// considero i due lati connessi al grado di libertà j

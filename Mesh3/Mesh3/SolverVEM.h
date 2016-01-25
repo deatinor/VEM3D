@@ -10,6 +10,18 @@
 
 using namespace Eigen;
 
+/** Virtual basic class to solveVEM
+ *
+ *	The idea is to implement here all the methods common to 2D and 3D cases and then to specilize the remainings
+ *
+ *	The methods are mainly methods to compute the characteristics matrixes.
+ *
+ *	\param embedded Dimension of the space
+ *	\param elementDimension dimension of each element (2 or 3)
+ *	\param baseElement Polygon or Polyhedron
+ *	\param MonomialType Monomials or MonomialPolygon. The last can be used in case of VEM on surfaces
+ *	\param real double or long double
+ */
 template <long embedded,long elementDimension,typename baseElement,typename MonomialType,typename real=double>
 class SolverVEM: public Solver<embedded,baseElement,Matrix<real,Dynamic,Dynamic>,real> {
 protected:
@@ -21,10 +33,14 @@ protected:
 	virtual Matrix<real,Dynamic,Dynamic> computePI(Matrix<real,elementDimension+1,Dynamic>&PIStar,Matrix<real,Dynamic,elementDimension+1>&D);
 	
 public:
+	/**	Basic constructor. A lot of paramethers are given as template.
+	 *
+	 *	\param inputForceTerm std::function as force term
+	 */
 	SolverVEM(std::function<real(const Point<embedded,real>&)> inputForceTerm):Solver<embedded,baseElement,Matrix<real, Dynamic, Dynamic>,real>::Solver(inputForceTerm) {};
 	
-	virtual Matrix<real,Dynamic,Dynamic> computeLocalK(const shared_ptr<baseElement>& element);
-	virtual real computeKnownTerm(const shared_ptr<baseElement>& element,const shared_ptr<MeshPoint<embedded,real>>& point)=0;
+	virtual Matrix<real,Dynamic,Dynamic> computeLocalK(const shared_ptr<baseElement>& element); //!< This is to compute the local stiffness matrix
+	virtual real computeKnownTerm(const shared_ptr<baseElement>& element,const shared_ptr<MeshPoint<embedded,real>>& point)=0; //!< Virtual method to compute the known term.
 };
 
 // computeLocalK
