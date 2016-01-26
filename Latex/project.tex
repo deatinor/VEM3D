@@ -1,0 +1,795 @@
+\documentclass[oneside,12pt]{book}  % reqno mette i numeri a destra
+
+\usepackage{moresize}  % serve per avere il fonte \HUGE
+\usepackage{a4}  % per stampare in formato a4
+\usepackage{amssymb,amsfonts,amsmath}  % serve per includere le macro pi`u potenti dell'AMS per le formule 
+\usepackage{eucal,mathrsfs} % Per avere un calligrafico piu' bello
+\usepackage[british,UKenglish,USenglish,english,american]{babel}  % per  gli a capo secondo le regole dell'italiano
+\usepackage{graphicx} % serve per importare le figure in formato jpg, png, pdf
+\usepackage{enumerate}  % Utile per creare items personalizzati
+\usepackage{color} % Se vuoi usare i colori, altrimenti toglilo
+%\usepackage[
+%color,
+%draft]        % per togliere showkeys sostituire draft con final
+%{showkeys}    % molto utile per stampare i nomi che hai dato alle varie label, compaiono nel draft. Nella versione finale 
+%                      basta mettere final oppure commentare l'istruzione per togliere le label.
+%% 
+\usepackage{pdfsync} % molto utile per saltare dal testo al pdf e vicevera.
+%%% MIEI
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[applemac]{inputenc}
+\usepackage{listings} 
+\usepackage{placeins}
+
+
+\theoremstyle{plain} 
+\newtheorem{thm}{Teorema}[section] 
+\newtheorem{cor}[thm]{Corollario} 
+\newtheorem{lem}[thm]{Lemma} 
+\newtheorem{prop}[thm]{Proposizione} 
+
+\theoremstyle{definition} 
+\newtheorem{defn}{Definizione}[chapter] 
+
+\theoremstyle{remark} 
+\newtheorem{oss}{Osservazione} 
+
+%%
+%%
+%%
+%%
+\newtheorem{teorema}{Teorema}[chapter]  % per cambiare la numerazione
+                                        % basta mettere chapter 
+\newtheorem{lemma}[teorema]{Lemma}
+\newtheorem{corollario}[teorema]{Corollario}
+\newtheorem{proposizione}[teorema]{Proposizione}
+\newtheorem{osservazione}[teorema]{Osservazione}
+\newtheorem{esempio}[teorema]{Esempio}
+\newtheorem{definizione}[teorema]{Definizione}
+\newtheorem{problema}[teorema]{Problema}
+\newtheorem{ipotesi}[teorema]{Ipotesi}
+%%
+\numberwithin{equation}{chapter} % serve per numerare le formule in accordo ai capitoli.
+%%
+%% ALTRE MACRO: nel file macro.tex ho messo tutte le macro che sono utili per i vari simboli. Vengono incluse dall'istruzione
+%%
+\input macro
+%%
+%% Se non ti servono (ma sono utili) commenta l'input
+%%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%                   TITOLO, INDICE
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%
+\makeindex % serve se vuoi fare un indice delle parole alla fine; altrimenti commenta.
+\begin{document}
+
+% Code package
+\lstset{language=Matlab} 
+
+\thispagestyle{empty}  % toglie il numero di pagina alla pagina inziale
+\begin{center}  % serve per centrare un testo  
+  {\Large Politecnico di Milano}\\[12pt]    % serve  per andare a capo lasciando uno spazio voluto.
+
+  {\Huge Progetto di \\
+  Numerical Analysis for Partial Differential Equations\\
+  e Advanced Programming for Scientific Computing }
+\end{center}
+
+
+\begin{center}    % qui metti il titolo della tesi
+  \Huge \bf Virtual Element Method
+\end{center}
+%
+\vspace{12pt}
+%
+\begin{flushleft}
+  \noindent\Large
+  Students:\\
+  Nicolo\'o Ripamonti \\
+  Stefano Savar\`e\\
+  
+\end{flushleft}
+%
+% \begin{flushright}
+%   \noindent\LARGE
+%   Tesi di Laurea di:\\
+%   Stefano Savar\'e - Matr.
+% \end{flushright}
+%
+\vspace{364pt}
+%
+\begin{center}
+  \large
+  Academic year 2014-2015
+\end{center}
+
+\newpage
+
+\tableofcontents  %serve per creare l'indice iniziale
+
+%%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%%                   INIZIO DELLA TESI
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \part{NOME}    % se devi dividere la tesi in piu parti
+
+
+\renewcommand{\baselinestretch}{1.5} % se vuoi aumentare l'interlinea; altrimenti commenta.
+
+% istruzioni per le sezioni: \chapter{}, \chapter*{}, \section, \section*
+% l'asterisco non mette il numero
+%%
+ 
+\addcontentsline{toc}{chapter}{Introduction}  % serve per creare la voce Introduzione nella table of contents iniziale
+
+\chapter*{Introduction - the model} % uso asterisco perch\'e di solito l'introduzione non si numera
+
+
+In this project we want to study the one-dimensional \textit{shallow
+  water} equation:
+\begin{equation}
+  \label{eq:shallow_water}
+  \begin{bmatrix} m \\ h \end{bmatrix}_t +\begin{bmatrix} m \\
+    m^2/h+\frac{1}{2}gh^2 \end{bmatrix}_x = G(x,t)
+\end{equation}
+in $\Omega=\Omega_x \times  \Omega_t$, where $h=h(x,t)$ is the depth
+of the water and $m=m(x,t)$ is a quantity which measure the flow rate
+of the fluid past a point. This is often called \textit{discharge}.
+In the following I will also use the more compact formula
+$q_t+f(q)_x=G$ with $q=(h,m)^T$. Using this notation it's more evident
+the expression for the flux:
+\begin{equation}
+  \label{eq:flux}
+  f\left (\begin{bmatrix} m \\ h \end{bmatrix}\right ) =\begin{bmatrix} m \\
+    m^2/h+\frac{1}{2}gh^2 \end{bmatrix}
+\end{equation}
+As important property of the model, the horizontal velocity is always
+given by $u=m/h$.
+To compute my Matlab simulation I have always used
+$g=1$, $\Omega_x=(0,2)$ and $\Omega_t=(0,T)$, where $T=2$.
+
+The project consists in the implementation of the Lax-Friedrichs
+method and the Godunov's method with Roe linearisation. The first
+chapter is about the Lax-Friedrichs method, the second about the
+Godunov's methods with a final section where the 2 methods are
+compared. There will be provided the most relevant parts of the code.
+
+
+
+
+\chapter{The finite volume method}
+We present in this chapter a theoretical overview of the finite volume
+method, focalising on the Lax Friedrichs method and on the Roe
+fluxes. 
+\section{The Godunov's method}
+While the finite difference methods start from the differential form
+of the equation the finite volume methods are in general based on the
+integral form.
+Given a domain $\Omega=\Omega_x\times \Omega_t$ we consider a spatial
+and temporal discretisation $(x_j,t^n)=(jh,kn)$ where $h$ and $k$ are
+respectively the spatial and temporal grid size.
+We consider a conservation law in the more general form:
+\begin{equation}
+  \label{eq:conservation_law}
+  \frac{\partial u}{\partial t}+\frac{\partial f(u)}{\partial x}=0
+\end{equation}
+with appropriate initial and boundary conditions.
+Let us define a cell as $[x_{j-1/2},x_{j+1/2}]\times [t^n,t^{n+1}]$
+with $x_{j+1/2}=x_j+h/2$ marking the cell boundaries. 
+
+To proceed we compute the conservation law in integral form:
+\begin{equation}
+  \label{eq:conservation_law_integral_form}
+  \int_{x_{j-1/2}}^{x_{j+1/2}}[u(x,t^{n+1})-u(x,t^n)]dx=-\int_{t^n}^{t^{n+1}}[f(u(x_{j+1/2},t))=f(u(x_{j-1/2},t))]dt
+\end{equation}
+The basic idea is to rewrite the second integral as the difference of
+2 fluxes: $F^{n}_{j+1/2}$ and $F^{n}_{j-1/2}$. 
+To pursue this aim we define the cell average:
+\begin{equation}
+  \label{eq:cell_average}
+  \bar{u}^{n}_{j}=\frac{1}{h}\int_{x_{j-1/2}}^{x_{j+1/2}}u(x,t^{n})dt
+\end{equation}
+and the flux:
+\begin{equation}
+  \label{eq:generic_flux}
+  F^{n}_{j+1/2}=F(\bar{u}^{n}_{j},\bar{u}^{n}_{j+1})=\frac{1}{k}\int_{t^n}^{t^{n+1}}f(u(x_{j+1/2},t))dt
+\end{equation}
+Through these definition we recover the \textit{finite volume scheme}:
+\begin{equation}
+  \label{eq:generic_finite_volume}
+  \bar{u}^{n+1}_{j}=\bar{u}^{n}_{j}-\frac{k}{h}[F(\bar{u}^{n}_{j},\bar{u}^{n}_{j+1})-F(\bar{u}^{n}_{j-1},\bar{u}^{n}_{j})]
+\end{equation}
+
+The scheme is already on \textit{conservative form} by construction.
+
+However the evaluation of the integral of $f(u(x_{j+1/2},t))$ over
+$t^n,t^{n+1}$ is not trivial and many possibilities are present.
+One of the main possibilities is to reconstruct the value of
+$u^*=u(x_{j+1/2},t^n)$ from the nearest value of $\bar{u}^n$ (e.g a
+linear trivial interpolation would be
+$u^*=\frac{1}{2}(\bar{u}^n_j+\bar{u}^n_{j+1})$). To keep into account
+the evolution of the $u^*$ in time we solve the Riemann problem. In
+particular note that the CFL condition is sufficient to ensure that
+$\bar{u}^n_{j+1/2}$ remain constant during a time step. The problem is
+indeed to find the intermediate state of the Riemann problem  between
+the 2 states $u_l$ and $u_r$.
+
+\section{The Roe fluxes}
+The exact solution of the Riemann problem can be even straightforward in
+scalar and linear problems, but in the non linear case it's a lot more
+difficult and computationally expensive. Even in some cases the exact
+solution cannot be found.
+
+The Roe fluxes is one of the method to achieve this goal (e.g solving
+the Riemann problem for a non linear vectorial problem). 
+Given the equation \ref{eq:conservation_law} in vectorial form we seek
+an approximate numerical flux by the linearisation:
+\begin{equation}
+  \label{eq:linearization_roe}
+  \ff^*=A^*\uu^*
+\end{equation}
+Assuming that $A^*$ is diagonalisable and using some general results
+for the linear Riemann problems we obtain the following expression for
+the flux:
+\begin{equation}
+  \label{eq:roe_flux}
+  \ff^*=\frac{\ff(\uu_l)+\ff(\uu_r)}{2} -\frac{1}{2}|A^*|(\uu_r-\uu_l)
+\end{equation}
+where $|A^*|=S^{-1}|\Lambda | S$.
+This will be the formula for the flux that I will use later.
+The Lax-Friedrichs flux is quite similar to this. The main difference
+is about the matrix $A^*$ that in the formula is replaced by his
+maximum eigenvalue in absolute value.
+
+To conclude for the non linear case the matrix $A^*$ has to satisfy
+certain condition:
+\begin{itemize}
+\item
+The matrix $A^*$ satisfies
+\begin{equation}
+  \label{eq:roe_condition1}
+  \ff(\uu_r)-\ff(\uu_l)=A^*(\uu_r-\uu_l)
+\end{equation}
+\item
+For each $u$
+\begin{equation}
+  \label{eq:roe_condition2}
+  \lim_{u_l,u_r \to u}A ^*(\uu_l,\uu_r)=\ff'(\uu)
+\end{equation}
+\item
+For each $u_l$ and $u_r$, $A^*(u_l,u_r)$ is diagonalisable and has
+only real eigenvalues.
+\end{itemize}
+
+\section{Derivation of $A^*$}
+
+\subsection{$A^*$ computation}
+
+To derive $A^*$ for our problem \ref{eq:shallow_water} we start by
+defining $\zz=h^{-1/2}\qq$. We consider $\zz$ in the following
+form: $$\zz=\begin{pmatrix} \alpha \\ \beta \end{pmatrix}=h^{-1/2}\qq=\begin{pmatrix} h^{1/2} \\ mh^{-1/2} \end{pmatrix} $$
+from which we can derive $h=\alpha^2$ and $m=\alpha\beta$.
+\\
+\\
+Substituting this into the definition of f yields
+\begin{equation}
+  \label{eq:roe_flux_z}
+  \gg(\zz)=\ff(\qq(\zz))=\begin{pmatrix} \alpha\beta \\ \beta^2+\frac{1}{2}g\alpha^4 \end{pmatrix}
+\end{equation}
+From this the following problem follows
+\begin{equation}
+  \label{eq:shallow_water_z}
+  \begin{pmatrix} \alpha \\ \beta \end{pmatrix}_t+\begin{pmatrix} \alpha\beta \\ \beta^2+\frac{1}{2}g\alpha^4 \end{pmatrix}_x=0
+\end{equation}
+\\
+Now suppose $z$ is given by $$\zz=\zz(\mu)=\zz_l+(\zz_r-\zz_l)\mu$$ with $\mu
+\in (0,1)$ and define $$C^*=\int_0^1\gg'(\zz(\mu))d\mu$$
+With this definition we can write
+\begin{equation}
+\begin{split}
+  \ff(\qq_r)&-\ff(\qq_l)=\gg(\zz_r)-\gg(\zz_l)=\int_0^1\frac{\partial}{\partial
+  \mu}(\gg(\zz(\mu)))d\mu \\
+&=\int_0^1\gg'(\zz(\mu))\frac{\partial
+  \zz}{\partial \mu}(\mu)d\mu
+=\int_0^1\gg'(\zz(\mu))d\mu(\zz_r-\zz_l)=C^*(\zz_r-\zz_l)
+\end{split}
+\end{equation}
+To compute now $C^*$ explicitly we consider the Jacobian of
+$\gg(\zz)$: $$\gg'(\zz)=\begin{bmatrix} \beta & \alpha \\ 2g\alpha^3
+  & 2\beta \end{bmatrix}$$.
+As stated befor $C^*$ is the integral from 0 to 1 of
+$\gg'(\\z(\mu))$. We thus have to compute:
+\begin{equation}
+  \label{eq:alpha_integral}
+  \int_0^1\alpha(\mu)d\mu=\int_0^1(\alpha_l+(\alpha_r-\alpha_l)\mu)d\mu=\frac{\alpha_r+\alpha_l}{2}=:\bar{\alpha}
+\end{equation}
+and similarly
+\begin{equation}
+  \label{eq:beta_integral}
+  \int_0^1\beta(\mu)d\mu=\frac{\beta_r+\beta_l}{2}=:\bar{\beta}
+\end{equation}
+I now have to compute the same integral for $\alpha^3$
+\begin{equation}
+  \label{eq:alpha_cubic_integral}
+  \int_0^1\alpha(\mu)^3d\mu=\int_0^1(\alpha_l+(\alpha_r-\alpha_l)\mu)^3d\mu=...=
+  \frac{1}{4}(\alpha_l^3+\alpha_r^3+\alpha_l\alpha_r^2+\alpha_r\alpha_l^2)
+\end{equation}
+I have omitted some intermediate passages, but the computation is
+straightforward. So mixing all together I have obtained an expression
+for $C^*$:
+\begin{equation}
+  \label{eq:c_matrix}
+  C^*=\begin{bmatrix} \bar{\beta} & \bar{\alpha} \\ \frac{g}{2} (\alpha_l^3+\alpha_r^3+\alpha_l\alpha_r^2+\alpha_r\alpha_l^2)
+  & 2\bar{\beta} \end{bmatrix}
+\end{equation}
+\newline
+In a similar way we have $$\qq_r-\qq_l=\int_0^1\frac{\partial
+  \qq}{\partial \zz}(\zz(\mu))d\mu(\zz_r-\zz_l)$$
+from which follows $\qq_r-\qq_l=B^*(\zz_r-\zz_l)$. Given
+that $$\frac{\partial \qq}{\partial \zz}=\begin{bmatrix} 2\alpha & 0\\
+  \beta & \alpha \end{bmatrix}$$ we get
+\begin{equation}
+  \label{eq:b_matrix}
+  B^*=\begin{bmatrix} 2\bar\alpha & 0\\
+  \bar\beta & \bar\alpha \end{bmatrix}
+\end{equation}
+Now we can compute $$A^*=C^*B^{*-1}$$ Through some computation that I
+don't report and using the identities $\alpha=h^{1/2}$ and
+$\beta=mh^{-1/2}$ I have obtain the following expression:
+\begin{equation}
+ \label{eq:a_matrix}
+  A^*=\begin{bmatrix} 0 & 1\\
+  \frac{g}{2}(h_l+h_r)- \left
+    (\frac{\frac{m_l}{\sqrt{h_l}}+\frac{m_r}{\sqrt{h_r}}
+    }{\sqrt{h_r}+\sqrt{h_l}} \right )^2& 
+  2\frac{\frac{m_l}{\sqrt{h_l}}+\frac{m_r}{\sqrt{h_r}} }{\sqrt{h_r}+\sqrt{h_l}} \end{bmatrix}
+\end{equation}
+
+\subsection{$|A^*|$ computation}
+To compute the decomposition $S\Lambda S^{-1}$ is convenient to
+define $$s=\frac{\frac{m_l}{\sqrt{h_l}}+\frac{m_r}{\sqrt{h_r}}
+}{\sqrt{h_r}+\sqrt{h_l}} $$
+and $$t=\frac{g}{2}(h_l+h_r)$$
+With this notation the computation is simpler and we get 
+\begin{equation}
+  \label{eq:eigenvalues}
+  \lambda_{1,2}=s \pm \sqrt{t}
+\end{equation}
+and
+\begin{equation}
+  \label{eq:s_matrix}
+  S=\begin{bmatrix} 1 & 1\\
+  \lambda_1& \lambda_2\end{bmatrix},\quad S^{-1}=\frac{1}{\lambda_1-\lambda_2}\begin{bmatrix} -\lambda_2 & 1\\
+  \lambda_1& -1\end{bmatrix}
+\end{equation}
+Since the computation of eigenvalues and eigenvectors is exact in the
+implementation of the method I will use the following formula for
+$|A^*|$ 
+\begin{equation}
+  \label{eq:s_matrix}
+  |A^*|=S \left | \begin{bmatrix} \lambda_1 & 0\\
+   0 & \lambda_2\end{bmatrix}\right | S^{-1}
+\end{equation}
+This will reduce significantly the computational cost of the method:
+we don't have t compute each time the eigenvector.
+For the LF flux instead, it's not necessary to compute $S$, it's
+sufficient to get the maximum eigenvalue in absolute value.
+
+\subsection{Checking of the $A^*$ conditions}
+As previously stated there are 3 main conditions on $A^*$ that have to
+be fulfilled. We examine each of them.
+\begin{enumerate}
+\item
+By construction, $A^*$
+satisfies $$\ff(\qq_r)-\ff(\qq_l)=A^*(\qq_r-\qq_l)$$
+\item
+If we define a function $$\bar
+v=\frac{\frac{m_l}{\sqrt{h_l}}+\frac{m_r}{\sqrt{h_r}}
+}{\sqrt{h_r}+\sqrt{h_l}}$$ we note that it is continuous in
+$h_r$,$h_l$,$m_r$ and $m_l$. Moreover when $h_r=h_l=h$ and $m_r=m_l=m$,
+$\bar v$ satisfies $\bar v=m/h$. Therefore
+$$\lim_{\qq_l,\qq_r \to \qq }A^*(\qq_l,\qq_r)=\begin{bmatrix} 0 & 1\\
+  gh-\left(\frac{m}{h}\right)^2 & 2\frac{m}{h}\end{bmatrix} $$
+\item
+I have already computed the spectral decomposition of $A^*$, so $A^*$
+is diagonalisable. Note that the eigenvalues are all real. In fact $h$
+is positive by physical constraint.
+\end{enumerate}
+
+
+\subsection{CFL condition}
+The computation of the CFL is quite an easy task in the scalar case
+but it's much more difficult in the non linear vectorial case. In the
+more general formula the CFL condition state 
+\begin{equation}
+  \label{eq:cfl_condition}
+  k<\frac{h}{c}
+\end{equation}
+where $k$,$h$ are the time,spacial steps, and $c$ is an appropriate
+quantity that have to be computed. In our case $c$ is the maximum
+eigenvalue of $A^*$, taken in absolute value. 
+We should so compute an estimate for
+\begin{equation}
+  \label{eq:eiganvalues_bounded}
+  \lambda_{1,2} = \frac{\frac{m_l}{\sqrt{h_l}}+\frac{m_r}{\sqrt{h_r}}
+  }{\sqrt{h_r}+\sqrt{h_l}}\pm\sqrt{\frac{g}{2}(h_l+h_r)}
+\end{equation}
+that is our estimate for $c$. 
+
+
+
+\chapter{Implementation of Lax-Friedrichs method}
+\label{chap:1}
+The implementation of Lax-Friedrichs method is described in the last
+chapter. In the last section of this chapter there are the most relevant part of code.
+
+\section{Numerical tests}
+\subsection{Case with known exact solution}
+\label{subsection:1_b}
+We started by considering a problem with this initial condition
+\begin{equation}
+  \label{eq:initial_solution_1b}
+  h(x,0)=h_0(x)=1+0.5\sin(\pi x)\quad \quad m(x,0)=m_0(x)=uh_0(x)
+\end{equation}
+and with
+\begin{equation}
+  \label{eq:known_term}
+  G(x,t)=\begin{bmatrix} \frac{\pi}{2}(u-1)\cos\pi(x-t))\\
+   \frac{\pi}{2}\cos\pi(x-t) \left(-u-u^2+gh_0(x-t)\right)\end{bmatrix}
+\end{equation}
+where $u=0.25$. 
+This problem has an exact solution that is
+\begin{equation}
+  \label{eq:exact_solution}
+  h(x,t)=h_0(x-t) \quad \quad m=uh
+\end{equation}
+I have used in the computation $k=\Delta x/2$ and $T=2$. For the grid
+I tested the code on grids with $\Delta x$ between 0.04 and 0.005.
+
+In image \ref{img:lf_1b_solution} we show a comparison between the
+numerical found and the exact solution. 
+I computed then the error of the numerical solution using the $L_1$
+norm. The plot of the error is in figure \ref{img:lf_1b_error}. The
+method has, as expected a first order accuracy.
+\begin{figure}[h]
+\label{img:lf_1b_solution}
+\centering
+\includegraphics[scale=0.6]{Immagini/LF/1b-solution-2.png}
+\caption{Comparison between numerical and exact solution for point
+  1b.}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:lf_1b_error}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/1b-error.png}
+\caption{Error of the numerical solution with dx varying between 0.04
+  and 0.005}
+\end{figure}
+
+\subsection{Cases with no exact solution}
+\label{subsection:1_c}
+
+Now we run the program with $G=0$ and with these initial functions
+\begin{equation}
+  \label{eq:initial_solution_1c_1}
+  h(x,0)=1-0.1\sin(\pi x)\quad \quad m(x,0)=0
+\end{equation}
+\begin{equation}
+  \label{eq:initial_solution_1c_2}
+  h(x,0)=1-0.2\sin(2\pi x)\quad \quad m(x,0)=0.5
+\end{equation}
+\begin{equation}
+  \label{eq:initial_solution_1c_2}
+  h(x,0)=\left\{ \begin{matrix} 1.5 & x<1 \\ 0.5 &x>1\end{matrix}\right. \quad \quad m(x,0)=0
+\end{equation}
+Since we don't have any exact solution for this case we computed the
+solution for $\Delta x=0.01/2^3$ and we used it as exact solution. We
+then test the order of convergence with $dx=0.08, 0.04, 0.02,
+0.01$ for the first case and with $dx=0.04, 0.02,
+0.01, 0.005$ for the others to have more evidence on the real order of
+convergence. In the following figures we have for each initial
+condition the visual comparison with the real solution. Moreover for
+each initial condition we show the order of convergence of the scheme
+using the $L_1$ norm. We have a first order convergence as expected
+for every case.
+
+\begin{figure}[h]
+\label{img:lf_1c_1_solution}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/1c-1-solution.png}
+\caption{Point 1c. Compare exact and numerical solution. Initial condition $h(x,0)=1-0.1\sin(\pi x)$}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:lf_1c_1_error}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/1c-1-error.png}
+\caption{Point 1c. Error. Initial condition $h(x,0)=1-0.1\sin(\pi x)$}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:lf_1c_2_solution}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/1c-2-solution.png}
+\caption{Point 1c. Compare exact and numerical solution. Initial condition $h(x,0)=1-0.2\sin(2\pi x)$}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:lf_1c_2_error}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/1c-2-error.png}
+\caption{Point 1c. Error. Initial condition $h(x,0)=1-0.2\sin(2\pi x)$}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:lf_1c_3_solution}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/1c-3-solution.png}
+\caption{Point 1c. Compare exact and numerical solution. Initial
+  condition piecewise constant}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:lf_1c_3_error}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/1c-3-error.png}
+\caption{Point 1c. Error. Initial condition piecewise constant}
+\end{figure}
+
+\FloatBarrier
+\section{Matlab code}
+In this section I provide the Matlab code that I used for the
+Lax-Friedrichs solver. I provide the code for the main time loop that
+updates the solution at every time step and the code relative to the
+computation of the Lax-Friedrichs flux.
+\begin{lstlisting}[frame=single]for i=2:length(gridT)
+for i=2:length(gridT)
+    for j=2:length(gridX)-1
+        
+        rightFlux=computeLFFlux(h(i-1,j), h(i-1,j+1),
+           m(i-1,j), m(i-1,j+1),F);
+        leftFlux=computeLFFlux(h(i-1,j-1),h(i-1,j),
+           m(i-1,j-1),m(i-1,j),F);
+
+        solution=[h(i-1,j) m(i-1,j)]'
+           -dt/dx*(rightFlux-leftFlux)
+           +dt*knownTerm(u,gridX(j),gridT(i-1),g);
+        h(i,j)=solution(1);
+        m(i,j)=solution(2);
+        
+    end
+    
+    h(i,1)=h(i,end-1);
+    h(i,end)=h(i,2);
+    m(i,1)=m(i,end-1);
+    m(i,end)=m(i,2);
+    
+    
+end
+\end{lstlisting}
+
+\begin{lstlisting}[frame=single]for i=2:length(gridT)
+function flux = computeLFFlux( hl,hr,ml,mr,F )
+
+lambda1=( (ml/sqrt(hl)+mr/sqrt(hr))/
+   (sqrt(hl)+sqrt(hr))  )^2+sqrt(1/2*(hl+hr));
+lambda2=( (ml/sqrt(hl)+mr/sqrt(hr))/
+   (sqrt(hl)+sqrt(hr))  )^2 - sqrt(1/2*(hl+hr));
+
+lambda=max(abs([lambda1,lambda2]));
+
+flux=1/2*( F(hl,ml)+F(hr,mr) ) - 1/2*lambda*[hr-hl;mr-ml];
+
+
+end
+\end{lstlisting}
+
+\chapter{Implementation of Godunov's method}
+\label{chap:2}
+
+\section{Numerical tests}
+In the following subsection we will redo the same numerical
+simulations that we did for the Lax-Friedrichs method.
+Comparing this method to the Lax-Friedrichs we notice the same order
+of convergence, independent from the initial condition. This method
+wether the order remains the same provide a better constant. This is
+particularly evident comparing the numerical solution with the exact
+solution with the same $dx$. 
+
+\subsection{Case with known exact solution}
+We reconsider the same initial condition of subsection
+\ref{subsection:1_b}. Without repeating all the conditions that are
+the same, I show as before the comparison between the numerical and
+the exact solution in figure \ref{img:roe_2b_solution} and the
+accuracy of the method in figure \ref{img:roe_2b_error}. As expected we have
+order 1 again.
+
+\begin{figure}[h]
+\label{img:roe_2b_solution}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/2b-solution.png}
+\caption{Point 2d. Compare exact and numerical solution. Initial
+  condition $h(x,0)=h_0(x)=1+0.5\sin(\pi x)$}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:roe_2b_error}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/1b-error.png}
+\caption{Point 2d. Error. Initial condition $h(x,0)=h_0(x)=1+0.5\sin(\pi x)$}
+\end{figure}
+
+
+\subsection{Cases with no exact solution}
+We reconsider the same initial condition of subsection
+\ref{subsection:1_c}. Since we don't have any exact solution for this case we computed the
+solution for $\Delta x=0.01/2^3$ and we used it as exact solution. We
+then test the order of convergence with $dx=0.08, 0.04, 0.02,
+0.01$ for the first case and with $dx=0.04, 0.02,
+0.01, 0.005$ for the others to have more evidence on the real order of
+convergence. In the following figures we have for each initial
+condition the visual comparison with the real solution. Moreover for
+each initial condition we show the order of convergence of the scheme
+using the $L_1$ norm. We have a first order convergence as expected
+for every case. 
+
+
+\begin{figure}[h]
+\label{img:roe_2c_1_solution}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/2c-1-solution.png}
+\caption{Point 2d. Compare exact and numerical solution. Initial condition $h(x,0)=1-0.1\sin(\pi x)$}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:roe_2c_1_error}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/2c-1-error.png}
+\caption{Point 2d. Error. Initial condition $h(x,0)=1-0.1\sin(\pi x)$}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:roe_2c_2_solution}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/2c-2-solution.png}
+\caption{Point 2d. Compare exact and numerical solution. Initial condition $h(x,0)=1-0.2\sin(2\pi x)$}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:roe_2c_2_error}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/2c-2-error.png}
+\caption{Point 2d. Error. Initial condition $h(x,0)=1-0.2\sin(2\pi x)$}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:roe_2c_3_solution}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/2c-3-solution.png}
+\caption{Point 2d. Compare exact and numerical solution. Initial
+  condition piecewise constant}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:roe_2c_3_error}
+\centering
+\includegraphics[scale=0.5]{Immagini/LF/2c-3-error.png}
+\caption{Point 2d. Error. Initial condition piecewise constant}
+\end{figure}
+
+\FloatBarrier
+\section{Matlab code}
+In this section I provide the Matlab code that I used for the
+Godunov's solver. The code for the main time loop that
+updates the solution at every time step is the same as the
+Lax-Friedrichs one. The following code is the one about the Roe flux.
+\begin{lstlisting}[frame=single]for i=2:length(gridT)
+function flux = computeROEFlux( hl,hr,ml,mr,F )
+lambda1=( (ml/sqrt(hl)+mr/sqrt(hr))/
+   (sqrt(hl)+sqrt(hr))  )^2 + sqrt(1/2*(hl+hr));
+lambda2=( (ml/sqrt(hl)+mr/sqrt(hr))/
+   (sqrt(hl)+sqrt(hr))  )^2 - sqrt(1/2*(hl+hr));
+
+S=[1 1;lambda1 lambda2];
+Sinverse=1/(lambda1-lambda2)*[-lambda2 1;lambda1 -1];
+EigenMatrix=abs([lambda1 0;0 lambda2]);
+
+A=S*EigenMatrix*Sinverse;
+
+flux=1/2*( F(hl,ml)+F(hr,mr) ) - 1/2*A*[hr-hl;mr-ml];
+
+
+end
+\end{lstlisting}
+
+
+
+% \chapter{Un po' di fisiologia}
+% \label{chap:3}
+
+% \cite{HodgkinHuxley}
+% Nel capitolo \ref{chap:1} abbiamo studiato le basi inutili di matematica. 
+% Ora studieremo quelle, ancor meno utili, di fisiologia.
+
+% Prendiamo ad esempio un cuore $\alpha$, una gamba $\beta$, 
+% una mano $\mathscr M$, una faccia $\mathcal F$,
+% un piede $\mathbb P$, un naso $\mathfrak N$ oppure
+% un nasino $\mathsf N$ o un nasone $\nn$.
+% Cosa ce ne facciamo? Nulla, appunto.
+% Ma grazie alle macro si pu\`o scrivere $\MM$, $\cF$, $\P$, $\frN$, $\sfn$, $\nn$.
+
+% Gli insiemi $\R,\Q,\N,\Z$ sono molto comodi con le macro....
+
+
+% \medskip
+% La bibliografia le vediamo dopo. Comunque si usa il file \emph{bibliografia.bib}
+% in cui si mettono tutti i dati bibliografici; ciascuna voce avr\`a una sua label.
+% Nel testo quando serve si usa poi il commando \emph{cite}: 
+% ad esempio 
+% %\cite{Sturm96}
+% contiene tutta una matematica che non ti serve...
+
+% Dopo aver compilato il file con \texttt{pdflatex},
+% esegui il comando \texttt{bibtex} e poi \texttt{pdflatex} due volte. Alla fine compare la bibliografia aggiornata.
+
+% Trovi il file che uso io, puoi usarlo come esempio per introdurre i testi che ti servono.
+
+
+
+% %\appendix  % serve se vuoi creare un appendice 
+
+
+% %% La bibliografia e' stata compilata e viene richiamata dal file
+% %% Paper.bbl; se si vuole ricompilarla con il bibtex occorre
+% %% togliere i commenti dalle due linee seguenti
+% %% e alla fine aggiungere nel file Paper.bbl la riga
+% %%
+% %% \addcontentsline{toc}{chapter}{Bibliography}
+% %%
+% %% subito dopo  \begin{thebibliography}
+
+
+
+
+% \bibliographystyle{siam}
+% \addcontentsline{toc}{chapter}{Bibliografia}
+% \bibliography{bibliografia}
+% %\input{Paper.bbl}
+
+
+% %% L'indice va stato compilato con l'istruzione
+% %% 
+% %% makeindex -o tesi.ind tesi.idx
+% %%
+% %% e viene richimato dal file tesi.ind;
+% %% se si vuole ricompilarlo occorre poi 
+% %% aggiungere nel file tesi.ind dopo \begin{theindex} la riga
+% %% 
+% %%   \addcontentsline{toc}{chapter}{Index}
+% %%
+% %%   
+% %\input tesi.in
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
