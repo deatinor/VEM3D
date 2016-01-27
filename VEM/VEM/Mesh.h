@@ -26,8 +26,10 @@ enum MeshType{TETRAHEDRON,TRIANGLE,ANYTHING3D,ANYTHING2D,FILETYPE1,FILETYPE2};
 //////////                MESH                        //////////
 ////////////////////////////////////////////////////////////////
 
-/** Basic class for creating a Mesh
+/** Abstract class for creating a Mesh
  *	
+ *	To inherit from this: create a contructor, implement one of the methods to set the elementVector (setTetrahedronMesh and following) and call the method initialize in the constructor.
+ *
  *	\param embedded It can be 2D or 3D
  *	\param baseElement typically Polygon or Polyhedron
  *  \param isOpen typically open. It can be closed for a surface embedded in a 3D space
@@ -76,7 +78,7 @@ public:
 	virtual void setRemainingThings()=0;
 	
 	
-	// metodi per settare l'elementVector, vanno implementati poi nell child class, solo quelli necessari
+	// methods to set the elementVector, they have to be implemented in the child class, only those necessary
 	virtual void setTetrahedronMesh(string connection) {}; //!< Read tetrahedron file type
 	virtual void setTriangleMesh(string connection) {};	//!< Read Triangle file type
 	virtual void setAnything3DMesh(string connection) {};	//!< Read general polyhedron file type
@@ -91,7 +93,7 @@ public:
 	virtual void writePoints(string outputFile="points.point") const;	//!< Point output to file
 	virtual void writeConnections(string outputFile="connections.conn") const;	//!< Connection output to file
 	
-protected: // costruttori protetti, non deve essere inizializzata questa classe, sebbene non possa essere definita abstract
+protected:
 
 	
 	Mesh():elementVector({}),pointVector({}){};	//!< Empty constructor

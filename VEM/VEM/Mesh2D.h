@@ -21,7 +21,12 @@ static bool lessPair(const pair<long,long>& pair1,const pair<long,long>& pair2) 
 template <typename real=double>
 class Mesh2D: public Mesh<2,Polygon<2,real>,OPEN,real> {
 private:
-	vector<pair<long,long>> pairVector; //!< This is to obtain internal and external points
+	/** This is to obtain internal and external points
+	 *
+	 *	There is no class Edge, to simplify the mesh creation. In this case a pair is an edge.
+	 *	All the pairs that are present only one time in the vector correspond to the boundary edges.
+	 */
+	vector<pair<long,long>> pairVector;
 
 public:
 	long numberOfBoundaryPoints;
@@ -37,11 +42,25 @@ public:
 	template <typename... Args >
 	shared_ptr<Polygon<2,real>> newPolygon(Args... arguments); //!< Method to add a Polygon to the Mesh after having read it
 	
-	virtual void setAnything2DMesh(string connection);	//!< Specilization of the method to read ANYTHING2D file.
+	/** Mesh of ANYTHING2D type
+	 *
+	 *  e.g. This is a Polygon, where 120 is the 120th point in the pointVector. Points are ordered:
+	 *	120,124,119,155
+	 *
+	 */
+	virtual void setAnything2DMesh(string connection);
 	
+	/** Specilization of the method
+	 *
+	 *	It uses the pairVector to accelerate the computation
+	 */
+	virtual void setBoundaryElements();
 	
-	virtual void setBoundaryElements();	//!< Specilization of the method
-	virtual void setRemainingThings();	//!< Specilization of the method
+	/** Specilization of the method
+	 *
+	 *	It sets pointIDs and numberOfBoundaryPoints
+	 */
+	virtual void setRemainingThings();
 	
 	void shrink_to_fit();
 	
@@ -60,42 +79,36 @@ template <typename real>
 void Mesh2D<real>::setAnything2DMesh(string connection) {
 	ifstream file2;
 	file2.open(connection);
-	string rigaFile2;
+	string fileRow2;
 
 	
-	//	int counter=0;
-	while (getline(file2, rigaFile2)) {
-		// conto il numero di punti
-		long numberOfVertexes=1;
-		for (int i=0; i<rigaFile2.size(); i++) {
-			if (rigaFile2[i]==',') {
+	while (getline(file2, fileRow2)) {
+		// it counts the number of points
+ 		long numberOfVertexes=1;
+		for (int i=0; i<fileRow2.size(); i++) {
+			if (fileRow2[i]==',') {
 				numberOfVertexes++;
 			}
 		}
 		
-		
-		istringstream rigaFileStream(rigaFile2);
-		
-		
-		vector<long> vertexVector;
-		vector<shared_ptr<MeshPoint<2,real>>> vertexPointerVector;
-			
+		istringstream rigaFileStream(fileRow2);
+	
+		vector<long> vertexVector; // for each vertex in the Polygon to create, in this vector is stores his position in pointVector
+		vector<shared_ptr<MeshPoint<2,real>>> vertexPointerVector; // vector of pointer to vertexes of the Polygon
 			
 		
-			
-		
-		// creo il vertexVector
+		// I create the vertexVector
 		for (int i=0;i<numberOfVertexes;i++) {
 			string pointString;
 			getline(rigaFileStream, pointString, ',');
 			istringstream stream3(pointString);
 			
-			//				cout<<pointString<<endl;
 			long value=0;
 			stream3>>value;
 			vertexVector.push_back(value);
 		}
 		
+		// I create the pairVector
 		for (int i=0; i<numberOfVertexes; i++) {
 			pair<long,long> pair;
 			if (vertexVector[i]<vertexVector[(i+1)%numberOfVertexes]){
@@ -106,17 +119,13 @@ void Mesh2D<real>::setAnything2DMesh(string connection) {
 			pairVector.push_back(pair);
 		}
 			
-		// creo il vertexPointerVector
+		// I create the vertexPointerVector
 		for (int i=0; i<numberOfVertexes; i++) {
 			vertexPointerVector.push_back(this->pointVector[vertexVector[i]-1 ]);
 		}
 			
-		// creo la faccia
+		// I create the Polygon
 		auto polygon=Polygon<2,real>::make_shared_Polygon(vertexPointerVector);
-		
-		//			cout<<face->isBoundary;
-		//			cout<<*face;
-		
 
 		this->elementVector.push_back(polygon);
 	}
@@ -128,17 +137,17 @@ void Mesh2D<real>::setAnything2DMesh(string connection) {
 template <typename real>
 void Mesh2D<real>::setBoundaryElements() {
 	
-	// riordino il vettore di pair per effettuare un confronto tra lati più veloce
+	// I reorder the pairVector to compare faster the edges
 	sort(pairVector.begin(),pairVector.end(),lessPair);
 	
-	// pongo tutti i punti con isBoundary=false
+	// I set all the points with isBoundary=false
 	for (int i=0;i<this->pointVector.size();i++) {
 		this->pointVector[i]->setIsBoundary(false);
 	}
 	
 
-	// confronto le pair
-	for (int i=0;i<pairVector.size()-1;i++) { // l'ultima la escludo
+	// I compare the pairs
+	for (int i=0;i<pairVector.size()-1;i++) { // I exclude the last pair
 		if (pairVector[i].first!=pairVector[i+1].first || pairVector[i].second!=pairVector[i+1].second) {
 			long point1=pairVector[i].first;
 			long point2=pairVector[i].second;
@@ -147,18 +156,17 @@ void Mesh2D<real>::setBoundaryElements() {
 			this->pointVector[point2-1]->setIsBoundary(true);
 		} else {
 			i++;
-			// se sono uguali salta la pair dopo
+			// if equals it jumps to the next pair
 		}
 	}
-	// l'ultima pair che era stata scartata si può scartare, i punti al bordo sono già stati individuati tutti
+	// the last pair is not considered, all the boundary points are already found
 
 	
-	// imposta isBoundary sui poligoni
+	// set isBoundary on the polygons
 	auto& pointVector=this->pointVector;
 	for (int i=0; i<pointVector.size(); i++) {
 		auto& point=pointVector[i];
 		if (point->getIsBoundary()) {
-//			auto& polygonVector=pointVector[i]->polygonVector;
 			for (int j=0; j<point->numberOfPolygons(); j++) {
 				if (auto polygon=point->polygon(j).lock()){
 					polygon->setIsBoundary(true);
@@ -173,7 +181,7 @@ void Mesh2D<real>::setBoundaryElements() {
 
 template <typename real>
 void Mesh2D<real>::setRemainingThings() {
-	// setta i pointID e le ultime proprietà
+	// set the pointIDs and the next properties
 	this->numberOfElements=this->elementVector.size();
 	this->numberOfPoints=this->pointVector.size();
 

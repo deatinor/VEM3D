@@ -34,7 +34,7 @@ class Point;
 /** Class to represent a Point belonging to a Mesh
  *
  *	The main differences with a simple Point are:
- *	- no copy constructor
+ *	- no copy constructor (this would cause problems in the Mesh)
  *	- it stores weak_ptr to the Polygons and Polyhedrons that have itself has vertex
  */
 template <long embedded,typename real=double>

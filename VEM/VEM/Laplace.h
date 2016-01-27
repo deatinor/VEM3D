@@ -33,7 +33,14 @@ using Monomial3D=Monomials<3,Polyhedron<3,real>,real>;
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-/**	Class to solve a Laplacian Problem
+/**	Class to solve a Laplacian Problem in 2D or 3D
+ *
+ *	Subclass of Problem well suited for Laplacian problems.
+ *
+ *	It's a general class, with no specified way to solve the problem. 
+ *	The Solver and the BoundaryCondition are specified as template paramether.
+ *	One can implement any kind of solver, the only restriction is that he has to create a subclass of the classes Solver and BoundaryCondition and pass them as template argument.
+ *	A possible extension would be to create a FEM solver without varying this class.
  *
  *	\param embedded Dimension of the space
  *	\param MeshType Type of the file to read
@@ -45,7 +52,7 @@ template <long embedded,typename MeshType,typename SolverType,typename BoundaryC
 class Laplace: public Problem<embedded,MeshType,real> {
 private:
 	// PRIVATE PROPERTIES
-
+	real diffusionCoeff;	//!< Coefficient of diffusion of the laplacian problem.
 	
 	
 	
@@ -63,7 +70,7 @@ public:
 	 * \param inputForceTerm ForceTerm std::function
 	 * \param inputBoundaryFunction std::function that expresses the boundary conditions
 	 */
-	Laplace(const MeshType& inputMesh,std::function<real(const Point<embedded,real>&)> inputForceTerm,std::function<real(const Point<embedded,real>&)> inputBoundaryFunction,real inputDiffusionCoeff=1):Problem<embedded,MeshType,real>(inputMesh,inputDiffusionCoeff),numberOfElements(inputMesh.numberOfElements),tripletList({}),boundaryCondition(inputMesh,inputBoundaryFunction),solver(inputForceTerm) {}
+	Laplace(const MeshType& inputMesh,std::function<real(const Point<embedded,real>&)> inputForceTerm,std::function<real(const Point<embedded,real>&)> inputBoundaryFunction,real inputDiffusionCoeff=1):Problem<embedded,MeshType,real>(inputMesh),numberOfElements(inputMesh.numberOfElements),tripletList({}),boundaryCondition(inputMesh,inputBoundaryFunction),solver(inputForceTerm),diffusionCoeff(inputDiffusionCoeff) {}
 	
 	// STANDARD METHODS
 	void computeStiffnessMatrix(); //<! General method. It invokes the methods of the Solver.
@@ -77,7 +84,7 @@ template <long embedded,typename MeshType,typename SolverType,typename BoundaryC
 void Laplace<embedded,MeshType,SolverType,BoundaryConditionType,real>::computeStiffnessMatrix() {
 	auto& mesh=this->mesh;
 	
-	// gira tutti i poliedri
+	// for each Polyhedron it calls the method of the Solver
 	for (int i=0;i<numberOfElements;i++) {
 
 		Matrix<real,Dynamic,Dynamic> Kloc=solver.computeLocalK(mesh.element(i));
@@ -96,18 +103,17 @@ template <long embedded,typename MeshType,typename SolverType,typename BoundaryC
 void Laplace<embedded,MeshType,SolverType,BoundaryConditionType,real>::computeKnownTerm() {
 	
 	auto& mesh=this->mesh;
-	// gira tutti i poliedri
+	// for each Polyhedron
 	for (int i=0;i<numberOfElements;i++) {
 		auto& element=*mesh.element(i);
 		
 		
-		// gira gli ID dei punti per aggiungere l'integrale al termine noto
-//		auto& pointVector=polyhedron.pointVector;
+		// for each point ID it adds the integral to the known term
 		for (int j=0;j<element.numberOfPoints;j++) {
 			long pointID=element.point(j)->getPointID();
 			real addTerm=solver.computeKnownTerm(mesh.element(i),element.point(j));
 
-			this->knownTerm[pointID]+=addTerm;//(volume*fValue*vhCoefficient);
+			this->knownTerm[pointID]+=addTerm;
 		}
 	
 	}

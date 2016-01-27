@@ -8,7 +8,10 @@
 
 /** Specialized class for 3D Mesh
  *
- *	BaseElement is a Polyhedron
+ *	BaseElement is a Polyhedron.
+ *
+ *	2 possibilities of file type: tetrahedron and anything3D. In the first for each Polyhedron only the vertex are specified in the connection file. In the second for each Polyhedron all the faces are specified.
+ *
  *
  */
 template <typename real=double>
@@ -32,19 +35,38 @@ public:
 	};
 	
 	// STANDARD METHODS
-	/** Method to create a Polygon after having read it
+	/** Method to create a Polygon after having read it.
+	 *
+	 *	It calls make_shared_Polygon.
+	 *	It also checks if the Polygon is on the boundary or not. It's faster to do it now, rather than after having read everything.
 	 */
 	template <typename... Args >
 	shared_ptr<Polygon<3,real>> newFace(Args... arguments);
 	
-	// specialization of the parent class functions
-	virtual void setBoundaryElements();	//!< Specilization of the method
+	/** Specilization of the method
+	 *
+	 *	Simple method, the main work is done in newFace
+	 */
+	virtual void setBoundaryElements();
 	virtual void setRemainingThings(); //!< Specilization of the method
 	
 	
 	// methods to set the elementVector
-	virtual void setTetrahedronMesh(string connection);	//!< Mesh of TETRAHEDRON type
-	virtual void setAnything3DMesh(string connection);	//!< Mesh of ANYTHING3D type
+	/** Mesh of TETRAHEDRON type
+	 *
+	 *	e.g. This is a Polyhedron, where 10 is the 10th point in the pointVector and each ';' describe a face:
+	 *	1,10,13,4;1,10,11,2;10,13,14,11;13,4,5,14;4,1,2,5;2,11,14,5
+	 *
+	 */
+	virtual void setTetrahedronMesh(string connection);
+	
+	/** Mesh of ANYTHING3D type
+	 *
+	 *  e.g. This is a Polyhedron, where 120 is the 120th point in the pointVector:
+	 *	120,124,119,155
+	 *
+	 */
+	virtual void setAnything3DMesh(string connection);
 	
 	void shrink_to_fit();
 	
@@ -58,8 +80,6 @@ public:
 
 // STANDARD METHODS
 
-// shared_ptr<MeshPoint<3, real>> p1, shared_ptr<MeshPoint<3, real>> p2, shared_ptr<MeshPoint<3, real>> p3
-
 template <typename real>
 template <typename... Args>
 shared_ptr<Polygon<3,real>> Mesh3D<real>::newFace(Args ...arguments) {
@@ -68,7 +88,7 @@ shared_ptr<Polygon<3,real>> Mesh3D<real>::newFace(Args ...arguments) {
 	for (int i=0; i<point1.numberOfPolygons(); i++) {
 		auto weakPolygon=point1.polygon(i);
 		if (auto polygon=weakPolygon.lock()) {
-			if (*polygon==*newPolygon && polygon!=newPolygon) { // puntatori diversi ma poligoni uguali
+			if (*polygon==*newPolygon && polygon!=newPolygon) { // different pointer but equal polygons
 				polygon->setIsBoundary(false);
 				newPolygon->setIsBoundary(false);
 				polygonVector.push_back(newPolygon);
@@ -95,9 +115,8 @@ void Mesh3D<real>::setAnything3DMesh(string connection) {
 	file2.open(connection);
 	string rigaFile2;
 	
-	//	int counter=0;
 	while (getline(file2, rigaFile2)) {
-		// conto il numero di facce
+		// it counts the number of faces
 		long numberOfFaces=1;
 		for (int i=0; i<rigaFile2.size(); i++) {
 			if (rigaFile2[i]==';') {
@@ -105,26 +124,22 @@ void Mesh3D<real>::setAnything3DMesh(string connection) {
 			}
 		}
 		
-		//		cout<<numberOfFaces<<endl;
 		vector<shared_ptr<Polygon<3,real>>> facesVector({});
 		
 		istringstream rigaFileStream(rigaFile2);
 		
-		// per ogni poliedro prendo le facce
+		// for each polyhedron I take the faces
 		for (long i=0; i<numberOfFaces; i++) {
 			string faceString;
 			getline(rigaFileStream, faceString, ';');
 			istringstream stream2(faceString);
 			
 			
-			//			cout<<faceString<<endl;
-			
-			// vettore che contiene i punti di ogni faccia
-			vector<long> vertexVector;
-			vector<shared_ptr<MeshPoint<3,real>>> vertexPointerVector;
+			vector<long> vertexVector; // for each vertex in the Polygon to create, in this vector is stores his position in pointVector
+			vector<shared_ptr<MeshPoint<3,real>>> vertexPointerVector; // vector of pointer to vertexes of the Polygon
 			
 			
-			// conto il numero di vertici per ogni faccia
+			// I count the number of vertexes for each face
 			long numberOfVertexes=1;
 			for (int j=0; j<faceString.size(); j++) {
 				if (faceString[j]==',') {
@@ -132,40 +147,32 @@ void Mesh3D<real>::setAnything3DMesh(string connection) {
 				}
 			}
 			
-			//			cout<<numberOfVertexes<<endl;
 			
-			// creo il vertexVector
+			// I create the vertexVector
 			for (int j=0;j<numberOfVertexes;j++) {
 				string pointString;
 				getline(stream2, pointString, ',');
 				istringstream stream3(pointString);
 				
-				//				cout<<pointString<<endl;
 				long value=0;
 				stream3>>value;
 				vertexVector.push_back(value);
 			}
 			
-			// creo il vertexPointerVector
+			// I creates vertexPointerVector
 			for (int j=0; j<numberOfVertexes; j++) {
 				vertexPointerVector.push_back(this->pointVector[vertexVector[j]-1 ]);
 			}
 			
-			// creo la faccia
-			
+			// I create the face
 			auto face=newFace(vertexPointerVector);
 			
 			facesVector.push_back(face);
 		}
 		
+		// I create the Polyhedron
 		auto polyhedron=Polyhedron<3,real>::make_shared_Polyhedron(facesVector);
 		this->elementVector.push_back(polyhedron);
-		
-		
-		
-		
-		
-		
 		
 	}
 	
@@ -193,7 +200,7 @@ void Mesh3D<real>::setBoundaryElements() {
 // setRemainingThings
 template <typename real>
 void Mesh3D<real>::setRemainingThings() {
-	// setta i pointID e le ultime proprietà
+	// It sets pointIDs and last properties
 	this->numberOfElements=this->elementVector.size();
 	this->numberOfPoints=this->pointVector.size();
 	numberOfPolygons=polygonVector.size();
@@ -229,8 +236,8 @@ void Mesh3D<real>::setTetrahedronMesh(string connection) {
 				numberOfVertex++;
 			}
 		}
-		vector<long> vertexVector;
-		vector<shared_ptr<MeshPoint<3,real>>> vertexPointerVector;
+		vector<long> vertexVector; // for each vertex in the Polygon to create, in this vector is stores his position in pointVector
+		vector<shared_ptr<MeshPoint<3,real>>> vertexPointerVector; // vector of pointer to vertexes of the Polygon
 		istringstream rigaFileStream(rigaFile2);
 		
 		for (long i=0; i<numberOfVertex+1; i++) {
@@ -243,18 +250,18 @@ void Mesh3D<real>::setTetrahedronMesh(string connection) {
 			vertexVector.push_back(value);
 			
 		}
-		// ho ottenuto i vertici del poliedro
-		
+		// I obtain vertexes of the Polyhedron
 		for (int i=0; i<numberOfVertex+1; i++) {
 			vertexPointerVector.push_back(this->pointVector[vertexVector[i]-1]);
 		}
 		
+		// gets the Points
 		auto p1=vertexPointerVector[0];
 		auto p2=vertexPointerVector[1];
 		auto p3=vertexPointerVector[2];
 		auto p4=vertexPointerVector[3];
 		
-		
+		// makes the Polygons
 		auto poly1=newFace(p1,p2,p3);
 		auto poly2=newFace(p1,p3,p4);
 		auto poly3=newFace(p4,p1,p2);
@@ -262,8 +269,9 @@ void Mesh3D<real>::setTetrahedronMesh(string connection) {
 		
 		
 		counter++;
+		// makes the Polyhedron
 		auto polyhedron=Polyhedron<3,real>::make_shared_Polyhedron(poly1,poly2,poly3,poly4);
-		
+	
 		
 		this->elementVector.push_back(polyhedron);
 		
