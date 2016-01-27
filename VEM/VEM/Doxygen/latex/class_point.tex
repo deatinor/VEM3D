@@ -1,0 +1,226 @@
+\hypertarget{class_point}{}\section{Point$<$ embedded, real $>$ Class Template Reference}
+\label{class_point}\index{Point$<$ embedded, real $>$@{Point$<$ embedded, real $>$}}
+
+
+Class to store the position of a point.  
+
+
+
+
+{\ttfamily \#include $<$Point.\+h$>$}
+
+Inheritance diagram for Point$<$ embedded, real $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_point}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_point_a1dff5286bb0a775c7db78320da11f3d4}{Point} (const array$<$ real, embedded $>$ \&input\+Array)\hypertarget{class_point_a1dff5286bb0a775c7db78320da11f3d4}{}\label{class_point_a1dff5286bb0a775c7db78320da11f3d4}
+
+\begin{DoxyCompactList}\small\item\em Constructor from std\+::array. \end{DoxyCompactList}\item 
+\hyperlink{class_point_a5c9c38f9f77cd9089a3a5cadedfee70c}{Point} (const \hyperlink{class_point}{Point}$<$ embedded, real $>$ \&input\+Point)\hypertarget{class_point_a5c9c38f9f77cd9089a3a5cadedfee70c}{}\label{class_point_a5c9c38f9f77cd9089a3a5cadedfee70c}
+
+\begin{DoxyCompactList}\small\item\em Copy constructor. \end{DoxyCompactList}\item 
+\hyperlink{class_point_ab4cb590995d17da1537e35f32da3e498}{Point} (const \hyperlink{class_mesh_point}{Mesh\+Point}$<$ embedded, real $>$ \&input\+Point)\hypertarget{class_point_ab4cb590995d17da1537e35f32da3e498}{}\label{class_point_ab4cb590995d17da1537e35f32da3e498}
+
+\begin{DoxyCompactList}\small\item\em Copy constructor from \hyperlink{class_mesh_point}{Mesh\+Point}. \end{DoxyCompactList}\item 
+\hyperlink{class_point_ab1a9e6eedb684c43816dc50c586df933}{Point} ()\hypertarget{class_point_ab1a9e6eedb684c43816dc50c586df933}{}\label{class_point_ab1a9e6eedb684c43816dc50c586df933}
+
+\begin{DoxyCompactList}\small\item\em Empty constructor. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename... Args$>$ }\\\hyperlink{class_point_ade059d5c3bf5513c9aaf6bc698f0bb24}{Point} (Args...\+arguments)
+\begin{DoxyCompactList}\small\item\em Constructor with variadic template. \end{DoxyCompactList}\item 
+long \hyperlink{class_point_a4a87c9a65f2bcd966f1df83a870f117f}{max\+Index} () const \hypertarget{class_point_a4a87c9a65f2bcd966f1df83a870f117f}{}\label{class_point_a4a87c9a65f2bcd966f1df83a870f117f}
+
+\begin{DoxyCompactList}\small\item\em Maximum index of the point. \end{DoxyCompactList}\item 
+long \hyperlink{class_point_a5b06a3b1249d1a29e316b00e94522a5a}{max\+Abs\+Index} () const \hypertarget{class_point_a5b06a3b1249d1a29e316b00e94522a5a}{}\label{class_point_a5b06a3b1249d1a29e316b00e94522a5a}
+
+\begin{DoxyCompactList}\small\item\em Maximum index of the point with absolute value. \end{DoxyCompactList}\item 
+real \hyperlink{class_point_a885ede7e456888ddb73792df46f88513}{norm} () const \hypertarget{class_point_a885ede7e456888ddb73792df46f88513}{}\label{class_point_a885ede7e456888ddb73792df46f88513}
+
+\begin{DoxyCompactList}\small\item\em L2 norm of the vector. \end{DoxyCompactList}\item 
+real \hyperlink{class_point_a6a5c8172bed4fadd3ff4369ac24b627e}{norm\+L1} () const \hypertarget{class_point_a6a5c8172bed4fadd3ff4369ac24b627e}{}\label{class_point_a6a5c8172bed4fadd3ff4369ac24b627e}
+
+\begin{DoxyCompactList}\small\item\em L1 norm of the vector. \end{DoxyCompactList}\item 
+string \hyperlink{class_point_a2e471acd2e526217306b148ef5d04d87}{write} () const 
+\begin{DoxyCompactList}\small\item\em Output to string. \end{DoxyCompactList}\item 
+real \& \hyperlink{class_point_ad9c36be87662ac8b290800ff76b8a3f7}{x} ()\hypertarget{class_point_ad9c36be87662ac8b290800ff76b8a3f7}{}\label{class_point_ad9c36be87662ac8b290800ff76b8a3f7}
+
+\begin{DoxyCompactList}\small\item\em Get the first element by reference. \end{DoxyCompactList}\item 
+real \hyperlink{class_point_a155238f2303c1805a976e5ffde2df863}{x} () const \hypertarget{class_point_a155238f2303c1805a976e5ffde2df863}{}\label{class_point_a155238f2303c1805a976e5ffde2df863}
+
+\begin{DoxyCompactList}\small\item\em Get the first element by value. \end{DoxyCompactList}\item 
+real \& \hyperlink{class_point_abdedcae417002d4e747b876a346a5062}{y} ()\hypertarget{class_point_abdedcae417002d4e747b876a346a5062}{}\label{class_point_abdedcae417002d4e747b876a346a5062}
+
+\begin{DoxyCompactList}\small\item\em Get the second element by reference. \end{DoxyCompactList}\item 
+real \hyperlink{class_point_ad4dc38edfea288dbfed132cf5ce3830a}{y} () const \hypertarget{class_point_ad4dc38edfea288dbfed132cf5ce3830a}{}\label{class_point_ad4dc38edfea288dbfed132cf5ce3830a}
+
+\begin{DoxyCompactList}\small\item\em Get the second element by value. \end{DoxyCompactList}\item 
+real \& \hyperlink{class_point_a70f81bbcc60b59191dba261ec8bee87e}{z} ()\hypertarget{class_point_a70f81bbcc60b59191dba261ec8bee87e}{}\label{class_point_a70f81bbcc60b59191dba261ec8bee87e}
+
+\begin{DoxyCompactList}\small\item\em Get the third element by reference. \end{DoxyCompactList}\item 
+real \hyperlink{class_point_ae344dd16dddf7ae80f665f085874fd55}{z} () const \hypertarget{class_point_ae344dd16dddf7ae80f665f085874fd55}{}\label{class_point_ae344dd16dddf7ae80f665f085874fd55}
+
+\begin{DoxyCompactList}\small\item\em Get the third element by value. \end{DoxyCompactList}\item 
+\hyperlink{class_point}{Point}$<$ embedded, real $>$ \& \hyperlink{class_point_a448799c65927e710a92fcd5b715e3b21}{operator=} (\hyperlink{class_point}{Point}$<$ embedded, real $>$ input\+Point)
+\begin{DoxyCompactList}\small\item\em Equal operator. \end{DoxyCompactList}\item 
+bool \hyperlink{class_point_a85d75524d6a63f080aca5cec2eca7ec9}{operator==} (const \hyperlink{class_point}{Point}$<$ embedded, real $>$ \&input\+Point) const 
+\begin{DoxyCompactList}\small\item\em Check if they are equals. \end{DoxyCompactList}\item 
+bool \hyperlink{class_point_af3dfd6f86d375de9c2bd412f9ba31c87}{operator!=} (const \hyperlink{class_point}{Point}$<$ embedded, real $>$ \&input\+Point) const 
+\begin{DoxyCompactList}\small\item\em Check if they are different. \end{DoxyCompactList}\item 
+real \& \hyperlink{class_point_ab8b7d24713bc91d95cced47933f06198}{operator\mbox{[}$\,$\mbox{]}} (long index)\hypertarget{class_point_ab8b7d24713bc91d95cced47933f06198}{}\label{class_point_ab8b7d24713bc91d95cced47933f06198}
+
+\begin{DoxyCompactList}\small\item\em Get an element by reference. \end{DoxyCompactList}\item 
+real \hyperlink{class_point_a6fb29d763d4c786452b071e790db86fc}{operator\mbox{[}$\,$\mbox{]}} (long index) const \hypertarget{class_point_a6fb29d763d4c786452b071e790db86fc}{}\label{class_point_a6fb29d763d4c786452b071e790db86fc}
+
+\begin{DoxyCompactList}\small\item\em Get an element by value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+array$<$ real, embedded $>$ \hyperlink{class_point_a24b16f288c9f98da13e4719b6ed462e6}{coordinates}\hypertarget{class_point_a24b16f288c9f98da13e4719b6ed462e6}{}\label{class_point_a24b16f288c9f98da13e4719b6ed462e6}
+
+\begin{DoxyCompactList}\small\item\em It stores the coordinates of the point. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$long embedded2, typename real2 $>$ }\\ostream \& \hyperlink{class_point_ac6eecb3c92e49e305452771a073acf4c}{operator$<$$<$} (ostream \&os, const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point)\hypertarget{class_point_ac6eecb3c92e49e305452771a073acf4c}{}\label{class_point_ac6eecb3c92e49e305452771a073acf4c}
+
+\begin{DoxyCompactList}\small\item\em Output operator. \end{DoxyCompactList}\item 
+{\footnotesize template$<$long embedded2, typename real2 $>$ }\\\hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \hyperlink{class_point_a3ea6134b47e84bd4452443ffde47e70f}{operator+} (const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point1, const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point2)\hypertarget{class_point_a3ea6134b47e84bd4452443ffde47e70f}{}\label{class_point_a3ea6134b47e84bd4452443ffde47e70f}
+
+\begin{DoxyCompactList}\small\item\em Sum operator. \end{DoxyCompactList}\item 
+{\footnotesize template$<$long embedded2, typename real2 $>$ }\\\hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \hyperlink{class_point_ab65b17238ecddcc87348a5e9c55892f3}{operator-\/} (const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point1, const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point2)\hypertarget{class_point_ab65b17238ecddcc87348a5e9c55892f3}{}\label{class_point_ab65b17238ecddcc87348a5e9c55892f3}
+
+\begin{DoxyCompactList}\small\item\em Difference operator. \end{DoxyCompactList}\item 
+{\footnotesize template$<$long embedded2, typename real2 $>$ }\\\hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \hyperlink{class_point_aadb04db36a16719114875b8a267ca639}{operator-\/} (const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point1)\hypertarget{class_point_aadb04db36a16719114875b8a267ca639}{}\label{class_point_aadb04db36a16719114875b8a267ca639}
+
+\begin{DoxyCompactList}\small\item\em Difference operator. \end{DoxyCompactList}\item 
+{\footnotesize template$<$long embedded2, typename real2 $>$ }\\real2 \hyperlink{class_point_afc1da372540656b24f224e7959624c08}{operator$\ast$} (const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point1, const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point2)\hypertarget{class_point_afc1da372540656b24f224e7959624c08}{}\label{class_point_afc1da372540656b24f224e7959624c08}
+
+\begin{DoxyCompactList}\small\item\em Product operator. \end{DoxyCompactList}\item 
+{\footnotesize template$<$long embedded2, typename real2 $>$ }\\\hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \hyperlink{class_point_acaaff0a0864728144ee00bb8772dfd74}{operator$\ast$} (long double coefficient, const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point)\hypertarget{class_point_acaaff0a0864728144ee00bb8772dfd74}{}\label{class_point_acaaff0a0864728144ee00bb8772dfd74}
+
+\begin{DoxyCompactList}\small\item\em Product operator. \end{DoxyCompactList}\item 
+{\footnotesize template$<$long embedded2, typename real2 $>$ }\\\hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \hyperlink{class_point_ab2682a3fd01359b9a694b8f8494341e1}{operator$\ast$} (const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point, long double coefficient)\hypertarget{class_point_ab2682a3fd01359b9a694b8f8494341e1}{}\label{class_point_ab2682a3fd01359b9a694b8f8494341e1}
+
+\begin{DoxyCompactList}\small\item\em Product operator. \end{DoxyCompactList}\item 
+{\footnotesize template$<$long embedded2, typename real2 $>$ }\\\hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \hyperlink{class_point_a587faaadac82c79e9119d8bc59396c79}{operator/} (const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point, long double coefficient)\hypertarget{class_point_a587faaadac82c79e9119d8bc59396c79}{}\label{class_point_a587faaadac82c79e9119d8bc59396c79}
+
+\begin{DoxyCompactList}\small\item\em Dividing operator. \end{DoxyCompactList}\item 
+{\footnotesize template$<$long embedded2, typename real2 $>$ }\\\hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \hyperlink{class_point_a951dd5bf519f7daabc4ba4e61657cc26}{cross} (const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point1, const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point2)
+\begin{DoxyCompactList}\small\item\em Cross product of 2 vector. \end{DoxyCompactList}\item 
+{\footnotesize template$<$long embedded2, typename real2 $>$ }\\\hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \hyperlink{class_point_a94ebaad0db80d547a452cba37e98e1ca}{prod\+Term\+By\+Term} (const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point1, const \hyperlink{class_point}{Point}$<$ embedded2, real2 $>$ \&point2)
+\begin{DoxyCompactList}\small\item\em Product term by term. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$long embedded, typename real = double$>$\\*
+class Point$<$ embedded, real $>$}
+
+Class to store the position of a point. 
+
+Virtually any dimensions allowed. Some methods are available only for d=2 or d=3. Any vector can be seen as a point. Some appropriate typedef (Vector2D, Vector3D, Vector$<$embedded$>$, Vector$<$embedded,real$>$) are implemented. 
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Point@{Point}!Point@{Point}}
+\index{Point@{Point}!Point@{Point}}
+\subsubsection[{\texorpdfstring{Point(\+Args...\+arguments)}{Point(Args...arguments)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real = double$>$ template$<$typename... Args$>$ {\bf Point}$<$ embedded, real $>$\+::{\bf Point} (
+\begin{DoxyParamCaption}
+\item[{Args...}]{arguments}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{class_point_ade059d5c3bf5513c9aaf6bc698f0bb24}{}\label{class_point_ade059d5c3bf5513c9aaf6bc698f0bb24}
+
+
+Constructor with variadic template. 
+
+Source\+: \href{http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable}{\tt http\+://stackoverflow.\+com/questions/8158261/templates-\/how-\/to-\/control-\/number-\/of-\/constructor-\/args-\/using-\/template-\/variable} 
+
+\subsection{Member Function Documentation}
+\index{Point@{Point}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!Point@{Point}}
+\subsubsection[{\texorpdfstring{operator"!=(const Point$<$ embedded, real $>$ \&input\+Point) const }{operator!=(const Point< embedded, real > &inputPoint) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real$>$ bool {\bf Point}$<$ embedded, real $>$\+::operator!= (
+\begin{DoxyParamCaption}
+\item[{const {\bf Point}$<$ embedded, real $>$ \&}]{input\+Point}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_point_af3dfd6f86d375de9c2bd412f9ba31c87}{}\label{class_point_af3dfd6f86d375de9c2bd412f9ba31c87}
+
+
+Check if they are different. 
+
+It compares only coordinates \index{Point@{Point}!operator=@{operator=}}
+\index{operator=@{operator=}!Point@{Point}}
+\subsubsection[{\texorpdfstring{operator=(\+Point$<$ embedded, real $>$ input\+Point)}{operator=(Point< embedded, real > inputPoint)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real$>$ {\bf Point}$<$ embedded, real $>$ \& {\bf Point}$<$ embedded, real $>$\+::operator= (
+\begin{DoxyParamCaption}
+\item[{{\bf Point}$<$ embedded, real $>$}]{input\+Point}
+\end{DoxyParamCaption}
+)}\hypertarget{class_point_a448799c65927e710a92fcd5b715e3b21}{}\label{class_point_a448799c65927e710a92fcd5b715e3b21}
+
+
+Equal operator. 
+
+Be careful, it copies only the coordinates, not the other things \index{Point@{Point}!operator==@{operator==}}
+\index{operator==@{operator==}!Point@{Point}}
+\subsubsection[{\texorpdfstring{operator==(const Point$<$ embedded, real $>$ \&input\+Point) const }{operator==(const Point< embedded, real > &inputPoint) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real$>$ bool {\bf Point}$<$ embedded, real $>$\+::operator== (
+\begin{DoxyParamCaption}
+\item[{const {\bf Point}$<$ embedded, real $>$ \&}]{input\+Point}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_point_a85d75524d6a63f080aca5cec2eca7ec9}{}\label{class_point_a85d75524d6a63f080aca5cec2eca7ec9}
+
+
+Check if they are equals. 
+
+It compares only coordinates \index{Point@{Point}!write@{write}}
+\index{write@{write}!Point@{Point}}
+\subsubsection[{\texorpdfstring{write() const }{write() const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real $>$ string {\bf Point}$<$ embedded, real $>$\+::write (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_point_a2e471acd2e526217306b148ef5d04d87}{}\label{class_point_a2e471acd2e526217306b148ef5d04d87}
+
+
+Output to string. 
+
+\begin{DoxyReturn}{Returns}
+std\+::string representing the \hyperlink{class_point}{Point} 
+\end{DoxyReturn}
+
+
+\subsection{Friends And Related Function Documentation}
+\index{Point@{Point}!cross@{cross}}
+\index{cross@{cross}!Point@{Point}}
+\subsubsection[{\texorpdfstring{cross}{cross}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real = double$>$ template$<$long embedded2, typename real2 $>$ {\bf Point}$<$embedded2,real2$>$ cross (
+\begin{DoxyParamCaption}
+\item[{const {\bf Point}$<$ embedded2, real2 $>$ \&}]{point1, }
+\item[{const {\bf Point}$<$ embedded2, real2 $>$ \&}]{point2}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [friend]}}\hypertarget{class_point_a951dd5bf519f7daabc4ba4e61657cc26}{}\label{class_point_a951dd5bf519f7daabc4ba4e61657cc26}
+
+
+Cross product of 2 vector. 
+
+\begin{DoxyReturn}{Returns}
+The resulting vector of the cross product Here \hyperlink{class_point}{Point} is intended as Vector. Cross product keeping sign into consideration 
+\end{DoxyReturn}
+\index{Point@{Point}!prod\+Term\+By\+Term@{prod\+Term\+By\+Term}}
+\index{prod\+Term\+By\+Term@{prod\+Term\+By\+Term}!Point@{Point}}
+\subsubsection[{\texorpdfstring{prod\+Term\+By\+Term}{prodTermByTerm}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real = double$>$ template$<$long embedded2, typename real2 $>$ {\bf Point}$<$embedded2,real2$>$ prod\+Term\+By\+Term (
+\begin{DoxyParamCaption}
+\item[{const {\bf Point}$<$ embedded2, real2 $>$ \&}]{point1, }
+\item[{const {\bf Point}$<$ embedded2, real2 $>$ \&}]{point2}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [friend]}}\hypertarget{class_point_a94ebaad0db80d547a452cba37e98e1ca}{}\label{class_point_a94ebaad0db80d547a452cba37e98e1ca}
+
+
+Product term by term. 
+
+\begin{DoxyReturn}{Returns}
+A point with component i being the product of the i components of the 2 vectors 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Mesh\+Point.\+h\item 
+Point.\+h\end{DoxyCompactItemize}

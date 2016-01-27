@@ -1,0 +1,43 @@
+\hypertarget{class_solver_v_e_m2_d}{}\section{Solver\+V\+E\+M2D$<$ real $>$ Class Template Reference}
+\label{class_solver_v_e_m2_d}\index{Solver\+V\+E\+M2\+D$<$ real $>$@{Solver\+V\+E\+M2\+D$<$ real $>$}}
+
+
+Specilized class to solve V\+EM in 2D.  
+
+
+
+
+{\ttfamily \#include $<$Solver\+V\+E\+M2\+D.\+h$>$}
+
+Inheritance diagram for Solver\+V\+E\+M2D$<$ real $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_solver_v_e_m2_d}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Matrix$<$ real, 3, Dynamic $>$ {\bfseries computeB} (const shared\+\_\+ptr$<$ \hyperlink{class_polygon}{Polygon}$<$ 2, real $>$$>$ \&polygon, \hyperlink{class_monomials}{Monomial2D}$<$ real $>$ \&monomial)\hypertarget{class_solver_v_e_m2_d_a047d81b5eda82278be3a2f835dce8845}{}\label{class_solver_v_e_m2_d_a047d81b5eda82278be3a2f835dce8845}
+
+\item 
+\hyperlink{class_solver_v_e_m2_d_aaf184f7a8c8d71699aa94cf9f2816e47}{Solver\+V\+E\+M2D} (std\+::function$<$ real(const \hyperlink{class_point}{Point}$<$ 2, real $>$ \&)$>$ input\+Force\+Term)\hypertarget{class_solver_v_e_m2_d_aaf184f7a8c8d71699aa94cf9f2816e47}{}\label{class_solver_v_e_m2_d_aaf184f7a8c8d71699aa94cf9f2816e47}
+
+\begin{DoxyCompactList}\small\item\em Standard constructor. \end{DoxyCompactList}\item 
+virtual real \hyperlink{class_solver_v_e_m2_d_a718d3ee9a896d30ee4cbe8a63adf5605}{compute\+Known\+Term} (const shared\+\_\+ptr$<$ \hyperlink{class_polygon}{Polygon}$<$ 2, real $>$$>$ \&element, const shared\+\_\+ptr$<$ \hyperlink{class_mesh_point}{Mesh\+Point}$<$ 2, real $>$$>$ \&point)\hypertarget{class_solver_v_e_m2_d_a718d3ee9a896d30ee4cbe8a63adf5605}{}\label{class_solver_v_e_m2_d_a718d3ee9a896d30ee4cbe8a63adf5605}
+
+\begin{DoxyCompactList}\small\item\em Computes the known term of the element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename real = double$>$\\*
+class Solver\+V\+E\+M2\+D$<$ real $>$}
+
+Specilized class to solve V\+EM in 2D. 
+
+It only implements computeB and compute\+Known\+Term 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Solver\+V\+E\+M2\+D.\+h\end{DoxyCompactItemize}

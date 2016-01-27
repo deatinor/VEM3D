@@ -1,0 +1,89 @@
+\hypertarget{class_mesh2_d}{}\section{Mesh2D$<$ real $>$ Class Template Reference}
+\label{class_mesh2_d}\index{Mesh2\+D$<$ real $>$@{Mesh2\+D$<$ real $>$}}
+
+
+Specialized class for 2D \hyperlink{class_mesh}{Mesh}.  
+
+
+
+
+{\ttfamily \#include $<$Mesh2\+D.\+h$>$}
+
+Inheritance diagram for Mesh2D$<$ real $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_mesh2_d}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_mesh2_d_a98d286dea8fdf7b908b3a56991beca47}{Mesh2D} (string point\+File, string connection\+File, Mesh\+Type mesh\+Type=A\+N\+Y\+T\+H\+I\+N\+G2D)\hypertarget{class_mesh2_d_a98d286dea8fdf7b908b3a56991beca47}{}\label{class_mesh2_d_a98d286dea8fdf7b908b3a56991beca47}
+
+\begin{DoxyCompactList}\small\item\em Constructor with input file. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename... Args$>$ }\\shared\+\_\+ptr$<$ \hyperlink{class_polygon}{Polygon}$<$ 2, real $>$ $>$ \hyperlink{class_mesh2_d_a08651a8b7f996ea4d8896bd0802d6f24}{new\+Polygon} (Args...\+arguments)\hypertarget{class_mesh2_d_a08651a8b7f996ea4d8896bd0802d6f24}{}\label{class_mesh2_d_a08651a8b7f996ea4d8896bd0802d6f24}
+
+\begin{DoxyCompactList}\small\item\em Method to add a \hyperlink{class_polygon}{Polygon} to the \hyperlink{class_mesh}{Mesh} after having read it. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh2_d_a6cf7a73abadd08ecd18d6f35c7b644c3}{set\+Anything2\+D\+Mesh} (string connection)\hypertarget{class_mesh2_d_a6cf7a73abadd08ecd18d6f35c7b644c3}{}\label{class_mesh2_d_a6cf7a73abadd08ecd18d6f35c7b644c3}
+
+\begin{DoxyCompactList}\small\item\em Specilization of the method to read A\+N\+Y\+T\+H\+I\+N\+G2D file. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh2_d_ac6408b5999b1deddbbd137dc8bd9e1cd}{set\+Boundary\+Elements} ()
+\begin{DoxyCompactList}\small\item\em Specilization of the method. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh2_d_ae52c22a91d85fdb99955bf57162f6dac}{set\+Remaining\+Things} ()
+\begin{DoxyCompactList}\small\item\em Specilization of the method. \end{DoxyCompactList}\item 
+void {\bfseries shrink\+\_\+to\+\_\+fit} ()\hypertarget{class_mesh2_d_a06fba3c3fc41d127a8238d4a1b7972a3}{}\label{class_mesh2_d_a06fba3c3fc41d127a8238d4a1b7972a3}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+long {\bfseries number\+Of\+Boundary\+Points}\hypertarget{class_mesh2_d_a3c1c3c7ab2139d81e6166bc493365191}{}\label{class_mesh2_d_a3c1c3c7ab2139d81e6166bc493365191}
+
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename real = double$>$\\*
+class Mesh2\+D$<$ real $>$}
+
+Specialized class for 2D \hyperlink{class_mesh}{Mesh}. 
+
+Base\+Element is a \hyperlink{class_polygon}{Polygon} 
+
+\subsection{Member Function Documentation}
+\index{Mesh2D@{Mesh2D}!set\+Boundary\+Elements@{set\+Boundary\+Elements}}
+\index{set\+Boundary\+Elements@{set\+Boundary\+Elements}!Mesh2D@{Mesh2D}}
+\subsubsection[{\texorpdfstring{set\+Boundary\+Elements()}{setBoundaryElements()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename real $>$ void {\bf Mesh2D}$<$ real $>$\+::set\+Boundary\+Elements (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{class_mesh2_d_ac6408b5999b1deddbbd137dc8bd9e1cd}{}\label{class_mesh2_d_ac6408b5999b1deddbbd137dc8bd9e1cd}
+
+
+Specilization of the method. 
+
+It uses the pair\+Vector to accelerate the computation 
+
+Implements \hyperlink{class_mesh_a887eb0d187f2da37b4c785d68dfcf7ad}{Mesh$<$ 2, Polygon$<$ 2, real $>$, O\+P\+E\+N, real $>$}.
+
+\index{Mesh2D@{Mesh2D}!set\+Remaining\+Things@{set\+Remaining\+Things}}
+\index{set\+Remaining\+Things@{set\+Remaining\+Things}!Mesh2D@{Mesh2D}}
+\subsubsection[{\texorpdfstring{set\+Remaining\+Things()}{setRemainingThings()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename real $>$ void {\bf Mesh2D}$<$ real $>$\+::set\+Remaining\+Things (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{class_mesh2_d_ae52c22a91d85fdb99955bf57162f6dac}{}\label{class_mesh2_d_ae52c22a91d85fdb99955bf57162f6dac}
+
+
+Specilization of the method. 
+
+It sets point\+I\+Ds and number\+Of\+Boundary\+Points 
+
+Implements \hyperlink{class_mesh_a70d7cba1e66435915fb1db7c430aa44f}{Mesh$<$ 2, Polygon$<$ 2, real $>$, O\+P\+E\+N, real $>$}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Mesh2\+D.\+h\end{DoxyCompactItemize}

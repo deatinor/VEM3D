@@ -1,0 +1,229 @@
+\hypertarget{class_mesh}{}\section{Mesh$<$ embedded, base\+Element, is\+Open, real $>$ Class Template Reference}
+\label{class_mesh}\index{Mesh$<$ embedded, base\+Element, is\+Open, real $>$@{Mesh$<$ embedded, base\+Element, is\+Open, real $>$}}
+
+
+Abstract class for creating a \hyperlink{class_mesh}{Mesh}.  
+
+
+
+
+{\ttfamily \#include $<$Mesh.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+const shared\+\_\+ptr$<$ base\+Element $>$ \& \hyperlink{class_mesh_a4a1745c0291384760349262dca8ca27c}{element} (long index) const 
+\item 
+const shared\+\_\+ptr$<$ \hyperlink{class_mesh_point}{Mesh\+Point}$<$ embedded, real $>$ $>$ \& \hyperlink{class_mesh_a41e57256500b30c8a79e32ce070ff2d1}{point} (long index) const 
+\item 
+const vector$<$ shared\+\_\+ptr$<$ \hyperlink{class_mesh_point}{Mesh\+Point}$<$ embedded, real $>$ $>$ $>$ \& {\bfseries get\+Point\+Vector} () const \hypertarget{class_mesh_ae589a7d04810b2ca182ce577c9976400}{}\label{class_mesh_ae589a7d04810b2ca182ce577c9976400}
+
+\item 
+virtual real \hyperlink{class_mesh_a828737450d4876e720c518ef362fa52a}{h\+Triangle} ()\hypertarget{class_mesh_a828737450d4876e720c518ef362fa52a}{}\label{class_mesh_a828737450d4876e720c518ef362fa52a}
+
+\begin{DoxyCompactList}\small\item\em paramether h of the \hyperlink{class_mesh}{Mesh} \end{DoxyCompactList}\item 
+void \hyperlink{class_mesh_adbdd6ff691886a2a8e9ec8192c9b0469}{initialize} (string point\+File, string connection, Mesh\+Type mesh\+Type=A\+N\+Y\+T\+H\+I\+N\+G3D)
+\begin{DoxyCompactList}\small\item\em Method that calls the functions that read the file. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh_abb728c88ecb80918cdcc0408eb5cb0c6}{set\+Point\+Vector} (string file)\hypertarget{class_mesh_abb728c88ecb80918cdcc0408eb5cb0c6}{}\label{class_mesh_abb728c88ecb80918cdcc0408eb5cb0c6}
+
+\begin{DoxyCompactList}\small\item\em It obtains the point\+Vector from file. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh_af6e1d08bb6a3d3a69a5ca363f8545442}{set\+Element\+Vector} (string connections, Mesh\+Type mesh\+Type)
+\begin{DoxyCompactList}\small\item\em It obtains the element\+Vector from connections. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh_a887eb0d187f2da37b4c785d68dfcf7ad}{set\+Boundary\+Elements} ()=0
+\begin{DoxyCompactList}\small\item\em Virtual method to keep into account the boundary elements. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh_a70d7cba1e66435915fb1db7c430aa44f}{set\+Remaining\+Things} ()=0
+\begin{DoxyCompactList}\small\item\em Virtual method used to set other things, like point\+I\+Ds. \end{DoxyCompactList}\item 
+virtual void {\bfseries set\+Tetrahedron\+Mesh} (string connection)\hypertarget{class_mesh_a55b0d4231dea5fce30cfe45a0a0c65f0}{}\label{class_mesh_a55b0d4231dea5fce30cfe45a0a0c65f0}
+
+\item 
+virtual void \hyperlink{class_mesh_aa06732e9d97c6753e880edda677b21b5}{set\+Triangle\+Mesh} (string connection)\hypertarget{class_mesh_aa06732e9d97c6753e880edda677b21b5}{}\label{class_mesh_aa06732e9d97c6753e880edda677b21b5}
+
+\begin{DoxyCompactList}\small\item\em Read tetrahedron file type. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh_ae066f4f10aaaaa6d49f581dde9721c8a}{set\+Anything3\+D\+Mesh} (string connection)\hypertarget{class_mesh_ae066f4f10aaaaa6d49f581dde9721c8a}{}\label{class_mesh_ae066f4f10aaaaa6d49f581dde9721c8a}
+
+\begin{DoxyCompactList}\small\item\em Read Triangle file type. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh_a2ecf67041cd4170bbe58e150c0463f22}{set\+Anything2\+D\+Mesh} (string connection)\hypertarget{class_mesh_a2ecf67041cd4170bbe58e150c0463f22}{}\label{class_mesh_a2ecf67041cd4170bbe58e150c0463f22}
+
+\begin{DoxyCompactList}\small\item\em Read general polyhedron file type. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh_a349da9279777b5cae335524136f85567}{set\+File\+Type1\+Mesh} (string connection)\hypertarget{class_mesh_a349da9279777b5cae335524136f85567}{}\label{class_mesh_a349da9279777b5cae335524136f85567}
+
+\begin{DoxyCompactList}\small\item\em Read general polygon file type. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh_a03cb81990255eea926696f883279935e}{set\+File\+Type2\+Mesh} (string connection)\hypertarget{class_mesh_a03cb81990255eea926696f883279935e}{}\label{class_mesh_a03cb81990255eea926696f883279935e}
+
+\begin{DoxyCompactList}\small\item\em Need to be specialized. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh_a5cb1110ec8bf2b1d089453f873df226f}{sort} ()
+\begin{DoxyCompactList}\small\item\em Need to be specialized. \end{DoxyCompactList}\item 
+void {\bfseries shrink\+\_\+to\+\_\+fit} ()\hypertarget{class_mesh_a9c9daf07927688c3a156ee1ef0c95900}{}\label{class_mesh_a9c9daf07927688c3a156ee1ef0c95900}
+
+\item 
+virtual void \hyperlink{class_mesh_acf271beef22b8df2fb50cd9f14da7c6a}{write} (string output\+Points=\char`\"{}points.\+point\char`\"{}, string output\+Connections=\char`\"{}connections.\+conn\char`\"{}) const \hypertarget{class_mesh_acf271beef22b8df2fb50cd9f14da7c6a}{}\label{class_mesh_acf271beef22b8df2fb50cd9f14da7c6a}
+
+\begin{DoxyCompactList}\small\item\em Full output to file. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh_a1ff4e8213296a357a0df5b7051008ae3}{write\+Points} (string output\+File=\char`\"{}points.\+point\char`\"{}) const \hypertarget{class_mesh_a1ff4e8213296a357a0df5b7051008ae3}{}\label{class_mesh_a1ff4e8213296a357a0df5b7051008ae3}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_point}{Point} output to file. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_mesh_adb3c64b4f1420c5ed0b6a74c6d9b116b}{write\+Connections} (string output\+File=\char`\"{}connections.\+conn\char`\"{}) const \hypertarget{class_mesh_adb3c64b4f1420c5ed0b6a74c6d9b116b}{}\label{class_mesh_adb3c64b4f1420c5ed0b6a74c6d9b116b}
+
+\begin{DoxyCompactList}\small\item\em Connection output to file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+long {\bfseries number\+Of\+Elements}\hypertarget{class_mesh_af7c23d5f0561acb3fb7fae234e5f2f32}{}\label{class_mesh_af7c23d5f0561acb3fb7fae234e5f2f32}
+
+\item 
+long {\bfseries number\+Of\+Points}\hypertarget{class_mesh_a6b2ec9290bb2a198ea28a2577a43e271}{}\label{class_mesh_a6b2ec9290bb2a198ea28a2577a43e271}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ shared\+\_\+ptr$<$ base\+Element $>$ $>$ \hyperlink{class_mesh_aea48e58470e3a72fcc3ee5b26f9c5315}{element\+Vector}\hypertarget{class_mesh_aea48e58470e3a72fcc3ee5b26f9c5315}{}\label{class_mesh_aea48e58470e3a72fcc3ee5b26f9c5315}
+
+\begin{DoxyCompactList}\small\item\em Vector of \hyperlink{class_polygon}{Polygon} or \hyperlink{class_polyhedron}{Polyhedron}. \end{DoxyCompactList}\item 
+vector$<$ shared\+\_\+ptr$<$ \hyperlink{class_mesh_point}{Mesh\+Point}$<$ embedded, real $>$ $>$ $>$ \hyperlink{class_mesh_ae132c0131accc25771300cea93e26c01}{point\+Vector}\hypertarget{class_mesh_ae132c0131accc25771300cea93e26c01}{}\label{class_mesh_ae132c0131accc25771300cea93e26c01}
+
+\begin{DoxyCompactList}\small\item\em Vector of the vertexes of each element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$long embedded2, typename base\+Element2 , Open\+Enum is\+Open2, typename real2 $>$ }\\ostream \& \hyperlink{class_mesh_a10337641e675a22873fcf8f0ddb7e409}{operator$<$$<$} (ostream \&os, const \hyperlink{class_mesh}{Mesh}$<$ embedded2, base\+Element2, is\+Open2, real2 $>$ \&mesh)
+\begin{DoxyCompactList}\small\item\em Empty constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$long embedded, typename base\+Element, Open\+Enum is\+Open = O\+P\+EN, typename real = double$>$\\*
+class Mesh$<$ embedded, base\+Element, is\+Open, real $>$}
+
+Abstract class for creating a \hyperlink{class_mesh}{Mesh}. 
+
+To inherit from this\+: create a contructor, implement one of the methods to set the element\+Vector (set\+Tetrahedron\+Mesh and following) and call the method initialize in the constructor.
+
+
+\begin{DoxyParams}{Parameters}
+{\em embedded} & It can be 2D or 3D \\
+\hline
+{\em base\+Element} & typically \hyperlink{class_polygon}{Polygon} or \hyperlink{class_polyhedron}{Polyhedron} \\
+\hline
+{\em is\+Open} & typically open. It can be closed for a surface embedded in a 3D space \\
+\hline
+{\em real} & double or long double \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\index{Mesh@{Mesh}!element@{element}}
+\index{element@{element}!Mesh@{Mesh}}
+\subsubsection[{\texorpdfstring{element(long index) const }{element(long index) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename base\+Element, Open\+Enum is\+Open = O\+P\+EN, typename real = double$>$ const shared\+\_\+ptr$<$ base\+Element $>$ \& {\bf Mesh}$<$ embedded, base\+Element, is\+Open, real $>$\+::element (
+\begin{DoxyParamCaption}
+\item[{long}]{index}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_mesh_a4a1745c0291384760349262dca8ca27c}{}\label{class_mesh_a4a1745c0291384760349262dca8ca27c}
+\begin{DoxyReturn}{Returns}
+the element with particular index 
+\end{DoxyReturn}
+\index{Mesh@{Mesh}!initialize@{initialize}}
+\index{initialize@{initialize}!Mesh@{Mesh}}
+\subsubsection[{\texorpdfstring{initialize(string point\+File, string connection, Mesh\+Type mesh\+Type=\+A\+N\+Y\+T\+H\+I\+N\+G3\+D)}{initialize(string pointFile, string connection, MeshType meshType=ANYTHING3D)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename base\+Element , Open\+Enum is\+Open, typename real $>$ void {\bf Mesh}$<$ embedded, base\+Element, is\+Open, real $>$\+::initialize (
+\begin{DoxyParamCaption}
+\item[{string}]{point\+File, }
+\item[{string}]{connection, }
+\item[{Mesh\+Type}]{mesh\+Type = {\ttfamily ANYTHING3D}}
+\end{DoxyParamCaption}
+)}\hypertarget{class_mesh_adbdd6ff691886a2a8e9ec8192c9b0469}{}\label{class_mesh_adbdd6ff691886a2a8e9ec8192c9b0469}
+
+
+Method that calls the functions that read the file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em point\+File} & the file with the position of the Points \\
+\hline
+{\em connection} & file with th econnection between points \\
+\hline
+{\em mesh\+Type} & format of the file type \\
+\hline
+\end{DoxyParams}
+\index{Mesh@{Mesh}!point@{point}}
+\index{point@{point}!Mesh@{Mesh}}
+\subsubsection[{\texorpdfstring{point(long index) const }{point(long index) const }}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename base\+Element , Open\+Enum is\+Open, typename real $>$ const shared\+\_\+ptr$<$ {\bf Mesh\+Point}$<$ embedded, real $>$ $>$ \& {\bf Mesh}$<$ embedded, base\+Element, is\+Open, real $>$\+::point (
+\begin{DoxyParamCaption}
+\item[{long}]{index}
+\end{DoxyParamCaption}
+) const}\hypertarget{class_mesh_a41e57256500b30c8a79e32ce070ff2d1}{}\label{class_mesh_a41e57256500b30c8a79e32ce070ff2d1}
+\begin{DoxyReturn}{Returns}
+the \hyperlink{class_mesh_point}{Mesh\+Point} with a particular index 
+\end{DoxyReturn}
+\index{Mesh@{Mesh}!set\+Boundary\+Elements@{set\+Boundary\+Elements}}
+\index{set\+Boundary\+Elements@{set\+Boundary\+Elements}!Mesh@{Mesh}}
+\subsubsection[{\texorpdfstring{set\+Boundary\+Elements()=0}{setBoundaryElements()=0}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename base\+Element, Open\+Enum is\+Open = O\+P\+EN, typename real = double$>$ virtual void {\bf Mesh}$<$ embedded, base\+Element, is\+Open, real $>$\+::set\+Boundary\+Elements (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\hypertarget{class_mesh_a887eb0d187f2da37b4c785d68dfcf7ad}{}\label{class_mesh_a887eb0d187f2da37b4c785d68dfcf7ad}
+
+
+Virtual method to keep into account the boundary elements. 
+
+
+
+Implemented in \hyperlink{class_mesh2_d_ac6408b5999b1deddbbd137dc8bd9e1cd}{Mesh2\+D$<$ real $>$}, and \hyperlink{class_mesh3_d_a5c90136ef98ac86c4bbd51eaa6c9b811}{Mesh3\+D$<$ real $>$}.
+
+\index{Mesh@{Mesh}!set\+Element\+Vector@{set\+Element\+Vector}}
+\index{set\+Element\+Vector@{set\+Element\+Vector}!Mesh@{Mesh}}
+\subsubsection[{\texorpdfstring{set\+Element\+Vector(string connections, Mesh\+Type mesh\+Type)}{setElementVector(string connections, MeshType meshType)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename base\+Element , Open\+Enum is\+Open, typename real $>$ void {\bf Mesh}$<$ embedded, base\+Element, is\+Open, real $>$\+::set\+Element\+Vector (
+\begin{DoxyParamCaption}
+\item[{string}]{connections, }
+\item[{Mesh\+Type}]{mesh\+Type}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{class_mesh_af6e1d08bb6a3d3a69a5ca363f8545442}{}\label{class_mesh_af6e1d08bb6a3d3a69a5ca363f8545442}
+
+
+It obtains the element\+Vector from connections. 
+
+Then it calls the appropriate method to read the connection file \index{Mesh@{Mesh}!set\+Remaining\+Things@{set\+Remaining\+Things}}
+\index{set\+Remaining\+Things@{set\+Remaining\+Things}!Mesh@{Mesh}}
+\subsubsection[{\texorpdfstring{set\+Remaining\+Things()=0}{setRemainingThings()=0}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename base\+Element, Open\+Enum is\+Open = O\+P\+EN, typename real = double$>$ virtual void {\bf Mesh}$<$ embedded, base\+Element, is\+Open, real $>$\+::set\+Remaining\+Things (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\hypertarget{class_mesh_a70d7cba1e66435915fb1db7c430aa44f}{}\label{class_mesh_a70d7cba1e66435915fb1db7c430aa44f}
+
+
+Virtual method used to set other things, like point\+I\+Ds. 
+
+
+
+Implemented in \hyperlink{class_mesh2_d_ae52c22a91d85fdb99955bf57162f6dac}{Mesh2\+D$<$ real $>$}, and \hyperlink{class_mesh3_d_ab13f81c133cff51c5e386db23c5ec685}{Mesh3\+D$<$ real $>$}.
+
+\index{Mesh@{Mesh}!sort@{sort}}
+\index{sort@{sort}!Mesh@{Mesh}}
+\subsubsection[{\texorpdfstring{sort()}{sort()}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename base\+Element , Open\+Enum is\+Open, typename real $>$ void {\bf Mesh}$<$ embedded, base\+Element, is\+Open, real $>$\+::sort (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{class_mesh_a5cb1110ec8bf2b1d089453f873df226f}{}\label{class_mesh_a5cb1110ec8bf2b1d089453f873df226f}
+
+
+Need to be specialized. 
+
+Sort the point\+Vector based on point\+ID 
+
+\subsection{Friends And Related Function Documentation}
+\index{Mesh@{Mesh}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!Mesh@{Mesh}}
+\subsubsection[{\texorpdfstring{operator$<$$<$}{operator<<}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename base\+Element, Open\+Enum is\+Open = O\+P\+EN, typename real = double$>$ template$<$long embedded2, typename base\+Element2 , Open\+Enum is\+Open2, typename real2 $>$ ostream\& operator$<$$<$ (
+\begin{DoxyParamCaption}
+\item[{ostream \&}]{os, }
+\item[{const {\bf Mesh}$<$ embedded2, base\+Element2, is\+Open2, real2 $>$ \&}]{mesh}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [friend]}}\hypertarget{class_mesh_a10337641e675a22873fcf8f0ddb7e409}{}\label{class_mesh_a10337641e675a22873fcf8f0ddb7e409}
+
+
+Empty constructor. 
+
+Output operator 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Mesh.\+h\end{DoxyCompactItemize}

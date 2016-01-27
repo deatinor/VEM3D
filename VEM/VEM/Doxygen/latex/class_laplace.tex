@@ -1,0 +1,96 @@
+\hypertarget{class_laplace}{}\section{Laplace$<$ embedded, Mesh\+Type, Solver\+Type, Boundary\+Condition\+Type, real $>$ Class Template Reference}
+\label{class_laplace}\index{Laplace$<$ embedded, Mesh\+Type, Solver\+Type, Boundary\+Condition\+Type, real $>$@{Laplace$<$ embedded, Mesh\+Type, Solver\+Type, Boundary\+Condition\+Type, real $>$}}
+
+
+Class to solve a Laplacian \hyperlink{class_problem}{Problem}.  
+
+
+
+
+{\ttfamily \#include $<$Laplace.\+h$>$}
+
+Inheritance diagram for Laplace$<$ embedded, Mesh\+Type, Solver\+Type, Boundary\+Condition\+Type, real $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_laplace}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_laplace_a12701fdb17859f9348e4cd4d819a95e3}{Laplace} (const Mesh\+Type \&input\+Mesh, std\+::function$<$ real(const \hyperlink{class_point}{Point}$<$ embedded, real $>$ \&)$>$ input\+Force\+Term, std\+::function$<$ real(const \hyperlink{class_point}{Point}$<$ embedded, real $>$ \&)$>$ input\+Boundary\+Function, real input\+Diffusion\+Coeff=1)
+\begin{DoxyCompactList}\small\item\em Standard constructor. \end{DoxyCompactList}\item 
+void \hyperlink{class_laplace_af7da15475d7204175e8f34fbc04091d5}{compute\+Stiffness\+Matrix} ()\hypertarget{class_laplace_af7da15475d7204175e8f34fbc04091d5}{}\label{class_laplace_af7da15475d7204175e8f34fbc04091d5}
+
+\begin{DoxyCompactList}\small\item\em Virtual method to compute the stiffness matrix. \end{DoxyCompactList}\item 
+void \hyperlink{class_laplace_aa1b02086ed9e87c3aabc1b70a4ad7a82}{compute\+Known\+Term} ()\hypertarget{class_laplace_aa1b02086ed9e87c3aabc1b70a4ad7a82}{}\label{class_laplace_aa1b02086ed9e87c3aabc1b70a4ad7a82}
+
+\begin{DoxyCompactList}\small\item\em General method. It invokes the methods of the \hyperlink{class_solver}{Solver} and \hyperlink{class_boundary_condition}{Boundary\+Condition}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ Triplet$<$ real $>$ $>$ \hyperlink{class_laplace_a3c7f5f7a6eaca88b6cbfee3afdfe4c07}{triplet\+List}\hypertarget{class_laplace_a3c7f5f7a6eaca88b6cbfee3afdfe4c07}{}\label{class_laplace_a3c7f5f7a6eaca88b6cbfee3afdfe4c07}
+
+\begin{DoxyCompactList}\small\item\em Vector used to fast build the stifness\+Matrix. Triplet is a class used by Eigen library. \end{DoxyCompactList}\item 
+long {\bfseries number\+Of\+Elements}\hypertarget{class_laplace_a0654b60f9552d97136a11ea7836e219b}{}\label{class_laplace_a0654b60f9552d97136a11ea7836e219b}
+
+\item 
+Boundary\+Condition\+Type {\bfseries boundary\+Condition}\hypertarget{class_laplace_a5e83c7cde7aa4051caf619d41b9642c0}{}\label{class_laplace_a5e83c7cde7aa4051caf619d41b9642c0}
+
+\item 
+Solver\+Type {\bfseries solver}\hypertarget{class_laplace_a288665cbc9433c15e61dbf08b04654a3}{}\label{class_laplace_a288665cbc9433c15e61dbf08b04654a3}
+
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$long embedded, typename Mesh\+Type, typename Solver\+Type, typename Boundary\+Condition\+Type, typename real = double$>$\\*
+class Laplace$<$ embedded, Mesh\+Type, Solver\+Type, Boundary\+Condition\+Type, real $>$}
+
+Class to solve a Laplacian \hyperlink{class_problem}{Problem}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em embedded} & Dimension of the space \\
+\hline
+{\em Mesh\+Type} & Type of the file to read \\
+\hline
+{\em Solver\+Type} & Kind of \hyperlink{class_solver}{Solver} to use. Any subclass of \hyperlink{class_solver}{Solver} is allowed. \\
+\hline
+{\em Boundary\+Condition\+Type} & Kind of \hyperlink{class_boundary_condition}{Boundary\+Condition} to use. Any subclass of \hyperlink{class_boundary_condition}{Boundary\+Condition} is allowed. \\
+\hline
+{\em real} & double or long double \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Laplace@{Laplace}!Laplace@{Laplace}}
+\index{Laplace@{Laplace}!Laplace@{Laplace}}
+\subsubsection[{\texorpdfstring{Laplace(const Mesh\+Type \&input\+Mesh, std\+::function$<$ real(const Point$<$ embedded, real $>$ \&)$>$ input\+Force\+Term, std\+::function$<$ real(const Point$<$ embedded, real $>$ \&)$>$ input\+Boundary\+Function, real input\+Diffusion\+Coeff=1)}{Laplace(const MeshType &inputMesh, std::function< real(const Point< embedded, real > &)> inputForceTerm, std::function< real(const Point< embedded, real > &)> inputBoundaryFunction, real inputDiffusionCoeff=1)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename Mesh\+Type , typename Solver\+Type , typename Boundary\+Condition\+Type , typename real  = double$>$ {\bf Laplace}$<$ embedded, Mesh\+Type, Solver\+Type, Boundary\+Condition\+Type, real $>$\+::{\bf Laplace} (
+\begin{DoxyParamCaption}
+\item[{const Mesh\+Type \&}]{input\+Mesh, }
+\item[{std\+::function$<$ real(const {\bf Point}$<$ embedded, real $>$ \&)$>$}]{input\+Force\+Term, }
+\item[{std\+::function$<$ real(const {\bf Point}$<$ embedded, real $>$ \&)$>$}]{input\+Boundary\+Function, }
+\item[{real}]{input\+Diffusion\+Coeff = {\ttfamily 1}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{class_laplace_a12701fdb17859f9348e4cd4d819a95e3}{}\label{class_laplace_a12701fdb17859f9348e4cd4d819a95e3}
+
+
+Standard constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input\+Mesh} & \hyperlink{class_mesh}{Mesh} on which the problem is defined \\
+\hline
+{\em input\+Force\+Term} & Force\+Term std\+::function \\
+\hline
+{\em input\+Boundary\+Function} & std\+::function that expresses the boundary conditions \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Laplace.\+h\end{DoxyCompactItemize}
