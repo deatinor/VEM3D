@@ -92,7 +92,7 @@
 \begin{flushleft}
   \noindent\Large
   Students:\\
-  Nicolo\'o Ripamonti \\
+  Nicolo\`o Ripamonti \\
   Stefano Savar\`e\\
   
 \end{flushleft}
@@ -100,7 +100,7 @@
 % \begin{flushright}
 %   \noindent\LARGE
 %   Tesi di Laurea di:\\
-%   Stefano Savar\'e - Matr.
+%   Stefano Savar\`e - Matr.
 % \end{flushright}
 %
 \vspace{364pt}
@@ -133,38 +133,438 @@
  
 \addcontentsline{toc}{chapter}{Introduction}  % serve per creare la voce Introduzione nella table of contents iniziale
 
-\chapter*{Introduction - the model} % uso asterisco perch\'e di solito l'introduzione non si numera
+
+\chapter{Implementazione}
+\label{ch:implementazione}
+
+Descriviamo in questo capitolo il codice da noi sviluppato. Abbiamo
+utilizzato il linguaggio C++, secondo la logica della programmazione
+ad oggetti. Abbiamo creato un semplice Makefile per automatizzare la
+compilazione e abbiamo usato Doxygen per generare automaticamente la
+documentazione del codice.
+Per la parte di visualizzazione del codice abbiamo invece preferito
+creare alcuni script Python, sfruttando la libreria Mayavi per i
+grafici 3D.
+Abbiamo utilizzato uno stile di codice il possibile coerente per
+facilitarne la comprensione.
+
+\section{Panoramica del codice}
+\label{sec:panoramica}
+Il codice \`e basato su 19 classi e un file main. Sfruttendo le
+tecniche del \textit{template programming} dichiarazione e
+implementazione delle classi sono entrambe nel file header.
+Sono stati usati solamente classi della standard library per rendere
+la gestione della memoria pi\`u semplice. In particolare i puntatori,
+dove necessari sono stati implementati come shared pointers o weak
+pointers. 
+Scopo dell'implementazione \`e stato il creare un codice il pi\`u
+possibile generale e riutilizzabile. Il codice consente di risolvere
+il problema di Laplace con condizioni al bordo di Dirichlet in 2D o 3D
+su mesh composte da generici poligoni e poliedri.
+Il lavoro \`e diviso idealmente in due parti principali:
+\begin{itemize}
+\item
+\textbf{La mesh:} 7 classi con cui viene modellizzata una qualunque
+Mesh 2D o 3D formata da elementi non convessi in generale. La
+possibilit\`a nei VEM di trattare figure qualunque ha
+reso questa parte piuttosto articolata e computazionalmente non
+trascurabile. Il calcolo di specifiche propriet\`a dei
+poligoni/poliedri (es. volume, normale esterna) \`e significativamente
+pi\`u complesso che nel caso standard, ma nondimeno indispensabile per
+la risoluzione del problema.
+
+\item
+\textbf{La risoluzione del problema con i VEM:} in questa parte si \`e
+cercato dapprima di creare un codice che consenta di risolvere il
+problema di Laplace su una mesh qualsiasi a prescindere dal tipo di
+solver e dalle condizioni al bordo. Dopo di ch\`e si \`e implementato
+il solver per il Virtual Element Method e le condizioni al bordo di
+Dirichlet, le uniche trattate in questo progetto.
+L'idea di base dell'implementazione di questa parte \`e stata di
+creare un codice sufficientemente generale da consentire di modificare
+il metodo utilizzato (ad esempio FEM al posto che VEM) semplicemente
+scrivendo la parte relativa al solver e non quella relativa al
+problema o alle condizioni al bordo.
+
+\end{itemize}
 
 
-In this project we want to study the one-dimensional \textit{shallow
-  water} equation:
-\begin{equation}
-  \label{eq:shallow_water}
-  \begin{bmatrix} m \\ h \end{bmatrix}_t +\begin{bmatrix} m \\
-    m^2/h+\frac{1}{2}gh^2 \end{bmatrix}_x = G(x,t)
-\end{equation}
-in $\Omega=\Omega_x \times  \Omega_t$, where $h=h(x,t)$ is the depth
-of the water and $m=m(x,t)$ is a quantity which measure the flow rate
-of the fluid past a point. This is often called \textit{discharge}.
-In the following I will also use the more compact formula
-$q_t+f(q)_x=G$ with $q=(h,m)^T$. Using this notation it's more evident
-the expression for the flux:
-\begin{equation}
-  \label{eq:flux}
-  f\left (\begin{bmatrix} m \\ h \end{bmatrix}\right ) =\begin{bmatrix} m \\
-    m^2/h+\frac{1}{2}gh^2 \end{bmatrix}
-\end{equation}
-As important property of the model, the horizontal velocity is always
-given by $u=m/h$.
-To compute my Matlab simulation I have always used
-$g=1$, $\Omega_x=(0,2)$ and $\Omega_t=(0,T)$, where $T=2$.
+\section{La Mesh}
+\label{sec:mesh}
+Abbiamo scelto di scrivere da zero il codice per la Mesh per via delle
+particolarit\`a dei VEM che richiedono elementi pi\`u generali che nel
+classico caso degli Elementi Finiti. Tratto comune a tutte le classi
+\`e la presenza di due parametri template, \textit{embedded} e
+\textit{real}, che garantiscono flessibilit\`a dal punto di vista
+dello spazio scelto (2D o 3D) e della precisione dei numeri a virgola
+mobile (double o long double). 
 
-The project consists in the implementation of the Lax-Friedrichs
-method and the Godunov's method with Roe linearisation. The first
-chapter is about the Lax-Friedrichs method, the second about the
-Godunov's methods with a final section where the 2 methods are
-compared. There will be provided the most relevant parts of the code.
+La Mesh in 3 dimensioni \`e stata pensata come un insieme di
+poliedri. Ciascuno di questi \`e a sua volta composto da un insieme di
+poligoni che a loro volta sono definiti come insieme \textit{ordinato}
+di punti. Per facilitare diverse operazioni ciascun poliedro contiene
+un vettore di puntatori ai vertici e alle facce e viceversa. Questo
+comporta alcune difficolt\`a nel constructor, che sono state superate
+con la tecnica dei variadic template e un metodo dedicato
+esplicitamente alla creazione di un'istanza. Per i puntatori come
+gi\`a detto abbiamo usato gli \textit{shared\_pointer} per facilitare
+la gestione della memoria. Non abbiamo usato \textit{unique\_pointers}
+in quanto all'interno del programma lo stesso puntatore \`e condiviso
+da pi\`u classi.
 
+\subsection{Point e MeshPoint}
+Queste 2 classi rappresentano un punto in uno spazio di una
+specificata dimensione. La differenza tra le due \`e che la prima \`e
+intesa per un punto generico, la seconda per un punto appartenente ad
+una mesh. Quest'ultima memorizza al suo interno anche i poligoni e i
+poliedri che hanno tale punto come vertice e non \`e stato fornito un
+copy constructor. Ha inoltre la possibilit\`a di tener traccia dell'ID
+del punto e se tale punto \`e sulla frontiera.
+
+La classe Point viene utilizzata anche per rappresentare un vettore,
+sono quindi stati forniti i metodi opportuni, come il calcolo della
+norma e il prodotto vettore.
+
+Riportiamo qui l'interfaccia della classe Point e i metodi principali:
+
+\begin{verbatim}
+template <long embedded,typename real=double>
+class Point {
+
+protected:
+    array<real,embedded> coordinates;
+
+public:
+    // CONSTRUCTORS
+    Point(const array<real,embedded>& inputArray);
+    Point(const Point<embedded,real>& inputPoint);
+    Point(const MeshPoint<embedded,real>& inputPoint);
+
+    // Constructor with variadic template
+    template <typename... Args>
+    Point(Args... arguments);
+
+    // STANDARD METHOS
+    long maxIndex() const;	//!< Maximum index of the point
+    long maxAbsIndex() const;	//!< Maximum index of the point with absolute value
+    real norm() const;  //!< L2 norm of the vector
+    real normL1() const; //!< L1 norm of the vector
+
+    real& operator[](long index);	//!< Get an element by
+reference
+
+    template <long embedded2,typename real2>
+    friend Point<embedded2,real2> cross(const Point<embedded2,real2>&
+point1, const Point<embedded2,real2>& point2);
+\end{verbatim}
+
+\noindent\rule{14cm}{1pt}
+
+Riportiamo l'interfaccia della classe MeshPoint e i metodi principali:
+
+\begin{verbatim}
+template <long embedded,typename real=double>
+class MeshPoint: public Point<embedded,real> {
+protected:
+    // PROPERTIES
+    long pointID;	//!< ID of the MeshPoint
+    real value;		//!< Value in the point after the resolution of the problem
+    bool isBoundary;	//<! Tells if the MeshPoint is on the boundary
+
+    vector<weak_ptr<Polygon<embedded, real>>> polygonVector;
+    vector<weak_ptr<Polyhedron<embedded,real>>> polyhedronVector;
+
+    // CONSTRUCTORS
+    // Constructor with variadic template
+    template <typename... Args>
+    MeshPoint(Args... arguments);
+
+    // STANDARD METHODS
+    void addPolygon(weak_ptr<Polygon<embedded,real>> inputPolygon); 
+//!< It insert in polygon vector a new Polygon
+    void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> inputPolyhedron);	
+//!< It insert in polyhedron vector a new Polyhedron
+
+
+\end{verbatim}
+
+\subsection{Polygon e Polyhedron}
+Queste due classi rappresentano un poligono o un poliedro generico,
+non convesso in generale. Entrambi sono da intendersi come componenti
+di una mesh, non sono state realizzate due versioni come per point in
+quanto non necessarie. Per entrambe l'unico modo per creare una nuova
+classe \`e sfruttando il metodo \textit{make\_shared\_Polygon}o
+\textit{make\_shared\_Polyhedron}, che restituisce uno shared pointer
+all'oggetto e si occupa anche di gestire le connessioni tra questi
+oggetti.
+
+Polygon \`e da intendersi come un vettore \textit{ordinato} di Point,
+pu\`o essere sia in 2D che in 3D. L'ordine dei punti \`e necessario
+sia per il fatto che non \`e possibile individuare un poligono non
+convesso da un insieme non ordinato di punti, sia per determinare il
+verso della normale. In fase di inizializzazione vengono calcolate le
+seguenti quantit\`a, necessarie per il problema numerico:
+\begin{itemize}
+\item area
+\item normale
+\item baricentro
+\end{itemize}
+
+ Polyhedron invece \`e un vettore \textit{non ordinato} di Polygon. 
+In fase di inizializzazione vengono calcolate le seguenti quantit\`a, 
+necessarie per il problema numerico:
+\begin{itemize}
+\item volume 
+\item normale esterna
+\item baricentro
+\end{itemize}
+Fa inoltre in modo che le normali delle facce siano orientate
+coerentemente.
+
+Riportiamo l'interfaccia della classe Polygon e i metodi principali:
+
+\begin{verbatim}
+template <long embedded, typename real=double>
+class Polygon: public std::enable_shared_from_this<Polygon<embedded,real>> {
+protected:
+    // PROPERTIES
+    // Vector of ordered vertexes
+    vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;
+	
+    bool isBoundary;	// Tells if the Polygon is on the boundary
+    real area;	// \return the area of the Polygon
+    Vector<3, real> normal;	// oriented normal to the Polygon
+    Point<embedded, real> centroid;	// centroid of the Polygon
+    vector<weak_ptr<Polyhedron<embedded,real>>> polyhedronVector;
+
+public:
+    // CONSTRUCTORS
+    Polygon(const privateStruct &,
+const vector<shared_ptr<MeshPoint<embedded,real>>>& vertexVector);
+    // Constructor with variadic template.
+    template <typename... Args>
+    Polygon(const privateStruct&,Args... arguments);
+
+    template <typename... Args>
+    static shared_ptr<Polygon<embedded,real>> make_shared_Polygon(Args... arguments);
+
+public:
+    // STANDARD METHODS
+    // Add a new vertex to the Polygon
+    void addPoint(const shared_ptr<MeshPoint<embedded,real>>& p1); 
+    // Add a new Polyhedron having this as face
+    void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> polyhedron);	
+			
+    Vector<embedded,real> computeCentroid();
+    real computeArea();
+    real getDiameter();
+    real hTriangle(); // Compute the maximum distance between 2 vertexes.
+
+    shared_ptr<MeshPoint<embedded,real>> isPointAVertex(Point<embedded,real>& point);	
+    bool isPointInside(Point<embedded,real>& point);
+    array<shared_ptr<MeshPoint<embedded,real>>,2> 
+isPointOnBoundary(Point<embedded,real>& point);
+
+    Vector<3,real> computeNormal();
+    void switchPointsOrder(); // Invert the orientation of the Polygon
+
+\end{verbatim}
+
+\noindent\rule{14cm}{1pt}
+
+Riportiamo l'interfaccia della classe Polyhedron e i metodi principali:
+
+\begin{verbatim}
+template <long embedded, typename real=double>
+class Polyhedron: public enable_shared_from_this<Polyhedron<embedded,real>> {
+
+protected:
+    // PROPERTIES
+    // Stores the faces of the Polyhedron
+    vector<shared_ptr<Polygon<embedded,real>>> polygonVector; 
+	
+    bool isBoundary;	// Tells if the Polygon is on the boundary
+    real volume;	// volume of the Polyhedron
+    Point<embedded,real> centroid;	// Not the real centroid, 
+only the mean of the vertexes.
+
+    // Stores the vertexes of the Polyhedron
+    vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;	
+
+public:
+    // CONSTRUCTORS
+    Polyhedron(const privateStruct&,
+const vector<shared_ptr<Polygon<embedded,real>>>& inputPolygonVector);
+    // Constructor with variadic template. DO NOT USE.
+    template <typename... Args>
+    Polyhedron(const privateStruct&,Args... arguments)
+
+    template <typename ...Args>
+    static shared_ptr<Polyhedron<embedded, real>>
+make_shared_Polyhedron;
+
+    // STANDARD METHODS
+    // Add a new vertex to the Polygon
+    void addPolygon(shared_ptr<Polygon<embedded,real>>& inputPolygon);
+    // Add a new Polyhedron having this as face
+    void addPoint(shared_ptr<MeshPoint<embedded,real>>& inputPoint);
+    Point<embedded,real> computeCentroid();	// return the centroid
+    real computeVolume();	// return the volume of the Polyhedron
+    real getDiameter();		// return the maximum distance between 2 Points
+    // Makes the normal to each face pointing towards the external of the Polyhedron
+    void fixExternalNormal();	
+    // Makes the normal of each face pointing in the same direction (or inward or outward)
+    void fixFacesOrientation();	
+    // Maximum distance between vertexes. Necessary for the mesh.
+    real hTriangle();	
+    void linkPoints();	// Makes all vertexes pointing to this
+    void linkPolygons();  // Makes all Polygons pointing to this
+
+    void switchFacesOrientation();	// Invert the orientation of all faces
+    // If a new face is added, also his vertexes are added to the pointVector
+    void updatePointVector();	
+
+
+\end{verbatim}
+
+\subsection{Mesh, Mesh2D e Mesh3D}
+Mesh \`e una classe astratta che ha lo scopo di rappresentare
+una mesh molto generica (anche ad esempio una superficie in uno spazio
+3D). L'idea alla base \`e di memorizzare due vettori, uno di Point e
+uno di Polygon o Polyhedron a seconda dello spazio scelto, e di creare
+dei metodi base per la lettura di diverse tipologie di file, che poi
+verranno implementati opportunamente nelle classi derivate. Sono
+presenti anche 2 appositi metodi per tener traccia degli elementi alla
+frontiera e per settare eventualmente altre propriet\`a della mesh. Non \`e
+stato implementato un costruttore, ma viene fornito un metodo
+\textit{initialize} che pu\`o essere chiamato dal costruttore di una
+classe derivata per l'inizializzazione.
+
+Mesh2D \`e la classe derivata di Mesh per gestire mesh in 2
+dimensioni. Per il rilevamento degli elementi di frontiera si sono
+cercati i lati presenti in un solo poligono nella mesh, attraverso
+l'introduzione di un \textit{pairVector.}
+
+Mesh3D \`e l'analogo nel caso tridimensionale. Per la maggiore
+complessit\`a della mesh abbiamo ritenuto opportuno salvare in un
+vettore i puntatori alle facce dei poliedri. Questo ci ha permesso di
+ottenere gli elementi di frontiera con un algoritmo simile a quello
+del caso 2D, ma confrontando le facce al posto dei lati. In questo
+caso l'algoritmo non viene chiamato in \textit{setBoundaryElement}
+come in precedenza, ma direttamente all'inizializzazione di ogni nuova
+faccia in quanto pi\`u veloce.
+
+Riportiamo l'interfaccia della classe Mesh e i metodi principali:
+
+\begin{verbatim}
+
+template <long embedded,typename baseElement,OpenEnum isOpen=OPEN,
+typename real=double>
+class Mesh {
+protected:
+    
+    // Vector of Polygon or Polyhedr
+    vector<shared_ptr<baseElement>> elementVector;	
+    // Vector of the vertexes of each element
+    vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;	
+	
+public:
+    long numberOfElements;
+    long numberOfPoints;
+
+    virtual real hTriangle();	// paramether h of the Mesh
+	
+    // Method that calls the functions that read the file
+    void initialize(string pointFile,string connection,MeshType meshType=ANYTHING3D);
+
+    // It obtains the pointVector from file
+    virtual void setPointVector(string file);	
+    // It obtains the elementVector from connections
+    virtual void setElementVector(string connections, MeshType meshType);
+    
+    // Virtual method to keep into account the boundary elements
+    virtual void setBoundaryElements()=0;
+    //	Virtual method used to set other things, like pointIDs
+    virtual void setRemainingThings()=0;
+
+    // methods to set the elementVector
+    virtual void setTetrahedronMesh(string connection); 
+    virtual void setTriangleMesh(string connection);	
+    virtual void setAnything3DMesh(string connection);
+    virtual void setAnything2DMesh(string connection);
+    virtual void setFileType1Mesh(string connection);
+    virtual void setFileType2Mesh(string connection);
+
+    virtual void sort(); //!< Sort the pointVector based on pointID
+
+
+\end{verbatim}
+
+\noindent\rule{14cm}{1pt}
+
+Riportiamo l'interfaccia della classe Mesh2D e i metodi principali:
+
+\begin{verbatim}
+template <typename real=double>
+class Mesh2D: public Mesh<2,Polygon<2,real>,OPEN,real> {
+private:
+    // This is to obtain internal and external points	
+    vector<pair<long,long>> pairVector;
+
+public:
+    long numberOfBoundaryPoints;
+	
+    // Constructor with input file
+    Mesh2D(string pointFile,string connectionFile,MeshType meshType=ANYTHING2D);
+
+    template <typename... Args >
+    shared_ptr<Polygon<2,real>> newPolygon(Args... arguments);
+
+    // Mesh of ANYTHING2D type
+    virtual void setAnything2DMesh(string connection);
+
+    virtual void setBoundaryElements();
+    virtual void setRemainingThings();
+\end{verbatim}
+
+\noindent\rule{14cm}{1pt}
+
+Riportiamo l'interfaccia della classe Mesh3D e i metodi principali:
+
+\begin{verbatim}
+template <typename real=double>
+class Mesh3D : public Mesh<3, Polyhedron<3,real>, OPEN, real> {
+protected:
+    // Vector of all the Polyhedron faces
+    vector<shared_ptr<Polygon<3,real>>> polygonVector;  
+
+public:
+    long numberOfPolygons;
+    long numberOfBoundaryPoints;
+
+    // Constructor with input file
+    Mesh3D(string pointFile,string connectionFile,MeshType meshType=ANYTHING3D);
+	
+    // STANDARD METHODS
+    // Method to create a Polygon after having read it.
+    template <typename... Args >
+    shared_ptr<Polygon<3,real>> newFace(Args... arguments);
+
+    virtual void setBoundaryElements();
+    virtual void setRemainingThings();
+
+    // Mesh of TETRAHEDRON type
+    virtual void setTetrahedronMesh(string connection);
+    // Mesh of ANYTHING3D type
+    virtual void setAnything3DMesh(string connection);
+
+\end{verbatim}
+
+\section{Il problema Laplaciano e il Solver VEM}
+\label{sec:solver}
+
+\section{Visualizzazione}
+\label{sec:visualizzazione}
 
 
 

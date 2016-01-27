@@ -25,6 +25,25 @@
 /* Begin PBXFileReference section */
 		7BA73CB51C57951D00C3F662 /* VEM */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = VEM; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BA73CB81C57951D00C3F662 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		7BA73CBF1C57963100C3F662 /* BoundaryCondition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BoundaryCondition.h; sourceTree = "<group>"; };
+		7BA73CC01C57963100C3F662 /* Dirichlet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dirichlet.h; sourceTree = "<group>"; };
+		7BA73CC11C57963100C3F662 /* Dirichlet3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Dirichlet3D.h; sourceTree = "<group>"; };
+		7BA73CC21C57963100C3F662 /* Error.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
+		7BA73CC31C57963100C3F662 /* Laplace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Laplace.h; sourceTree = "<group>"; };
+		7BA73CC41C57963100C3F662 /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
+		7BA73CC51C57963100C3F662 /* Mesh2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh2D.h; sourceTree = "<group>"; };
+		7BA73CC61C57963100C3F662 /* Mesh3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh3D.h; sourceTree = "<group>"; };
+		7BA73CC71C57963100C3F662 /* MeshPoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshPoint.h; sourceTree = "<group>"; };
+		7BA73CC81C57963100C3F662 /* Monomials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Monomials.h; sourceTree = "<group>"; };
+		7BA73CC91C57963100C3F662 /* MonomialsPolygon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MonomialsPolygon.h; sourceTree = "<group>"; };
+		7BA73CCA1C57963100C3F662 /* Point.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Point.h; sourceTree = "<group>"; };
+		7BA73CCB1C57963100C3F662 /* Polygon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Polygon.h; sourceTree = "<group>"; };
+		7BA73CCC1C57963100C3F662 /* Polyhedron.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Polyhedron.h; sourceTree = "<group>"; };
+		7BA73CCD1C57963100C3F662 /* Problem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Problem.h; sourceTree = "<group>"; };
+		7BA73CCE1C57963100C3F662 /* Solver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Solver.h; sourceTree = "<group>"; };
+		7BA73CCF1C57963100C3F662 /* SolverVEM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SolverVEM.h; sourceTree = "<group>"; };
+		7BA73CD01C57963100C3F662 /* SolverVEM2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SolverVEM2D.h; sourceTree = "<group>"; };
+		7BA73CD11C57963100C3F662 /* SolverVEM3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SolverVEM3D.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +77,25 @@
 			isa = PBXGroup;
 			children = (
 				7BA73CB81C57951D00C3F662 /* main.cpp */,
+				7BA73CCA1C57963100C3F662 /* Point.h */,
+				7BA73CC71C57963100C3F662 /* MeshPoint.h */,
+				7BA73CCB1C57963100C3F662 /* Polygon.h */,
+				7BA73CCC1C57963100C3F662 /* Polyhedron.h */,
+				7BA73CC41C57963100C3F662 /* Mesh.h */,
+				7BA73CC51C57963100C3F662 /* Mesh2D.h */,
+				7BA73CC61C57963100C3F662 /* Mesh3D.h */,
+				7BA73CCD1C57963100C3F662 /* Problem.h */,
+				7BA73CC31C57963100C3F662 /* Laplace.h */,
+				7BA73CC81C57963100C3F662 /* Monomials.h */,
+				7BA73CC91C57963100C3F662 /* MonomialsPolygon.h */,
+				7BA73CCE1C57963100C3F662 /* Solver.h */,
+				7BA73CCF1C57963100C3F662 /* SolverVEM.h */,
+				7BA73CD01C57963100C3F662 /* SolverVEM2D.h */,
+				7BA73CD11C57963100C3F662 /* SolverVEM3D.h */,
+				7BA73CBF1C57963100C3F662 /* BoundaryCondition.h */,
+				7BA73CC01C57963100C3F662 /* Dirichlet.h */,
+				7BA73CC11C57963100C3F662 /* Dirichlet3D.h */,
+				7BA73CC21C57963100C3F662 /* Error.h */,
 			);
 			path = VEM;
 			sourceTree = "<group>";
@@ -164,6 +202,10 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				"OTHER_CFLAGS[arch=*]" = (
+					"-I",
+					/usr/local/bin/,
+				);
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -200,6 +242,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				"OTHER_CFLAGS[arch=*]" = (
+					"-I",
+					/usr/local/bin/,
+				);
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -237,6 +283,7 @@
 				7BA73CBE1C57951D00C3F662 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

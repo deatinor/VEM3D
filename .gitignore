@@ -11,6 +11,7 @@ build/
 Mesh/
 Mesh3.xcodeproj/ 
 Mesh3/Mesh3/Doxygen/
+VEM/VEM/Doxygen/
 
 # Do not ignore Makefiles
 !Makefile
