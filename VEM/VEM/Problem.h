@@ -23,6 +23,15 @@ using VectorX=Matrix<real, Dynamic, 1>;
 
 /** Virtual class to represent a very generic problem.
  *
+ *	The idea is to provide a general set of method common to a large class of numerical problem.
+ *	The class is well suited for all the problems that can be solved by solving a linear system with a stiffness matrix and a known term.
+ *	
+ *	The child classes have to override the methods computeStiffnessMatrix() and computeKnownTerm()
+ *
+ *	It uses Eigen for storing all the matrixes and to solve the linear system
+ *
+ *	It also provide methods to display the error
+ *
  *	\param embedded Dimension of the space
  *	\param MeshType Type of the file to read
  *	\param real double or long double
@@ -46,7 +55,7 @@ public:
 	 *	It allocates the space for all the matrixes
 	 */
 	Problem(const MeshType& inputMesh):mesh(inputMesh),stiffnessMatrix((int)inputMesh.numberOfPoints,(int)inputMesh.numberOfPoints),knownTerm(inputMesh.numberOfPoints),solution(inputMesh.numberOfPoints) {
-		// inizializzo lo knownTerm a 0
+		// knownTerm initialized to 0
 		for (long i=0; i<inputMesh.numberOfPoints; i++) {
 			knownTerm[i]=0;
 		}
@@ -56,11 +65,11 @@ public:
 	
 	virtual void computeStiffnessMatrix()=0; //!< Virtual method to compute the stiffness matrix
 	virtual void computeKnownTerm()=0;	//!< Virtual method to compute the known term
-	virtual void computeSolution();		//!< Method to compute solution
-	virtual void operator()();			//!< Method to execute the method
+	virtual void computeSolution();		//!< Method to compute solution. It solves the linear system.
+	virtual void operator()();			//!< Method to execute the method. FreeFem style.
 	
 	virtual void displayError(std::function<real(Point<embedded,real>&)> realSolutionFunction); //!<  It displays the error after the computation
-	virtual void write(string outputPoints="points.point",string outputConnections="connections.conn",string outputSolution="solution.sol");	//!< full Output to file
+	virtual void write(string outputPoints="points.point",string outputConnections="connections.conn",string outputSolution="solution.sol");	//!< full output to file
 	virtual void writeSolution(string outputSolution="solution.sol"); //!< Output to file of the solution
 	
 };
