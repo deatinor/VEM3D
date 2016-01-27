@@ -21,7 +21,7 @@ using namespace Eigen;
 template <typename real>
 using VectorX=Matrix<real, Dynamic, 1>;
 
-/** Virtual class to represent a very generic laplacian problem.
+/** Virtual class to represent a very generic problem.
  *
  *	\param embedded Dimension of the space
  *	\param MeshType Type of the file to read
@@ -38,14 +38,14 @@ public:
 	VectorX<real> knownTerm;
 	VectorX<real> solution;
 	
-	real diffusionCoeff;
+	
 	
 public:
 	/** General constructor for the Problem
 	 *
 	 *	It allocates the space for all the matrixes
 	 */
-	Problem(const MeshType& inputMesh,real inputDiffusionCoeff=1):mesh(inputMesh),stiffnessMatrix((int)inputMesh.numberOfPoints,(int)inputMesh.numberOfPoints),knownTerm(inputMesh.numberOfPoints),solution(inputMesh.numberOfPoints),diffusionCoeff(inputDiffusionCoeff){
+	Problem(const MeshType& inputMesh):mesh(inputMesh),stiffnessMatrix((int)inputMesh.numberOfPoints,(int)inputMesh.numberOfPoints),knownTerm(inputMesh.numberOfPoints),solution(inputMesh.numberOfPoints) {
 		// inizializzo lo knownTerm a 0
 		for (long i=0; i<inputMesh.numberOfPoints; i++) {
 			knownTerm[i]=0;
