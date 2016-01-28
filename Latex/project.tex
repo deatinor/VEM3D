@@ -768,6 +768,11 @@ caso 3D ha richiesto una pi\`u complessa valutazione dei termini al
 bordo. \`E stato necessario calcolare il polinomio interpolante VEM su
 ogni faccia, il che causa un aumento notevole del tempo di calcolo.
 
+Una propriet\`a importante tra le matrici che caratterizzano i VEM \`e
+l'identit\`a $$G=BD$$, molto utile in fase di testing del codice. \`E
+stato implementato un controllo che avverte l'utente nel caso tale
+identit\`a non sia soddisfatta.
+
 \noindent\rule{14cm}{1pt}
 
 Riportiamo l'interfaccia della classe Solver e i metodi principali:
@@ -1014,9 +1019,20 @@ SparseMatrix<real>& inputStiffnessMatrix);
 
 \end{verbatim}
 
-\section{Visualizzazione}
+\section{Visualizzazione }
 \label{sec:visualizzazione}
+Per la parte di visualizzazione, contrariamente alle precedenti
+abbiamo scelto di utilizzare il linguaggio Python per ragioni di
+semplicit\`a. 
+Attraverso la libreria Matplotlib abbiamo creato 2 script per la
+visualizzazione in 3D di un poliedro o di tutta la mesh. Lo scopo
+principale di questi scipt \`e il testing, il codice per mesh di
+grosse dimensioni \`e molto lento. \`E tuttavia efficacie in mesh
+pi\`u piccole per avere un feedback visivo sulla correttezza della
+stessa. 
 
+
+ 
 
 
 \chapter{The finite volume method}
