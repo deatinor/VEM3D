@@ -36,6 +36,7 @@ VEM/VEM.xcodeproj/
 Latex/.#bibliografia.bib
 Latex/project.pdfsync
 Latex/project.toc
+Latex/.#project.tex
 
 # Ignore all txt and same files
 *.txt
