@@ -36,8 +36,16 @@ class Mesh2D;
  *
  *	Virtually any dimensions allowed. Some methods are available only for d=2 or d=3.
  *	Any vector can be seen as a point.
- *  Some appropriate typedef (Vector2D, Vector3D, Vector<embedded>, Vector<embedded,real>) are implemented.
  *
+ *	Typedefs
+ *		- <b>Point2D</b>
+ *		- <b>Point3D</b>
+ *		- <b>PointLong2D</b>, long double
+ *		- <b>PointLong3D</b>, long double
+ *		- <b>Vector<embedded,real></b>, exactly the same of Point<embedded,real>
+ *		- <b>VectorD<embedded></b>, type double
+ *		- <b>Vector2D</b>
+ *		- <b>Vector3D</b>
  */
 
 template <long embedded,typename real=double>
