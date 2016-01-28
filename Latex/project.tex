@@ -150,7 +150,7 @@ facilitarne la comprensione.
 
 \section{Panoramica del codice}
 \label{sec:panoramica}
-Il codice \`e basato su 19 classi e un file main. Sfruttendo le
+Il codice \`e basato su 18 classi e un file main. Sfruttendo le
 tecniche del \textit{template programming} dichiarazione e
 implementazione delle classi sono entrambe nel file header.
 Sono stati usati solamente classi della standard library per rendere
@@ -873,9 +873,146 @@ const shared_ptr<MeshPoint<3,real>>& point);
 
 \end{verbatim}
 
-\subsection{BoundaryCondition, Dirichlet e Dirichlet3D}
+\subsection{BoundaryCondition, Dirichlet}
+Queste due classi si occupano di gestire le condizioni al bordo.
+BoundaryCondition \`e una classe astratta in grado in linea teorica di
+rappresentare ogni tipo di condizione al bordo. Dirichlet, invece
+implementa l'omonima condizione al bordo.
+
+Sono basate su 3 metodi principali che hanno i seguenti scopi:
+\begin{itemize}
+\item
+Processare la matrice di rigidezza locale prima di aggiungerla in
+quella globale. Nel caso di Dirichlet la matrice di stiffness \`e
+diagonale nella parte in alto a sinistra: i rispettivi elementi non vengono
+dunque aggiunti
+
+\item 
+Processare la matrice di rigidezza globale dopo la sua
+creazione. Nell'esempio precedente la parte in alto a sinistra \`e
+resa diagonale.
+
+\item
+Processare il termine noto dopo la sua creazione. Nell'esempio nella
+parte in alto vengono imposte le condizioni al bordo.
+
+\end{itemize}
+
+\noindent\rule{14cm}{1pt}
+
+Riportiamo l'interfaccia della classe BoundaryCondition e i metodi principali:
+
+\begin{verbatim}
+template <long embedded,typename MeshType,typename MeshElement,typename real=double>
+class BoundaryCondition {
+protected:
+    const MeshType& mesh;
+    std::function<real(Point<embedded,real>&)> boundaryFunction;
+
+    BoundaryCondition(const MeshType&
+inputMesh,std::function<real(Point<embedded,real>&)> inputBoundaryFunction);
+
+public:
+    // This is to decide if to add the Kloc computed to the matrix
+    virtual void addToTripletList(Matrix<real,Dynamic,Dynamic>& Kloc,
+MeshElement& element,vector<Triplet<real>>& tripletList)=0;
+	
+    // Changes the stiffnessMatrix to keep into account the boundary condition.
+    virtual void assignBoundaryConditionOnStiffnessMatrix(vector<Triplet<real>>&
+tripletList)=0;
+	
+    // Changes the known term to keep into account the boundary condition
+    virtual void assignBoundaryConditionOnKnownTerm(VectorX<real>& knownTerm)=0; 		
+};
+
+\end{verbatim}
+
+
+\noindent\rule{14cm}{1pt}
+
+Riportiamo l'interfaccia della classe Dirichlet e i metodi principali:
+
+\begin{verbatim}
+template <long embedded,typename MeshType,typename MeshElement,typename real>
+class Dirichlet: public BoundaryCondition<embedded,MeshType,MeshElement,real> {
+    long numberOfPoints;
+    long numberOfBoundaryPoints;
+
+public:
+    // Standard constructor
+    Dirichlet(const MeshType& mesh,std::function<real(Point<embedded,real>&)> 
+boundaryFunction);
+	
+    // This is to decide if to add the Kloc computed to the matrix.
+    virtual void addToTripletList(Matrix<real,Dynamic,Dynamic>& Kloc,
+MeshElement& element,vector<Triplet<real>>& tripletList);
+	
+    // Changes the stiffnessMatrix to keep into account the boundary condition.
+    virtual void assignBoundaryConditionOnStiffnessMatrix(vector<Triplet<real>>&
+tripletList);
+	
+    // Changes the known term to keep into account the boundary condition
+    virtual void assignBoundaryConditionOnKnownTerm(VectorX<real>& knownTerm);
+	
+	
+};
+
+template <typename real=double>
+using Dirichlet3D=Dirichlet<3,Mesh3D<real>,Polyhedron<3,real>,real>;
+
+template <typename real=double>
+using Dirichlet2D=Dirichlet<2,Mesh2D<real>,Polygon<2,real>,real>;
+\end{verbatim}
 
 \subsection{Error}
+\`E una semplice classe dedicata al calcolo dell'errore. L'errore \`e
+calcolato in 2 diversi modi:
+\begin{itemize}
+\item Norma $l^\infty$: il massimo in valore assoluto della differenza
+  nei nodi tra la soluzione reale e quella numerica.
+
+\item Norma $H^1$ discreta: viene calcolata come $$u^TKu$$ dove $u$
+  \`e la differenza tra soluzione reale e numerica e $K$ \`e la matrice di stiffness.
+
+\end{itemize}
+
+\noindent\rule{14cm}{1pt}
+
+Riportiamo l'interfaccia della classe Dirichlet e i metodi principali:
+
+\begin{verbatim}
+template <long embedded,typename real=double>
+class Error {
+protected:
+    const VectorX<real>& solution;
+    VectorX<real> realSolution;
+    VectorX<real> difference;
+    const vector<shared_ptr<MeshPoint<embedded,real>>>& pointVector;
+    std::function<real(Point<embedded,real>&)> realSolutionFunction;
+	
+    SparseMatrix<real>& stiffnessMatrix;
+	
+    // This computes the exact solution, from realSolutionFunction
+    void computeRealSolution(); 
+	
+public:
+    Error(const VectorX<real>& inputSolution,
+const vector<shared_ptr<MeshPoint<embedded,real>>>& inputPointVector,
+std::function<real(Point<embedded,real>&)> inputRealSolutionFunction,
+SparseMatrix<real>& inputStiffnessMatrix);
+
+    // L infinite norm of the error
+    real LInfinity();
+	
+    // H1 discrete norm of the error
+    real H1Discrete();
+	
+    void displayError();   //!< Print the computer error
+	
+};
+
+
+\end{verbatim}
 
 \section{Visualizzazione}
 \label{sec:visualizzazione}
