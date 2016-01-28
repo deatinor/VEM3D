@@ -19,6 +19,9 @@ using VectorX=Matrix<real, Dynamic, 1>;
 /** Class to compute and display the error
  *
  *	It computes the values only in the points
+ *	2 error computed
+ *		- L infinite norm (maximum of the difference with absolute value in the points)
+ *		- H1 discrete norm (u^T * K * u)
  */
 template <long embedded,typename real=double>
 class Error {
@@ -43,8 +46,17 @@ public:
 	 */
 	Error(const VectorX<real>& inputSolution,const vector<shared_ptr<MeshPoint<embedded,real>>>& inputPointVector,std::function<real(Point<embedded,real>&)> inputRealSolutionFunction,SparseMatrix<real>& inputStiffnessMatrix);
 	
-	real LInfinity(); //!< It computes the L infinity norm
-	real H1Discrete();	//!< It computes the H1 discrete norm
+	/** L infinite norm of the error
+	 *
+	 *	Maximum of the difference between points
+	 */
+	real LInfinity();
+	
+	/** H1 discrete norm of the error
+	 *
+	 *	u^T * K * u where u is the solution and K is the stiffness matrix
+	 */
+	real H1Discrete();
 	
 	void displayError();	//!< Print the computer error
 	

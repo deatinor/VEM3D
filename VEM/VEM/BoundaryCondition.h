@@ -13,7 +13,6 @@
 #include "Mesh3D.h"
 #include "Mesh2D.h"
 #include "Laplace.h"
-#include "Dirichlet3D.h"
 
 
 using namespace Eigen;
@@ -21,7 +20,12 @@ using namespace Eigen;
 template <typename real>
 using VectorX=Matrix<real, Dynamic, 1>;
 
-/** Virtual class for BoundaryCondition
+/** Abstract class for BoundaryCondition
+ *
+ *  This class does 3 main things:
+ *	- It processes the Kloc matrix after the creation from Solver (e.g in Dirichlet condition the upper part of the stiffness matrix is diagonal and there is no need to add these terms)
+ *	- Once the K matrix is completed it processes the full matrix to assign boundary condition (e.g in the same example it makes the upper part diagonal)
+ *	- It imposes boundary condition also on the known term
  *
  *	\param embedded Dimension of the space
  *	\param MeshType the kind of Mesh I have

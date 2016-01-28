@@ -11,11 +11,14 @@ using namespace std;
 ///////////           MONOMIALSPOLYGON					///////////////
 ///////////////////////////////////////////////////////////////////////
 
-/** Class similar to Monomial, but used to compute the similar quantities for a Polygon embedded in 3D
+/** Class that inherit from Monomial, used to compute the similar quantities for a Polygon embedded in 3D
+ *
+ *  This is used to compute the VEM on the surfaces
  */
 template <typename real>
 class MonomialsPolygon: public Monomials<3, Polygon<3,real>,real> {
 public:
+	// these are virtual indexes used to project the Polygon on an appropriate plane
 	long indexX;
 	long indexY;
 	long indexZ;
@@ -37,7 +40,7 @@ public:
 
 template <typename real>
 MonomialsPolygon<real>::MonomialsPolygon(const shared_ptr<Polygon<3,real>>& figure): Monomials<3, Polygon<3,real>,real>(figure),indexX(0),indexY(1) {
-	// inizializzazione di indexX e indexY
+	// initialization of indexX and indexY
 	auto& normal=figure->getNormal();
 	long indexZ=0;
 	double maxNormalValue=0;
@@ -53,10 +56,7 @@ MonomialsPolygon<real>::MonomialsPolygon(const shared_ptr<Polygon<3,real>>& figu
 	} else if (indexZ==1){
 		indexY=2;
 	}
-	//	 calcola il gradiente
-	
-	
-	
+	//	 computes the gradient
 	gradientX[indexX]=(1.0-normal[indexX]*normal[indexX])/this->diameter;
 	gradientX[indexY]=-normal[indexX]*normal[indexY]/this->diameter;
 	gradientX[indexZ]=-normal[indexX]*normal[indexZ]/this->diameter;

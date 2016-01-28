@@ -12,7 +12,7 @@ Mesh/
 Mesh3.xcodeproj/ 
 Mesh3/Mesh3/Doxygen/
 VEM/VEM/Doxygen/
-VEM/VEM.xcodeproj
+VEM/VEM.xcodeproj/
 
 # Do not ignore Makefiles
 !Makefile
@@ -31,6 +31,11 @@ VEM/VEM.xcodeproj
 *.log
 *.aux
 *.gz
+*.bbl
+*.blg
+Latex/.#bibliografia.bib
+Latex/project.pdfsync
+Latex/project.toc
 
 # Ignore all txt and same files
 *.txt
