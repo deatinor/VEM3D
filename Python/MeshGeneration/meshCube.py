@@ -1,5 +1,40 @@
 import numpy as np
 
+##
+## 	Create a 3D mesh of cubes. 
+##
+#		
+#	
+#	Output file of type ANYTHING3D. 
+#	xpoints, ypoints and zpoints are the number of points on the x, y and z axys
+#
+
+
+##################################################################
+##################################################################
+
+## MODIFY ONLY THESE PARAMETHERS
+
+
+xmin=-1.0
+xmax=1.0
+ymin=-1.0
+ymax=1.0
+zmin=-1.0
+zmax=1.0
+
+xpoints=5
+ypoints=5
+zpoints=5
+
+outputPoint="point-2.txt"
+outputConn="conn-2.txt"
+
+
+##################################################################
+##################################################################
+
+
 class Point:
 	x=0
 	y=0
@@ -76,16 +111,7 @@ def createCubeString(face1,face2,face3,face4,face5,face6):
 	return output
 	
 
-xmin=-1.0
-xmax=1.0
-ymin=-1.0
-ymax=1.0
-zmin=-1.0
-zmax=1.0
 
-xpoints=133
-ypoints=133
-zpoints=133
 
 x=np.linspace(xmin,xmax,xpoints)
 y=np.linspace(ymin,ymax,ypoints)
@@ -112,20 +138,15 @@ print points.len()
 
 
 # scrivo i punti
-file="point.txt"
-f=open(file,'w')
+f=open("../Output/"+outputPoint,'w')
 
-# j=1
 for i in points.listPoint:
-# 	f.write(str(j)+":  ")
 	f.write(i.write())
-# 	j+=1
 
 f.close()
 
 # scrivo le connessioni
-file="connection.txt"
-f=open(file,'w')
+f=open("../Output/"+outputConn,'w')
 for i in range(len(x)):
 	if i==xpoints-1:
 		continue

@@ -1,5 +1,39 @@
 import numpy as np
 
+##
+## 	Create a 2D mesh of squares
+##
+#		
+#	
+#	Output file of type ANYTHING2D. 
+#	xpoints and ypoints are the number of points on the x and y axys
+#
+
+
+##################################################################
+##################################################################
+
+## MODIFY ONLY THESE PARAMETHERS
+
+
+xmin=-1.0
+xmax=1.0
+ymin=-1.0
+ymax=1.0
+
+xpoints=65
+ypoints=65
+
+outputPoint="point-32.txt"
+outputConn="conn-32.txt"
+
+
+##################################################################
+##################################################################
+
+
+
+
 class Point:
 	x=0
 	y=0
@@ -55,15 +89,6 @@ def convertToString(p1,p2,p3,p4):
 	output=str(p1)+","+str(p2)+","+str(p3)+","+str(p4)+"\n"
 	return output
 
-
-xmin=-1.0
-xmax=1.0
-ymin=-1.0
-ymax=1.0
-
-xpoints=65
-ypoints=65
-
 x=np.linspace(xmin,xmax,xpoints)
 y=np.linspace(ymin,ymax,ypoints)
 
@@ -80,20 +105,15 @@ print points.len()
 
 
 # scrivo i punti
-file="point-32.txt"
-f=open(file,'w')
+f=open("../Output/"+outputPoint,'w')
 
 # j=1
 for i in points.listPoint:
-# 	f.write(str(j)+":  ")
 	f.write(i.write())
-# 	j+=1
-
 f.close()
 
 # scrivo le connessioni
-file="conn-32.txt"
-f=open(file,'w')
+f=open("../Output/"+outputConn,'w')
 for i in range(len(x)):
 	if i==xpoints-1:
 		continue
