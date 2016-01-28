@@ -12,13 +12,16 @@ using Monomial2D=Monomials<2,Polygon<2,real>,real>;
 template <typename real=double>
 class SolverVEM2D: public SolverVEM<2,2,Polygon<2,real>,Monomial2D<real>,real> {
 public:
-	virtual Matrix<real,3,Dynamic> computeB(const shared_ptr<Polygon<2,real>>& polygon,Monomial2D<real>& monomial); // sistemare l'integrale al bordo
-	public:
+	virtual Matrix<real,3,Dynamic> computeB(const shared_ptr<Polygon<2,real>>& polygon,Monomial2D<real>& monomial);
+
+public:
 	/** Standard constructor
 	 */
 	SolverVEM2D(std::function<real(const Point<2,real>&)> inputForceTerm):SolverVEM<2,2,Polygon<2,real>,Monomial2D<real>,real>::SolverVEM(inputForceTerm) {};
 	
 	/** Computes the known term of the element
+	 *
+	 *	Used a second order formula: we computes the f in the centroid
 	 */
 	virtual real computeKnownTerm(const shared_ptr<Polygon<2,real>>& element,const shared_ptr<MeshPoint<2,real>>& point);
 	
@@ -30,34 +33,31 @@ Matrix<real,3,Dynamic> SolverVEM2D<real>::computeB(const shared_ptr<Polygon<2,re
 	long numberOfPoints=polygon->numberOfPoints;
 	Matrix<real,3,Dynamic> B(3,numberOfPoints);
 	
-	// prima riga
+	// first row
 	for (int j=0; j<numberOfPoints; j++) {
 		B(0,j)=1.0/numberOfPoints;
 	}
 	
-	// inizializzo il resto a 0
+	// inizialize the others to 0
 	for (int i=1; i<3; i++) {
 		for (int j=0; j<numberOfPoints; j++) {
 			B(i,j)=0;
 		}
 	}
 	
-	// calcolo l'integrale al bordo per gli altri termini
+	// computing the boundary integral for the other terms
 	real gradient=monomial.gradient;
 	for (int j=0; j<numberOfPoints; j++) {
-		// considero i due lati connessi al grado di libertà j
+		// consider the 2 edges connected to the degree of freedom j
 		auto edge1=(*polygon->point(j))-(*polygon->point(j-1+numberOfPoints));
 		auto edge2=(*polygon->point(j+1))-(*polygon->point(j));
 		
 		Point<2,real> normalEdge1(edge1.y(),-edge1.x());
 		Point<2,real> normalEdge2(edge2.y(),-edge2.x());
-		// normalizzo
+		
+		// normalizing
 		normalEdge1=normalEdge1/normalEdge1.norm();
 		normalEdge2=normalEdge2/normalEdge2.norm();
-		
-//		cout<<"point: "<<*pointVector[j]<<endl;
-//		cout<<"normal1: "<<normalEdge1<<endl;
-//		cout<<"normal2: "<<normalEdge2<<endl;
 		
 		real edge1Norm=edge1.norm();
 		real edge2Norm=edge2.norm();
@@ -70,14 +70,10 @@ Matrix<real,3,Dynamic> SolverVEM2D<real>::computeB(const shared_ptr<Polygon<2,re
 
 template <typename real>
 real SolverVEM2D<real>::computeKnownTerm(const shared_ptr<Polygon<2,real>>& element,const shared_ptr<MeshPoint<2,real>>& point) {
-	real fValue=this->forceTerm(element->getCentroid()); // calcola la f nel primo punto di ogni poliedro, credo che basti essendo piecewise constant
+	real fValue=this->forceTerm(element->getCentroid()); // computing f in the centroid of each polyhedron
 	
-//	for (int i=0;i<element->numberOfPoints;i++) {
-//		fValue+=this->forceTerm(*element->point(i));
-//	}
-//	fValue/=element->numberOfPoints;
-	real vhCoefficient=1.0/(element->numberOfPoints); // e' il P0 di ogni vh, sempre lo stesso per ogni vh
-	real area=element->getArea(); // lo salva per non dovervi accedere per ogni punto
+	real vhCoefficient=1.0/(element->numberOfPoints); // this is P0 of each vh, always the same for every vh
+	real area=element->getArea(); // saved to not access to it for every point
 	return area*vhCoefficient*fValue;
 }
 

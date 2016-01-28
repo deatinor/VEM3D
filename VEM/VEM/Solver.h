@@ -12,7 +12,9 @@ using namespace Eigen;
 template <typename real=double>
 using Monomial3D=Monomials<3,Polyhedron<3,real>,real>;
 
-/** Generic Solver to use in Laplace 
+/** Generic Solver
+ *
+ *	It's compatible with any numerical scheme that consist in computing the local stiffness matrix.
  *
  *	\param embedded Dimension of the space
  *	\param baseElement Polygon or Polyhedron

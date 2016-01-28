@@ -12,7 +12,6 @@
 #include "Solver.h"
 #include "BoundaryCondition.h"
 #include "Error.h"
-#include "Dirichlet3D.h"
 
 
 
@@ -65,7 +64,11 @@ public:
 	
 	virtual void computeStiffnessMatrix()=0; //!< Virtual method to compute the stiffness matrix
 	virtual void computeKnownTerm()=0;	//!< Virtual method to compute the known term
-	virtual void computeSolution();		//!< Method to compute solution. It solves the linear system.
+	/** Method to compute solution. It solves the linear system.
+	 *
+	 *	It implements the biconjugate gradient stabilized method (BiCGSTAB). Override if you want to change it.
+	 */
+	virtual void computeSolution();
 	virtual void operator()();			//!< Method to execute the method. FreeFem style.
 	
 	virtual void displayError(std::function<real(Point<embedded,real>&)> realSolutionFunction); //!<  It displays the error after the computation

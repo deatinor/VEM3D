@@ -12,7 +12,6 @@
 #include "Solver.h"
 #include "BoundaryCondition.h"
 #include "Error.h"
-#include "Dirichlet3D.h"
 #include "Problem.h"
 
 

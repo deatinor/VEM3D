@@ -50,7 +50,7 @@ Matrix<real,Dynamic,Dynamic> SolverVEM<embedded,elementDimension,baseElement,Mon
 	
 	MonomialType monomial(element);
 	
-	// calcolo le matrici necessarie
+	// computing the necessary matrixes
 	
 	//	cout<<"diameter: "<<monomial.Element->diameter()<<endl;
 	//	cout<<"centroid: "<<monomial.Element->centroid<<endl;
@@ -64,13 +64,11 @@ Matrix<real,Dynamic,Dynamic> SolverVEM<embedded,elementDimension,baseElement,Mon
 	
 	//	cout<<(G-B*D).norm()<<endl;
 	if ((G-B*D).norm()>1e-10) {
-		//		cout<<"failed"<<endl;
 		cout<<"failed"<<endl<<G<<endl<<endl<<B*D<<endl;
 		cout<<(G-B*D).norm()<<endl;
 		
 		cout<<*monomial.element<<endl;
 	} else {
-		//		cout<<"ok"<<endl;
 	}
 	
 	auto PIStar=computePIStar(G, B);
@@ -79,7 +77,7 @@ Matrix<real,Dynamic,Dynamic> SolverVEM<embedded,elementDimension,baseElement,Mon
 	//	cout<<"PI"<<endl<<PI<<endl;
 	
 	
-	// calcolo Kloc dalle matrici precedenti
+	// compute Kloc from the past matrixes
 	for(int i=0; i<elementDimension+1; i++)
 		G(0,i)=0;
 	
@@ -92,18 +90,14 @@ Matrix<real,Dynamic,Dynamic> SolverVEM<embedded,elementDimension,baseElement,Mon
 	//	cout<<"Kloc: "<<endl<<Kloc<<endl;
 	
 	return Kloc;
-	
-	
-	
 }
 
 // G
 template <long embedded,long elementDimension,typename baseElement,typename MonomialType,typename real>
 Matrix<real,elementDimension+1,elementDimension+1> SolverVEM<embedded,elementDimension,baseElement,MonomialType,real>::computeG(MonomialType& monomial) {
-	//	auto& pointVector=monomial.element->pointVector;
 	auto& element=monomial.element;
 	
-	real volume=monomial.element->space(); // volume se 3D, area se 2D
+	real volume=monomial.element->space(); // volume if 3D, area if 2D
 	
 	Matrix<real,elementDimension+1,elementDimension+1> G;
 	
@@ -113,34 +107,26 @@ Matrix<real,elementDimension+1,elementDimension+1> SolverVEM<embedded,elementDim
 		}
 	}
 	
-	// prima colonna
+	// first column
 	G(0,0)=1;
 	
-	
-	
-	// prima riga (tranne prima colonna)
+	// first row (except first column)
 	real value=0;
 	for (int i=1; i<elementDimension+1; i++) {
 		value=0;
 		for (int k=0;k<element->numberOfPoints;k++) {
-			//			cout<<monomial.evaluate(pointVector[k],i-1)<<endl;
 			value+=monomial.evaluate(*(element->point(k)),i-1);
 		}
 		value/=element->numberOfPoints;
 		G(0,i)=value;
 	}
 	
-	// la diagonale
+	// diagonal
 	for (int i=1;i<elementDimension+1;i++) {
-		//		for (int j=1;j<4;j++) {
 		G(i,i)=monomial.gradient*monomial.gradient*volume;
-		//			else G(i,j)=0;
-		//		}
 	}
 	
 	return G;
-	
-	
 }
 
 // D
@@ -148,11 +134,10 @@ template <long embedded,long elementDimension,typename baseElement,typename Mono
 Matrix<real,Dynamic,elementDimension+1> SolverVEM<embedded,elementDimension,baseElement,MonomialType,real>::computeD(MonomialType& monomial) {
 	
 	long numberOfPoints=monomial.element->numberOfPoints;
-	//	auto& pointVector=monomial.element->pointVector;
 	auto& element=monomial.element;
 	Matrix<real,Dynamic,elementDimension+1> D(numberOfPoints,elementDimension+1);
 	
-	// prima colonna
+	// first column
 	for (int j=0; j<numberOfPoints; j++) {
 		D(j,0)=1;
 	}
@@ -162,16 +147,12 @@ Matrix<real,Dynamic,elementDimension+1> SolverVEM<embedded,elementDimension,base
 		}
 	}
 	
-	// resto della matrice
-	//	cout<<monomial.diameter<<" "<<monomial.gradient<<endl;
-	//	cout<<monomial.centroid;
+	// other terms of the matrix
 	for (int i=0; i<numberOfPoints; i++) {
 		for (int j=1;j<elementDimension+1;j++) {
 			D(i,j)=monomial.evaluate(*element->point(i),j-1);
 		}
 	}
-	
-	
 	
 	return D;
 }
@@ -185,10 +166,7 @@ Matrix<real,elementDimension+1,Dynamic> SolverVEM<embedded,elementDimension,base
 	BiCGSTAB<Matrix<real,elementDimension+1,elementDimension+1>> solver;
 	solver.compute(G);
 	auto PIStar = solver.solve(B);
-	
 	return PIStar;
-	
-	
 }
 
 // PI
@@ -196,7 +174,6 @@ template <long embedded,long elementDimension,typename baseElement,typename Mono
 Matrix<real,Dynamic,Dynamic> SolverVEM<embedded,elementDimension,baseElement,MonomialType,real>::computePI(Matrix<real, elementDimension + 1, Dynamic> &PIStar, Matrix<real, Dynamic, elementDimension + 1> &D) {
 	auto PI = D * PIStar;
 	return PI;
-	
 }
 
 
