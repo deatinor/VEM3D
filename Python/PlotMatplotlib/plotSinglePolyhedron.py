@@ -1,6 +1,30 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+##
+## 	Class to plot a single Polyhedron using Matplotlib
+##
+#		
+#	
+#	File of type ANYTHING3D. It reads only the first line.
+#
+
+
+##################################################################
+##################################################################
+
+## MODIFY ONLY THIS FILES
+
+
+pointFile="/Users/stefano/Dropbox/Programmazione/PACS/ProgettoGithub/Mesh/Cube/CubeWithoutPart/point-1.txt"
+connectionsFile="/Users/stefano/Dropbox/Programmazione/PACS/ProgettoGithub/Mesh/Cube/CubeWithoutPart/conn-1.txt"
+
+
+##################################################################
+##################################################################
+
+
+
 class Point:
 	x=0
 	y=0
@@ -21,13 +45,9 @@ class Point:
 		output+="\ny:  "+str(self.y)
 		output+="\nz:  "+str(self.z)+"\n\n"
 		return output
-		
-
-file="/Users/stefano/Dropbox/Programmazione/PACS/ProgettoGithub/Mesh/Cube/CubeWithoutPart/point-1.txt"
-connection="/Users/stefano/Dropbox/Programmazione/PACS/ProgettoGithub/Mesh/Cube/CubeWithoutPart/conn-1.txt"
 
 
-f=open(file)
+f=open(pointFile)
 
 points=[]
 
@@ -43,7 +63,7 @@ f.close
 	
 	
 
-f=open(connection)
+f=open(connectionsFile)
 
 connections=[]
 

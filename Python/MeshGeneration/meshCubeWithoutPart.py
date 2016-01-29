@@ -1,5 +1,40 @@
 import numpy as np
 
+##
+## 	Create a 3D mesh of cubes without a part of the cube to study the Fichera corner case. 
+##
+#		
+#	
+#	Output file of type ANYTHING3D. 
+#	We remove 1/8 of the cube in the part corresponding to the vertex x,y,z=-1
+#	xpoints, ypoints and zpoints are the number of points on the x, y and z axys
+#
+
+
+##################################################################
+##################################################################
+
+## MODIFY ONLY THESE PARAMETHERS
+
+
+xmin=-1.0
+xmax=1.0
+ymin=-1.0
+ymax=1.0
+zmin=-1.0
+zmax=1.0
+
+xpoints=65
+ypoints=65
+zpoints=65
+
+outputPoint="point-32.txt"
+outputConn="conn-32.txt"
+
+
+##################################################################
+##################################################################
+
 class Point:
 	x=0
 	y=0
@@ -85,18 +120,6 @@ def convertToString(p1,p2,p3,p4):
 def createCubeString(face1,face2,face3,face4,face5,face6):
 	output=str(face1)+";"+str(face2)+";"+str(face3)+";"+str(face4)+";"+str(face5)+";"+str(face6)+"\n"
 	return output
-	
-
-xmin=-1.0
-xmax=1.0
-ymin=-1.0
-ymax=1.0
-zmin=-1.0
-zmax=1.0
-
-xpoints=65
-ypoints=65
-zpoints=65
 
 x=np.linspace(xmin,xmax,xpoints)
 y=np.linspace(ymin,ymax,ypoints)
@@ -124,23 +147,18 @@ print points.len()
 
 
 # scrivo i punti
-file="point-32.txt"
-f=open(file,'w')
+f=open("../Output/"+outputPoint,'w')
 
-# j=1
+
 for i in points.listPoint:
-# 	f.write(str(j)+":  ")
 	f.write(i.write())
-# 	j+=1
-
 f.close()
 
 p1=int(points.fastIndexOfPoint(Point(x[0],y[1],z[2])))
 
 
 # scrivo le connessioni
-file="conn-32.txt"
-f=open(file,'w')
+f=open("../Output/"+outputConn,'w')
 for i in range(len(x)):
 	if i==xpoints-1:
 		continue

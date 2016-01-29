@@ -44,3 +44,6 @@ Latex/.#project.tex
 *.conn
 *.out
 
+# Ignore some Python files
+Python/Old/
+
