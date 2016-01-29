@@ -107,7 +107,7 @@
 %
 \begin{center}
   \large
-  Academic year 2014-2015
+  Anno Accademico 2014-2015
 \end{center}
 
 \newpage
@@ -169,24 +169,24 @@ $$ A=\frac{1}{2} \bigg | \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i) \bigg
 |$$
 dove si \`e usata la convenzione $x_{n+1},y_{n+1}=x_1,y_1$
 
-\begin{proof}
-Si consideri la forma differenziale $$ \omega=\frac{x dy}{2}-\frac{y
-  dy}{2}$$.
-Per il teorema di Green si ha: $$ \int_\Omega d\omega = \int_{\partial
-\Omega} \omega = \sum^n_{i=1}\int_{A(i)}\omega =
-\frac{1}{2}\sum_{i=1}^n \int_{A(i)}x dy-y dx$$,
-dove $A(i)$ \`e il segmento che unisce il punto $(x_i,y_i)$ a
-$(x_{i+1},y_{i+1})$.
-Attraverso una parametrizzazione ottengo:
-$$\frac{1}{2}\sum_{i=1}^n
-\int_0^1(x_i+(x_{i+1}-x_i)t)(y_{i+1}-y_i)-(y_i+(y_{i+1}-y_i)t)(x_{i+1}-x_i)dt$$,
-e integrando
-$$\frac{1}{2}\sum_{i=1}^n
-\frac{1}{2}[(x_i+x_{i+1})(y_{i+1}-y_i)-(y_i+y_{i+1})(x_{i+1}-x_i)]$$
-Svolgendo i calcoli ottengo la tesi:
-$$\frac{1}{2} \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i) $$
+% \begin{proof}
+% Si consideri la forma differenziale $$ \omega=\frac{x dy}{2}-\frac{y
+%   dy}{2}$$.
+% Per il teorema di Green si ha: $$ \int_\Omega d\omega = \int_{\partial
+% \Omega} \omega = \sum^n_{i=1}\int_{A(i)}\omega =
+% \frac{1}{2}\sum_{i=1}^n \int_{A(i)}x dy-y dx$$,
+% dove $A(i)$ \`e il segmento che unisce il punto $(x_i,y_i)$ a
+% $(x_{i+1},y_{i+1})$.
+% Attraverso una parametrizzazione ottengo:
+% $$\frac{1}{2}\sum_{i=1}^n
+% \int_0^1(x_i+(x_{i+1}-x_i)t)(y_{i+1}-y_i)-(y_i+(y_{i+1}-y_i)t)(x_{i+1}-x_i)dt$$,
+% e integrando
+% $$\frac{1}{2}\sum_{i=1}^n
+% \frac{1}{2}[(x_i+x_{i+1})(y_{i+1}-y_i)-(y_i+y_{i+1})(x_{i+1}-x_i)]$$
+% Svolgendo i calcoli ottengo la tesi:
+% $$\frac{1}{2} \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i) $$
 
-\end{proof}
+% \end{proof}
 
 \subsection{Area in 3D}
 Per il caso 3D abbiamo usato un algoritmo simile. L'algoritmo usato
@@ -355,7 +355,7 @@ facilitarne la comprensione.
 
 \section{Panoramica del codice}
 \label{sec:panoramica}
-Il codice \`e basato su 18 classi e un file main. Sfruttendo le
+Il codice \`e basato su 18 classi e un file main. Sfruttando le
 tecniche del \textit{template programming} dichiarazione e
 implementazione delle classi sono entrambe nel file header.
 Sono stati usati solamente classi della standard library per rendere
@@ -668,7 +668,7 @@ typename real=double>
 class Mesh {
 protected:
     
-    // Vector of Polygon or Polyhedr
+    // Vector of Polygon or Polyhedron
     vector<shared_ptr<baseElement>> elementVector;	
     // Vector of the vertexes of each element
     vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;	
@@ -968,7 +968,7 @@ calcolando $$ \mathbf{K_E^h= (\Pi^\Delta_\star)^T \tilde{G}
 Sono state inoltre sfruttate le classi Monomials e MonomialsPolygon
 per la valutazione dei monomi caratteristici del metodo VEM. 
 Il calcolo di $\BB$ e del termine noto \`e stato delegato alle classi
-figlie metre il resto \`e implementato direttamente in SolverVEM. Il
+figlie mentre il resto \`e implementato direttamente in SolverVEM. Il
 caso 3D ha richiesto una pi\`u complessa valutazione dei termini al
 bordo. \`E stato necessario calcolare il polinomio interpolante VEM su
 ogni faccia, il che causa un aumento notevole del tempo di calcolo.
@@ -1231,8 +1231,8 @@ abbiamo scelto di utilizzare il linguaggio Python per ragioni di
 semplicit\`a. 
 Attraverso la libreria Matplotlib abbiamo creato 2 script per la
 visualizzazione in 3D di un poliedro o di tutta la mesh. Lo scopo
-principale di questi scipt \`e il testing, il codice per mesh di
-grosse dimensioni \`e molto lento. \`E tuttavia efficacie in mesh
+principale di questi script \`e il testing, il codice per mesh di
+grosse dimensioni \`e molto lento. \`E tuttavia efficace in mesh
 pi\`u piccole per avere un feedback visivo sulla correttezza della
 stessa. 
 
