@@ -399,10 +399,8 @@ Vector<3,real> Polygon<embedded,real>::computeNormal(){
 			auto& p1=*pointVector[i];
 			auto& p2=*pointVector[(i+1)%numberOfPoints];
 			newNormal[2]+=(p1[0]-p2[0])*(p1[1]+p2[1]);
-			
+	
 			// vertexes ALWAYS sorted counterclockwise
-			
-			
 		}
 		if (newNormal[2]<0) {
 			switchPointsOrder();
@@ -580,7 +578,7 @@ bool Polygon<embedded,real>::isConflictPoint(Point<embedded, real> &point) {
 		return true;
 	}
 	
-	// ottengo il maxNormalIndex
+	// I obtain the maxNormalIndex
 	long maxNormalIndex=0;
 	real maxNormalValue=0;
 	for (int i=0;i<3;i++) {
@@ -589,7 +587,7 @@ bool Polygon<embedded,real>::isConflictPoint(Point<embedded, real> &point) {
 			maxNormalValue=abs(normal[i]);
 		}
 	}
-	// l'index1 e' quello di confronto
+	// the index1 is the compare one
 	long indexX=0;
 	long indexY=1;
 	if (maxNormalIndex==1) {
