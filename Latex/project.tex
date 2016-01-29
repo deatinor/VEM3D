@@ -133,6 +133,211 @@
  
 \addcontentsline{toc}{chapter}{Introduction}  % serve per creare la voce Introduzione nella table of contents iniziale
 
+\chapter{Algoritmi utilizzati}
+\label{ch:algorithms}
+In questo capitolo diamo una descrizione teorica degli algoritmi che
+abbiamo usato per determinare alcune specifiche propriet\`a degli
+elementi della mesh. Nel caso degli Elementi Finiti, determinare
+quantit\`a come l'area o la normale esterna a un poligono, non \`e un
+compito complesso in quanto \`e necessario gestire solo elementi
+triangolari.
+Una delle caratteristiche principali dei VEM, invece, \`e la
+possibilit\`a di trattare mesh di poligoni/poliedri qualunque, anche concavi:
+la complessit\`a dell'operazione \`e dunque molto aumentata.
+
+Non avendo trovato in letteratura un articolo unico che parlasse
+contemporaneamente di tutti questi problemi, proponiamo qui gli
+algoritmi principali da noi utilizzati. La maggior parte sono stati
+trovati on-line, ad alcuni abbiamo apportato nostre modifiche per
+adattarli al nostro caso.
+
+\section{Poligoni}
+Per un generico poligono per i VEM \`e necessario calcolare:
+\begin{itemize}
+\item Area
+\item Normale orientata
+\item Baricentro
+\end{itemize}
+
+Per ciascuno di questi \`e necessario fornire un'implementazione
+differente nel caso il poligono sia in 2D o sia immerso in uno spazio 3D.
+
+\subsection{Area in 2D}
+Si \`e sfruttata la formula dell'area di Gauss. \cite{wiki:areaGauss}:
+
+$$ A=\frac{1}{2} \bigg | \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i) \bigg
+|$$
+dove si \`e usata la convenzione $x_{n+1},y_{n+1}=x_1,y_1$
+
+\begin{proof}
+Si consideri la forma differenziale $$ \omega=\frac{x dy}{2}-\frac{y
+  dy}{2}$$.
+Per il teorema di Green si ha: $$ \int_\Omega d\omega = \int_{\partial
+\Omega} \omega = \sum^n_{i=1}\int_{A(i)}\omega =
+\frac{1}{2}\sum_{i=1}^n \int_{A(i)}x dy-y dx$$,
+dove $A(i)$ \`e il segmento che unisce il punto $(x_i,y_i)$ a
+$(x_{i+1},y_{i+1})$.
+Attraverso una parametrizzazione ottengo:
+$$\frac{1}{2}\sum_{i=1}^n
+\int_0^1(x_i+(x_{i+1}-x_i)t)(y_{i+1}-y_i)-(y_i+(y_{i+1}-y_i)t)(x_{i+1}-x_i)dt$$,
+e integrando
+$$\frac{1}{2}\sum_{i=1}^n
+\frac{1}{2}[(x_i+x_{i+1})(y_{i+1}-y_i)-(y_i+y_{i+1})(x_{i+1}-x_i)]$$
+Svolgendo i calcoli ottengo la tesi:
+$$\frac{1}{2} \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i) $$
+
+\end{proof}
+
+\subsection{Area in 3D}
+Per il caso 3D abbiamo usato un algoritmo simile. L'algoritmo usato
+\`e il seguente:
+\begin{enumerate}
+\item Proietto il poligono in un piano. 
+Dato un vertice $(x,y,z)$ pongo a 0 la componente corrispondente al
+massimo indice della normale al poligono. In questo modo ottengo
+l'equivalente di un poligono 2D.
+
+\item Calcolo l'area del poligono proiettato con la formula dell'area
+  di Gauss
+
+\item Divido per un apposito scale factor. Tale valore \`e calcolato
+  come:
+$$ \frac{\max_i (\nn[i])}{||\nn||} $$,
+dove $\nn$ \`e la normale al poligono.
+
+\end{enumerate}
+
+\subsection{Normale orientata}
+Il calcolo del verso della normale per un poligono concavo non \`e
+elementare. Sarebbe invece pi\`u semplice calcolare la semplice
+direzione.
+Nel caso di poligono immerso in 3D la normale \`e ottenuta con la
+seguente formula:
+
+$$
+\begin{cases}
+N_x=\sum_{i=0}^{n} (y_i-y_{i+1})(z_i+z_{i+1}) \\
+N_y=\sum_{i=0}^{n} (z_i-z_{i+1})(x_i+x_{i+1}) \\
+N_z=\sum_{i=0}^{n} (x_i-x_{i+1})(y_i+y_{i+1}) 
+\end{cases}
+$$
+
+Nel caso 2D l'algoritmo \`e il medesimo, ma non vengono pi\`u
+calcolate le componenti $N_x$ e $N_y$ che sono 0.
+
+\subsection{Baricentro}
+Nel caso 2D la formula per calcolare il baricentro $C$ di un poligono
+\`e la seguente:
+$$
+\begin{cases}
+C_x=\frac{1}{6A}\sum_{i=0}^{n} (x_i+x_{i+1})(x_iy_{i+1}-x_{i+1}y_i) \\
+C_y=\frac{1}{6A}\sum_{i=0}^{n} (y_i+y_{i+1})(x_iy_{i+1}-x_{i+1}y_i) \\
+\end{cases}
+$$
+dove $A$ \`e l'area con segno del poligono, data dalla formula:
+$$A=\frac{1}{2} \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i) $$
+
+Il caso 3D \`e implementato in modo simile, l'algoritmo \`e il
+seguente:
+
+\begin{enumerate}
+\item Se il poligono giace su un piano parallelo a $xy$, $xz$ o
+  $yz$ l'algoritmo \`e identico al caso 2D
+
+\item Altrimenti viene dapprima proiettato su uno dei tre piani, come
+  per l'algoritmo per determinare l'area, e
+  attraverso l'algoritmo precedente vengono determinate 2 delle 3
+  componenti del baricentro. Viene successivamente proiettato su un
+  altro dei 3 piani per determinare l'ultima componente.
+
+\end{enumerate}
+
+
+\section{Poliedri}
+Diversamente dal caso poligonale non abbiamo implementato un algoritmo
+esatto per il calcolo del baricentro. Tale valore non \`e necessario
+per il nostro progetto e richiede un alto costo computazionale.
+
+\subsection{Volume}
+Per il volume si \`e sfruttato il teorema della divergenza: sfruttando
+la relazione:
+$$ \int_\Omega \nabla \cdot \FF d\omega=\int_{\partial\omega}\FF \cdot
+\nn ds $$
+ponendo $$\FF=x$$ ottengo:
+$$ \int_\Omega d\omega=\int_{\partial\omega} \xx \cdot \nn ds =\int_{\partial\omega} x  n_x ds $$
+Il secondo integrale pu\`o essere scomposto in integrale su ogni
+faccia del poliedro:
+$$ \int_{\partial\omega} x n_x ds=\sum_{i=1}^k \int_{A_i} x n_x ds$$
+dove $k$ \`e il numero di facce del poliedro e $A_i$ \`e la faccia.
+Poich\'e 
+$$\int_{A_i} x n_x ds= |A_i| n_x  \bar x_i $$
+dove $|A_i|$ \`e l'area del poligono $A_i$ e $\bar x_i$ \`e la
+componente $x$ del baricentro di $A_i$.
+Ottengo dunque:
+$$ V= \sum_{i=1}^k |A_i|  n_x \bar x_i $$
+Conoscendo area, baricentro e normale delle facce la formula \`e dunque di
+veloce implementazione.
+ 
+\subsection{Orientamento della normale coerente tra le facce}
+Scopo di questo algoritmo \`e di far si che, dato un poliedro, la
+normale a tutte le facce sia interna o esterna. Un poligono per
+definizione \`e dato da un insieme \textit{ordinato} di
+punti. L'algoritmo \`e il seguente:
+
+\begin{enumerate}
+\item Ordina le facce.
+\item Per ciascuna faccia controlla per tutte le successive
+  nell'ordinamento se hanno lati in comune.
+\item Se si, se il lato compare in ordine opposto nelle due facce
+  l'orientamento \`e coerente. Altrimenti inverti l'ordine dei vertici
+  nella seconda faccia. Modifica l'ordinamento delle facce,
+  posizionando la seconda faccia davanti a quella
+  di partenza.
+
+\item Se no continua senza ulteriori operazioni.
+
+\item Una volta controllate tutte le facce successive nell'ordinamento
+  continua con la prima faccia nell'ordinamento non ancora controllata.
+
+\end{enumerate}
+
+\subsection{Determinare se la normale \`e esterna o interna}
+Una volta ottenuto un ordinamento coerente tra le facce del poliedro,
+\`e necessario ordinarle tutte verso l'esterno, per calcolare
+correttamente i termini di bordo nei metodi numerici.
+
+L'algoritmo da noi implementato \`e una versione 3D del \textit{Ray
+  casting algorithm}. Questo in 2D consiste nel determinare il numero di
+intersezioni con i lati del poligono di un raggio proveniente
+dall'esterno e diretto verso un punto. Se questo numero \`e pari il
+punto \`e esterno, se dispari il punto \`e interno. Pu\`o essere
+riproposto in modo pressoch\`e identico nel caso 3D, anche se con un
+costo computazionale elevato.
+
+Una problematica nel caso 2D che si ripropone anche in quello 3D \`e
+il caso in cui l'intersezione del raggio con il poligono avviene in un
+vertice invece che in un lato. In questo caso per ottenere un
+risultato corretto \`e necessario modificare il raggio considerato. 
+
+Poich\`e tutte le facce sono orientate coerentemente \`e sufficiente
+orientare correttamente la normale ad un unica faccia e nel caso di
+modifiche invertire il verso di tutte le altre facce.
+L'algoritmo da noi proposto \`e il seguente:
+\begin{enumerate}
+\item Considera la prima faccia del poliedro e un punto scelto
+  casualmente su di essa.
+\item Considera il prolungamento della normale avente origine in tale
+  punto.
+\item Se tale prolungamento interseca un vertice o uno spigolo
+  seleziona un altro punto casualmente e ripeti il procedimento
+\item Conta il numero di intersezioni con le facce del poliedro di
+  tale semiretta.
+\item Se pari la normale \`e esterna, se dispari la normale \`e interna.
+
+\end{enumerate}
+
+
+ 
 
 \chapter{Implementazione}
 \label{ch:implementazione}

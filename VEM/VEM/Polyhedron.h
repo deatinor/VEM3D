@@ -77,10 +77,35 @@ public:
 	void addPolygon(shared_ptr<Polygon<embedded,real>>& inputPolygon);	//!< Add a new vertex to the Polygon
 	void addPoint(shared_ptr<MeshPoint<embedded,real>>& inputPoint);	//!< Add a new Polyhedron having this as face
 	Point<embedded,real> computeCentroid();	//!< \return the centroid
-	real computeVolume();	//!< \return the volume of the Polyhedron
+	/** Computes the volume of the Polyhedron
+	 *
+	 *	It uses the Gaus formula:
+	 *	The volume is the sum on all the faces of the area of the face multiplied by the x coordinate of the baricenter, multiplied by the x component of the normal to the polygon
+	 *
+	 */
+	real computeVolume();
 	real getDiameter();		//!< \return the maximum distance between 2 Points
-	void fixExternalNormal();	//!< Makes the normal to each face pointing towards the external of the Polyhedron
-	void fixFacesOrientation();	//!< Makes the normal of each face pointing in the same direction (or inward or outward)
+	
+	/** Makes the normal to each face pointing towards the external of the Polyhedron
+	 *
+	 *	Ray casting algorithm:
+	 *		- Consider the first face and a random point on it
+	 *		- Consider the normal starting 
+	 *		- If the line intersect a vertex or an edge consider an another random
+	 *
+	 */
+	void fixExternalNormal();
+	
+	/** Makes the normal of each face pointing in the same direction (or inward or outward)
+	 *
+	 *	Algorithm:
+	 *		- Order all the faces
+	 *		- For each face check all the faces that are after it in the ordering. Check if they have common edges.
+	 *		- If yes, make sure that the edge in common is in the opposite order in the 2 face. If it's in the same order invert the face. Put the face checked right in front of itself.
+	 *		- If it has no common edge with any of the precedent faces do nothing
+	 *		- Continue with the first face in the ordering not checked yet.
+	 */
+	void fixFacesOrientation();
 	real hTriangle();	//!< \return The maximum distance between vertexes. Necessary for the mesh.
 	void initialize();	//<! Put this Polyhedron to the polyhedronVector in each MeshPoint and Polygon. Computes volume, normal and centroid
 	void linkPoints();	//<! Makes all vertexes pointing to this
@@ -374,7 +399,6 @@ void Polyhedron<embedded,real>::fixFacesOrientation() {
 		// per ogni poligono controlla tutti quelli dopo, quelli che ha trovato che sono a lui adiacenti (quindi li ha sistemati) li mette subito dopo di lui
 		auto& polygon1=*polygonVector[i];
 		for (int j=nextJ; j<numberOfPolygons; j++) {
-//			bool flag1=false;
 			auto& polygon2=*polygonVector[j];
 			
 			for (int k=0;k<polygon1.numberOfPoints;k++) {
@@ -383,7 +407,6 @@ void Polyhedron<embedded,real>::fixFacesOrientation() {
 				auto point2=polygon1[k+1];
 				for (int m=0;m<polygon2.numberOfPoints;m++) {
 					if (point1==polygon2[m] && point2==polygon2[m+1]) {
-//						flag1=true;
 						flag2=true;
 						polygon2.switchPointsOrder();
 						iter_swap(polygonVector.begin()+nextJ,polygonVector.begin()+j);
@@ -391,7 +414,6 @@ void Polyhedron<embedded,real>::fixFacesOrientation() {
 						break;
 					}
 					if (point1==polygon2[m] && point2==polygon2[m-1]) {
-//						flag1=true;
 						flag2=true;
 						iter_swap(polygonVector.begin()+nextJ,polygonVector.begin()+j);
 						nextJ++;
@@ -400,7 +422,6 @@ void Polyhedron<embedded,real>::fixFacesOrientation() {
 				}
 				if (flag2) break;
 			}
-//			if (flag1)break;
 		}
 
 		

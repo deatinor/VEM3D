@@ -97,8 +97,26 @@ public:
 	// STANDARD METHODS
 	void addPoint(const shared_ptr<MeshPoint<embedded,real>>& p1); //!< Add a new vertex to the Polygon
 	void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> polyhedron);	//!< Add a new Polyhedron having this as face
-			
+	
+	/** Compute centroid of a Polygon
+	 *
+	 *	Source:
+	 *	https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
+	 *
+	 *	For the 3D case the Polygon is projected on one of the xy, xz or yz plane to determine 2 of the components.
+	 *	Then it's projected on an another plane to determine the last component.
+	 */
 	Vector<embedded,real> computeCentroid();
+	
+	/** Compute area of the Polygon
+	 *
+	 *	Gauss formula: https://en.wikipedia.org/wiki/Shoelace_formula
+	 *	For the 3D case:
+	 *		- Project the Polygon on a plane
+	 *		- Compute the area with Gauss formula
+	 *		- Divide by an apposite scale factor
+	 *
+	 */
 	real computeArea();
 	real getDiameter();
 	real hTriangle(); //!< Compute the maximum distance between 2 vertexes. Necessary for the paramether h of the Mesh
@@ -115,6 +133,12 @@ public:
 	 *
 	 *	Source:
 	 *	http://www.gamedev.net/topic/416131-calculating-a-polygon-normal/?p=3771628
+	 *
+	 *	Nx = (Yn-Yn+1)*(Zn+Zn+1)
+	 *	Ny = (Zn-Zn+1)*(Xn+Xn+1)
+	 *	Nz = (Xn-Xn+1)*(Yn+Yn+1)
+	 *
+	 *	In the 2D case it's sufficient to compute the Z component.
 	 *
 	 */
 	Vector<3,real> computeNormal();
@@ -304,18 +328,20 @@ real Polygon<embedded,real>::computeArea() {
 	real area=0;
 	
 	if (embedded==2) {
-	for (int i=0;i<pointVector.size()-1;i++) {
-		area+=pointVector[i]->x()*pointVector[i+1]->y()-pointVector[i+1]->x()*pointVector[i]->y();
-	}
-	area+=pointVector[0]->y()*pointVector[pointVector.size()-1]->x()-pointVector[0]->x()*pointVector[pointVector.size()-1]->y();
-	return abs(area/2);
+		for (int i=0;i<pointVector.size()-1;i++) {
+			area+=pointVector[i]->x()*pointVector[i+1]->y()-pointVector[i+1]->x()*pointVector[i]->y();
+		}
+		area+=pointVector[0]->y()*pointVector[pointVector.size()-1]->x()-pointVector[0]->x()*pointVector[pointVector.size()-1]->y();
+		return abs(area/2);
 	}
 	
 	
 	
 
 	else if (embedded==3) {
-	// I obtaine the scale factor
+	// I obtaine the scale factor.
+	// I put to 0 the index with higher normal index.
+	// The Polygon so becomes a 2D Polygon
 	long maxNormalIndex=0;
 	real maxNormalValue=0;
 	for (int i=0;i<3;i++) {
