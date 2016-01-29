@@ -1,10 +1,29 @@
 from mayavi import mlab
 import numpy
 
+##  TODO  ##
+## 	Class to plot a mesh of Polyhedrons using Matplotlib
+##
+#		
+#	TODO  ##
+#	File of type ANYTHING3D. It reads only the first line.
+#	Be careful. It may become slow even with not so large meshes.
+#
+
+
+##################################################################
+##################################################################
+
+## MODIFY ONLY THIS FILES
+
 folder="../Mesh3/Mesh3/Output/"
 
-point="point.txt"
-solution="solution.txt"
+point="point2D.txt"
+solution="solution2D.txt"
+
+##################################################################
+##################################################################
+
 
 
 class Point:
