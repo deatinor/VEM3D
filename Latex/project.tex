@@ -152,13 +152,14 @@ trovati on-line, ad alcuni abbiamo apportato nostre modifiche per
 adattarli al nostro caso.
 
 \section{Poligoni}
-Per un generico poligono per i VEM \`e necessario calcolare:
+Un poligono nella nostra implementazione \`e definito come un insieme
+\textit{ordinato} di punti. 
+\`E necessario calcolare:
 \begin{itemize}
 \item Area
 \item Normale orientata
 \item Baricentro
 \end{itemize}
-
 Per ciascuno di questi \`e necessario fornire un'implementazione
 differente nel caso il poligono sia in 2D o sia immerso in uno spazio 3D.
 
@@ -192,10 +193,14 @@ dove si \`e usata la convenzione $x_{n+1},y_{n+1}=x_1,y_1$
 Per il caso 3D abbiamo usato un algoritmo simile. L'algoritmo usato
 \`e il seguente:
 \begin{enumerate}
-\item Proietto il poligono in un piano. 
+\item Proietto il poligono su uno dei tre piani principali $xy$, $xz$,
+  $yz$. 
 Dato un vertice $(x,y,z)$ pongo a 0 la componente corrispondente al
 massimo indice della normale al poligono. In questo modo ottengo
-l'equivalente di un poligono 2D.
+l'equivalente di un poligono 2D. Eliminando la componende con indice
+maggiore si evita il caso di poligono gi\`a parallelo ad uno dei tre
+piani. In questo caso infatti la proiezione risulterebbe in un
+poligono degenere.
 
 \item Calcolo l'area del poligono proiettato con la formula dell'area
   di Gauss
@@ -208,11 +213,14 @@ dove $\nn$ \`e la normale al poligono.
 \end{enumerate}
 
 \subsection{Normale orientata}
-Il calcolo del verso della normale per un poligono concavo non \`e
+Attraverso la nostra definizione di poligono, avendo gi\`a un
+ordinamento tra i punti, il verso della normale
+\`e ottenuto attraverso la regola della mano destra.
+Tale calcolo per un poligono concavo non \`e
 elementare. Sarebbe invece pi\`u semplice calcolare la semplice
 direzione.
-Nel caso di poligono immerso in 3D la normale \`e ottenuta con la
-seguente formula:
+Sfruttando l'algoritmo di Newell, nel caso di poligono immerso in 3D
+la normale \`e ottenuta con la seguente formula:
 
 $$
 \begin{cases}
@@ -236,7 +244,6 @@ C_y=\frac{1}{6A}\sum_{i=0}^{n} (y_i+y_{i+1})(x_iy_{i+1}-x_{i+1}y_i) \\
 $$
 dove $A$ \`e l'area con segno del poligono, data dalla formula:
 $$A=\frac{1}{2} \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i) $$
-
 Il caso 3D \`e implementato in modo simile, l'algoritmo \`e il
 seguente:
 
@@ -246,7 +253,7 @@ seguente:
 
 \item Altrimenti viene dapprima proiettato su uno dei tre piani, come
   per l'algoritmo per determinare l'area, e
-  attraverso l'algoritmo precedente vengono determinate 2 delle 3
+ procedendo come nel caso 2D vengono determinate 2 delle 3
   componenti del baricentro. Viene successivamente proiettato su un
   altro dei 3 piani per determinare l'ultima componente.
 
@@ -254,9 +261,17 @@ seguente:
 
 
 \section{Poliedri}
+Un poliedro nella nostra implementazione \`e definito come un insieme
+\textit{non ordinato} di poligoni.
 Diversamente dal caso poligonale non abbiamo implementato un algoritmo
 esatto per il calcolo del baricentro. Tale valore non \`e necessario
 per il nostro progetto e richiede un alto costo computazionale.
+\`E invece necessario determinare:
+\begin{itemize}
+\item Volume
+\item Orientamento coerente della normale tra le facce di un poliedro
+\item Determinare se la normale \`e esterna o interna
+\end{itemize}
 
 \subsection{Volume}
 Per il volume si \`e sfruttato il teorema della divergenza: sfruttando
@@ -269,7 +284,7 @@ Il secondo integrale pu\`o essere scomposto in integrale su ogni
 faccia del poliedro:
 $$ \int_{\partial\omega} x n_x ds=\sum_{i=1}^k \int_{A_i} x n_x ds$$
 dove $k$ \`e il numero di facce del poliedro e $A_i$ \`e la faccia.
-Poich\'e 
+Si noti che
 $$\int_{A_i} x n_x ds= |A_i| n_x  \bar x_i $$
 dove $|A_i|$ \`e l'area del poligono $A_i$ e $\bar x_i$ \`e la
 componente $x$ del baricentro di $A_i$.
@@ -279,18 +294,18 @@ Conoscendo area, baricentro e normale delle facce la formula \`e dunque di
 veloce implementazione.
  
 \subsection{Orientamento della normale coerente tra le facce}
-Scopo di questo algoritmo \`e di far si che, dato un poliedro, la
-normale a tutte le facce sia interna o esterna. Un poligono per
-definizione \`e dato da un insieme \textit{ordinato} di
-punti. L'algoritmo \`e il seguente:
+Scopo di questo algoritmo \`e di far si che, dato un poliedro, le
+facce siano orientate coerentemente, ossia che la
+normale sia, per tutte le facce, o interna o esterna al poliedro. L'algoritmo \`e il seguente:
 
 \begin{enumerate}
-\item Ordina le facce.
+\item Fornisci un ordinamento tra le facce del poliedro.
 \item Per ciascuna faccia controlla per tutte le successive
   nell'ordinamento se hanno lati in comune.
 \item Se si, se il lato compare in ordine opposto nelle due facce
-  l'orientamento \`e coerente. Altrimenti inverti l'ordine dei vertici
-  nella seconda faccia. Modifica l'ordinamento delle facce,
+  l'orientamento \`e coerente (la normale dei due poligoni punta per
+  entrambi o verso l'esterno o verso l'interno). Altrimenti inverti l'ordine dei vertici
+  nella seconda faccia per ottenere un orientamento coerente. Modifica l'ordinamento delle facce,
   posizionando la seconda faccia davanti a quella
   di partenza.
 
@@ -307,9 +322,10 @@ Una volta ottenuto un ordinamento coerente tra le facce del poliedro,
 correttamente i termini di bordo nei metodi numerici.
 
 L'algoritmo da noi implementato \`e una versione 3D del \textit{Ray
-  casting algorithm}. Questo in 2D consiste nel determinare il numero di
-intersezioni con i lati del poligono di un raggio proveniente
-dall'esterno e diretto verso un punto. Se questo numero \`e pari il
+  casting algorithm}. Questo in 2D consiste nel determinare se un
+punto \`e esterno o interno ad un poligono. Per ottenere questa
+informazione si conta il numero di intersezioni di un raggio
+proveniente dall'esterno e diretto verso tale punto. Se questo numero \`e pari il
 punto \`e esterno, se dispari il punto \`e interno. Pu\`o essere
 riproposto in modo pressoch\`e identico nel caso 3D, anche se con un
 costo computazionale elevato.
@@ -328,13 +344,17 @@ L'algoritmo da noi proposto \`e il seguente:
   casualmente su di essa.
 \item Considera il prolungamento della normale avente origine in tale
   punto.
-\item Se tale prolungamento interseca un vertice o uno spigolo
+\item Se tale prolungamento interseca un vertice o uno spigolo del poliedro
   seleziona un altro punto casualmente e ripeti il procedimento
 \item Conta il numero di intersezioni con le facce del poliedro di
-  tale semiretta.
-\item Se pari la normale \`e esterna, se dispari la normale \`e interna.
+  tale semiretta. Questo punto \`e quello pi\`u costoso computazionalmente.
+\item Se pari la normale \`e esterna, se dispari la normale \`e
+  interna.
+\item Se interna inverti l'orientamento di tutte le facce del poliedro
+  per averla esterna.
 
 \end{enumerate}
+
 
 
  
@@ -1236,8 +1256,20 @@ grosse dimensioni \`e molto lento. \`E tuttavia efficace in mesh
 pi\`u piccole per avere un feedback visivo sulla correttezza della
 stessa. 
 
+\begin{figure}[h]
+\label{img:matplotlibPolyhedron}
+\centering
+\includegraphics[scale=0.4]{Immagini/Project/matplotlibTest5.png}
+\caption{Plot con Matplotlib. Un particolare elemento della Mesh che i
+  VEM possono gestire.}
+\end{figure}
 
-
+\begin{figure}[h]
+\label{img:matplotlibMesh}
+\centering
+\includegraphics[scale=0.4]{Immagini/Project/matplotlibPlotMesh.png}
+\caption{Plot con Matplotlib. Mesh di cubi.}
+\end{figure}
 
 % \chapter{Un po' di fisiologia}
 % \label{chap:3}
