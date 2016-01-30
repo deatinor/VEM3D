@@ -1,0 +1,45 @@
+// nome file input
+
+// CUBIC MESH
+//inputPoint=../../Mesh/Cube/Cubic/point-1.txt;
+//inputConnection=../../Mesh/Cube/Cubic/conn-1.txt;
+
+// CUBO TAGLIATO
+//inputPoint=../../Mesh/Cube/CubeWithoutPart/point-16.txt;
+//inputConnection=../../Mesh/Cube/CubeWithoutPart/conn-16.txt;
+
+// SPHERIC MESH
+inputPoint=../../Mesh/Sphere3D/p_sphere_0_04.txt;
+inputConnection=../../Mesh/Sphere3D/t_sphere_0_04.txt;
+
+// 2D MESH
+//inputPoint=../../Mesh/Mesh2DSquare/point-8.txt
+//inputConnection=../../Mesh/Mesh2DSquare/conn-8.txt;
+
+// TEST
+//inputPoint=../../Mesh/Test/point3.txt;
+//inputConnection=../../Mesh/Test/conn3.txt;
+
+// mesh type
+meshType=Mesh3D;
+fileType=TETRAHEDRON;
+
+// il solver e le boundary condition sono determinate automaticamente dalla mesh
+// solver type
+solverType=;
+// boundary condition type
+boundaryCondition=;
+
+// nome file output, devono essere definiti tutti o nessuno
+outputPoint=Output/point2D.txt;
+outputConnection=Output/conn2D.txt;
+outputSolution=Output/solution2D.txt;
+
+// forceTermFunction
+forceTermFunction=forceTermSquare;
+
+// solution function
+solutionFunction=solutionSquare;
+
+// typename real
+real=double;
