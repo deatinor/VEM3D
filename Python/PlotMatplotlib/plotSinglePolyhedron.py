@@ -16,8 +16,8 @@ from mpl_toolkits.mplot3d import Axes3D
 ## MODIFY ONLY THIS FILES
 
 
-pointFile="/Users/stefano/Dropbox/Programmazione/PACS/ProgettoGithub/Mesh/Cube/CubeWithoutPart/point-1.txt"
-connectionsFile="/Users/stefano/Dropbox/Programmazione/PACS/ProgettoGithub/Mesh/Cube/CubeWithoutPart/conn-1.txt"
+pointFile="../../Mesh/Test/point5.txt"
+connectionsFile="../../Mesh/Test/conn5.txt"
 
 
 ##################################################################
