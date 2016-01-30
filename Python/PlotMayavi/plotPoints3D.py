@@ -2,12 +2,12 @@ from mayavi import mlab
 import numpy
 
 ##  TODO  ##
-## 	Class to plot a mesh of Polyhedrons using Matplotlib
+## 	Class to plot the vertexes of a 3D mesh with the corresponding solution.
 ##
 #		
-#	TODO  ##
-#	File of type ANYTHING3D. It reads only the first line.
-#	Be careful. It may become slow even with not so large meshes.
+#	It reads only the point file (the one output of the program) and the solution file.
+#	Don't use the input point file since the ordering of the points may change during
+#	the algorithm
 #
 
 
@@ -16,7 +16,7 @@ import numpy
 
 ## MODIFY ONLY THIS FILES
 
-folder="../Mesh3/Mesh3/Output/"
+folder="../../VEM/VEM/Output/"
 
 point="point2D.txt"
 solution="solution2D.txt"
