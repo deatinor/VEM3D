@@ -1248,13 +1248,26 @@ SparseMatrix<real>& inputStiffnessMatrix);
 \label{sec:visualizzazione}
 Per la parte di visualizzazione, contrariamente alle precedenti
 abbiamo scelto di utilizzare il linguaggio Python per ragioni di
-semplicit\`a. 
+semplicit\`a. Questa parte \`e suddivisa in 2 parti a seconda delle
+librerie utilizzate:
+\begin{itemize}
+\item
 Attraverso la libreria Matplotlib abbiamo creato 2 script per la
 visualizzazione in 3D di un poliedro o di tutta la mesh. Lo scopo
 principale di questi script \`e il testing, il codice per mesh di
 grosse dimensioni \`e molto lento. \`E tuttavia efficace in mesh
 pi\`u piccole per avere un feedback visivo sulla correttezza della
 stessa. 
+\item
+Attraverso la libreria Mayavi abbiamo creato 3 script per la
+visualizzazione della soluzione. 
+\textit{plotPoints3D} mostra solo i vertici dei poliedri che
+costituiscono la mesh con relativa soluzione. 
+\textit{plot2D} e \textit{plot3D} invece mostrano la soluzione in
+tutta la mesh. Nel caso 3D ci si pu\`o avvalere dei tools di
+visualizzazione di Mayavi per, ad esempio, osservare la soluzione
+lungo una sezione della mesh.
+\end{itemize}
 
 \begin{figure}[h]
 \label{img:matplotlibPolyhedron}
