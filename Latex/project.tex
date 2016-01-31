@@ -164,7 +164,7 @@ Per ciascuno di questi \`e necessario fornire un'implementazione
 differente nel caso il poligono sia in 2D o sia immerso in uno spazio 3D.
 
 \subsection{Area in 2D}
-Si \`e sfruttata la formula dell'area di Gauss. \cite{wiki:areaGauss}:
+Si \`e sfruttata la formula dell'area di Gauss-Green:
 
 $$ A=\frac{1}{2} \bigg | \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i) \bigg
 |$$
@@ -362,30 +362,31 @@ L'algoritmo da noi proposto \`e il seguente:
 \chapter{Implementazione}
 \label{ch:implementazione}
 
+Scopo della parte implementativa del progetto \`e creare un codice che consenta di risolvere
+il problema di Laplace con condizioni al bordo di Dirichlet in 2D o 3D
+su mesh composte rispettivamente da generici poligoni e poliedri.
 Descriviamo in questo capitolo il codice da noi sviluppato. Abbiamo
 utilizzato il linguaggio C++, secondo la logica della programmazione
-ad oggetti. Abbiamo creato un semplice Makefile per automatizzare la
-compilazione e abbiamo usato Doxygen per generare automaticamente la
+ad oggetti. Attraverso un semplice Makefile \`e possibile automatizzare la
+compilazione e sfruttando Doxygen viene generata automaticamente la
 documentazione del codice.
 Per la parte di visualizzazione del codice abbiamo invece preferito
 creare alcuni script Python, sfruttando la libreria Mayavi per i
 grafici 3D.
-Abbiamo utilizzato uno stile di codice il possibile coerente per
+Abbiamo utilizzato uno stile di codice il pi\`u possibile coerente per
 facilitarne la comprensione.
 
 \section{Panoramica del codice}
 \label{sec:panoramica}
 Il codice \`e basato su 18 classi e un file main. Sfruttando le
-tecniche del \textit{template programming} dichiarazione e
+tecniche del \textit{template programming}, dichiarazione e
 implementazione delle classi sono entrambe nel file header.
-Sono stati usati solamente classi della standard library per rendere
-la gestione della memoria pi\`u semplice. In particolare i puntatori,
-dove necessari sono stati implementati come shared pointers o weak
-pointers. 
+La gestione della memoria \`e stata effettuata con le pi\`u recenti
+tecniche del C++11 allo scopo di evitare memory leak: in particolare i puntatori,
+dove necessari, sono stati implementati come shared pointers o weak
+pointers.
 Scopo dell'implementazione \`e stato il creare un codice il pi\`u
-possibile generale e riutilizzabile. Il codice consente di risolvere
-il problema di Laplace con condizioni al bordo di Dirichlet in 2D o 3D
-su mesh composte da generici poligoni e poliedri.
+possibile generale e riutilizzabile. 
 Il lavoro \`e diviso idealmente in due parti principali:
 \begin{itemize}
 \item
@@ -410,32 +411,50 @@ creare un codice sufficientemente generale da consentire di modificare
 il metodo utilizzato (ad esempio FEM al posto che VEM) semplicemente
 scrivendo la parte relativa al solver e non quella relativa al
 problema o alle condizioni al bordo.
-
 \end{itemize}
+A queste due parti principali si aggiunge il file \textit{main}, in
+cui viene lanciato il solutore appropriato in base ad alcuni parametri
+presenti in un \textit{datafile}. Questo per evitare di dover
+ricompilare il programma ad ogni piccola modifica.
 
+Come gi\`a detto vi \`e poi una parte separata di codice, scritto questa
+volta in Python, destinato alla visualizzazione grafica. Si \`e scelto
+questo linguaggio per la sua semplicit\`a rispetto al C++ e per la
+presenza di una libreria, \textit{Mayavi}, adatta alla visualizzazione
+3D. Questa parte \`e intesa come completamento della precedente,
+scritta allo scopo di fornire un modo rapido di testare graficamente
+la soluzione.
 
 \section{La Mesh}
 \label{sec:mesh}
 Abbiamo scelto di scrivere da zero il codice per la Mesh per via delle
 particolarit\`a dei VEM che richiedono elementi pi\`u generali che nel
-classico caso degli Elementi Finiti. Tratto comune a tutte le classi
+classico caso degli Elementi Finiti. 
+
+La Mesh in 3 dimensioni \`e stata pensata come un insieme di
+poliedri. Ciascuno di questi \`e a sua volta composto da un insieme di
+poligoni che a loro volta sono definiti come insieme ordinato
+di punti. Le 3 classi che rappresentano poliedri, poligoni e punti
+sono quelle su cui si \`e basata la costruzione della mesh; sono
+estremamente interconnesse tra loro: ciascun poliedro contiene
+un vettore di puntatori ai vertici e alle facce dello stesso e viceversa. Questo
+comporta alcune difficolt\`a nel costruttore, che sono state superate
+con la tecnica dei variadic template e un metodo dedicato
+esplicitamente alla creazione di un'istanza. Per i puntatori come
+gi\`a detto abbiamo usato gli \textit{shared\_pointer} per facilitare
+la gestione della memoria. 
+Non abbiamo usato i pi\`u efficienti \textit{unique\_pointers}
+in quanto all'interno del programma lo stesso puntatore \`e condiviso
+da pi\`u classi.
+Il caso 2D \`e implementato in modo analogo salvo l'assenza dei
+poliedri. Non si \`e rivelata invece necessaria una classe Edge, non
+\`e stata dunque implementata ai fini di rendere pi\`u semplice la struttura.
+
+Tratto comune a tutte le classi
 \`e la presenza di due parametri template, \textit{embedded} e
 \textit{real}, che garantiscono flessibilit\`a dal punto di vista
 dello spazio scelto (2D o 3D) e della precisione dei numeri a virgola
 mobile (double o long double). 
-
-La Mesh in 3 dimensioni \`e stata pensata come un insieme di
-poliedri. Ciascuno di questi \`e a sua volta composto da un insieme di
-poligoni che a loro volta sono definiti come insieme \textit{ordinato}
-di punti. Per facilitare diverse operazioni ciascun poliedro contiene
-un vettore di puntatori ai vertici e alle facce e viceversa. Questo
-comporta alcune difficolt\`a nel constructor, che sono state superate
-con la tecnica dei variadic template e un metodo dedicato
-esplicitamente alla creazione di un'istanza. Per i puntatori come
-gi\`a detto abbiamo usato gli \textit{shared\_pointer} per facilitare
-la gestione della memoria. Non abbiamo usato \textit{unique\_pointers}
-in quanto all'interno del programma lo stesso puntatore \`e condiviso
-da pi\`u classi.
 
 \subsection{Point e MeshPoint}
 Queste 2 classi rappresentano un punto in uno spazio di una
@@ -448,7 +467,16 @@ del punto e se tale punto \`e sulla frontiera.
 
 La classe Point viene utilizzata anche per rappresentare un vettore,
 sono quindi stati forniti i metodi opportuni, come il calcolo della
-norma e il prodotto vettore.
+norma e il prodotto vettore. 
+
+La presenza o meno del copy constructor \`e la maggiore differenza tra
+le due classi: nella classe Point \`e molto utile per velocizzare
+diverse operazioni, in MeshPoint invece \`e addirittuara dannoso, in
+quanto, data la stretta interconnessione tra le classi che formano la
+mesh, copiare uno dei suoi elementi renderebbe molto difficile
+preservare correttamente tali collegamenti.
+
+\noindent\rule{14cm}{1pt}
 
 Riportiamo qui l'interfaccia della classe Point e i metodi principali:
 
@@ -517,14 +545,20 @@ protected:
 Queste due classi rappresentano un poligono o un poliedro generico,
 non convesso in generale. Entrambi sono da intendersi come componenti
 di una mesh, non sono state realizzate due versioni come per point in
-quanto non necessarie. Per entrambe l'unico modo per creare una nuova
-classe \`e sfruttando il metodo \textit{make\_shared\_Polygon}o
+quanto non necessarie. Valgono dunque le stesse considerazioni
+sull'assenza di copy constructor proposte per MeshPoint.
+Per entrambe l'unico modo per creare una nuova
+classe \`e sfruttando il metodo \textit{make\_shared\_Polygon} o
 \textit{make\_shared\_Polyhedron}, che restituisce uno shared pointer
-all'oggetto e si occupa anche di gestire le connessioni tra questi
-oggetti.
+all'oggetto e si occupa anche di gestire le connessioni tra
+essi. L'utilizzo della tecnica dei \textit{variadic template}
+garantisce una certa flessibilit\`a e leggibilit\`a nel codice. Ad
+esempio un \textit{Polygon} pu\`o essere inizializzato sia da un
+\textit{std::vector} di \textit{MeshPoint}, sia da una sequenza di
+lunghezza arbitraria degli stessi.
 
 Polygon \`e da intendersi come un vettore \textit{ordinato} di Point,
-pu\`o essere sia in 2D che in 3D. L'ordine dei punti \`e necessario
+pu\`o essere sia in 2D che in 3D. L'ordinamento dei punti \`e necessario
 sia per il fatto che non \`e possibile individuare un poligono non
 convesso da un insieme non ordinato di punti, sia per determinare il
 verso della normale. In fase di inizializzazione vengono calcolate le
@@ -544,7 +578,10 @@ necessarie per il problema numerico:
 \item baricentro
 \end{itemize}
 Fa inoltre in modo che le normali delle facce siano orientate
-coerentemente.
+coerentemente. Gli algoritmi utilizzati per calcolare queste
+quantit\`a sono proposti nel capitolo \ref{ch:algorithms}.
+
+\noindent\rule{14cm}{1pt}
 
 Riportiamo l'interfaccia della classe Polygon e i metodi principali:
 
@@ -659,7 +696,7 @@ una mesh molto generica (anche ad esempio una superficie in uno spazio
 uno di Polygon o Polyhedron a seconda dello spazio scelto, e di creare
 dei metodi base per la lettura di diverse tipologie di file, che poi
 verranno implementati opportunamente nelle classi derivate. Sono
-presenti anche 2 appositi metodi per tener traccia degli elementi alla
+presenti anche 2 appositi metodi virtuali per tener traccia degli elementi alla
 frontiera e per settare eventualmente altre propriet\`a della mesh. Non \`e
 stato implementato un costruttore, ma viene fornito un metodo
 \textit{initialize} che pu\`o essere chiamato dal costruttore di una
@@ -667,17 +704,24 @@ classe derivata per l'inizializzazione.
 
 Mesh2D \`e la classe derivata di Mesh per gestire mesh in 2
 dimensioni. Per il rilevamento degli elementi di frontiera si sono
-cercati i lati presenti in un solo poligono nella mesh, attraverso
-l'introduzione di un \textit{pairVector.}
+cercati i lati presenti in un solo poligono nella mesh. Per
+velocizzare la ricerca e dal momento che non \`e presente una classe
+Edge, \`e stato introdotto un vettore di coppie di punti, denominato
+\textit{pairVector}, evitando cos\`i la creazione di un'apposita
+classe Edge che avrebbe reso il codice inutilmente pi\`u complesso.
+Una volta creata la mesh il \textit{pairVector} viene analizzato per
+trovare lati non duplicati.
+
 
 Mesh3D \`e l'analogo nel caso tridimensionale. Per la maggiore
 complessit\`a della mesh abbiamo ritenuto opportuno salvare in un
-vettore i puntatori alle facce dei poliedri. Questo ci ha permesso di
+vettore anche i puntatori alle facce dei poligoni. Questo ci ha permesso di
 ottenere gli elementi di frontiera con un algoritmo simile a quello
 del caso 2D, ma confrontando le facce al posto dei lati. In questo
-caso l'algoritmo non viene chiamato in \textit{setBoundaryElement}
-come in precedenza, ma direttamente all'inizializzazione di ogni nuova
+caso l'algoritmo di confronto viene chiamato direttamente all'inizializzazione di ogni nuova
 faccia in quanto pi\`u veloce.
+
+\noindent\rule{14cm}{1pt}
 
 Riportiamo l'interfaccia della classe Mesh e i metodi principali:
 
@@ -789,11 +833,11 @@ public:
 \label{sec:solver}
 Per la parte relativa alla risoluzione del problema numerico abbiamo
 cercato di scrivere un codice il pi\`u modulare possibile, scorporando
-la parte relativa alla modellizzazione del problema da quella relativa
-al tipo di solver utilizzato (VEM nel nostro caso) e da quella
+la parte relativa alla modellizzazione del problema sia da quella relativa
+al tipo di solver utilizzato (VEM nel nostro caso) che da quella
 relativa alle condizioni al bordo (Dirichlet nel progetto). \`E stato fatto
 largo uso della tecnica del \textit{template programming} per
-garantire questa modularit\'a. 
+garantire questa modularit\`a. 
 Le classi che modellizzano il problema sono infatti classi template in
 cui due dei parametri sono il tipo di Solver e le condizioni al bordo.
 Vi \`e poi una classe dedicata al calcolo dell'errore.
@@ -807,7 +851,7 @@ numerico.
 Problem \`e una classe astratta che descrive un problema molto generico, che pu\`o
 essere risolto attraverso un sistema lineare composto da una matrice
 di stiffness e un termine noto. Scopo di Problem \`e di definire
-un'interfaccia comune a tutti i metodi e di implementare i metodi
+un'interfaccia comune a tutti i metodi e di implementare quelli
 pi\`u generici. In particolare la creazione della matrice di stiffness
 e del termine noto sono delegate alle classi figlie mentre viene
 implementato un solutore di default del sistema lineare (BiCGSTAB),
@@ -824,7 +868,7 @@ di condizioni al bordo da utilizzare.
 Sono poi implementati i metodi per l'assemblamento del sistema
 lineare: questa classe delega alle classi
 dedicate a solver e condizioni al bordo il calcolo della matrice di
-rigidezza locale, a partire da questa si occupa invece dell'assemblamento di quella
+rigidezza locale. A partire da questa si occupa invece dell'assemblamento di quella
 globale.
 
 \noindent\rule{14cm}{1pt}
@@ -897,13 +941,20 @@ inputBoundaryFunction,real inputDiffusionCoeff=1)
 
 \subsection{Monomials e MonomialsPolygon}
 Sono due classi accessorie al solutore VEM. Ne diamo una descrizione
-ora per rendere pi\`u chiaro il seguito. Dato un elemento di una mesh
+ora per rendere pi\`u chiaro il seguito. Richiamando la teoria dei
+VEM, dato un elemento di una mesh
 denotiamo come monomio
 $m_\alpha$ di grado $|\alpha|$ la seguente quantit\`a: 
-$$m_\alpha:=\bigg( \frac{\xx-\xx_k}{h_dk} \bigg) ^\alpha$$
+$$m_\alpha:=\bigg( \frac{\xx-\xx_k}{h_k} \bigg) ^\alpha$$
 dove $\xx_k$ \`e il baricentro dell'elemento e $h_k$ il suo diametro.
 Per il solutore VEM di grado 1 \`e necessario valutare tale funzione
-nei vertici dell'elemento e calcolarne il gradiente.
+nei vertici dell'elemento e calcolarne il gradiente. Si noti che, per
+i VEM di ordine 1, sia
+$\xx_k$ che $h_k$ non devono essere calcolate esattamente, ma \`e
+sufficiente che siano le stesse per tutti i monomi dello stesso
+elemento. Non \`e stato quindi necessario calcolare esattamente il
+baricentro esatto di un poliedro, operazione molto costosa
+computazionalmente.
 
 Nella classe Monomial sono fornite queste due opzioni.
 
@@ -963,9 +1014,9 @@ public:
 
 \subsection{Solver, SolverVEM, SolverVEM2D e SolverVEM3D}
 Queste classi rappresentano la parte relativa al solutore numerico. 
-RIguardo la parte sui VEM non ci soffermiamo troppo sulla descrizione
+Riguardo la parte sui VEM non ci soffermiamo troppo sulla descrizione
 del metodo numerico, che rimandiamo all'apposito capitolo, diamo una
-descrizione invece sull'implementazione scelta.
+descrizione invece dell'implementazione scelta.
 
 Solver \`e una classe astratta che rappresenta un generico
 solver. \`E presente un unico metodo, \textit{computeLocalK}, che
@@ -976,27 +1027,31 @@ calcolo di una matrice di rigidezza locale su ogni elemento.
 Le altre tre classi sono figlie di Solver e implementano il solutore
 VEM. Non \`e stato possibile creare un'unica classe per il caso 2D e
 3D. Si \`e scelto dunque di creare una nuova classe astratta,
-SolverVEM, in cui sono stati implementati i metodi comuni al caso 2 bi
+SolverVEM, in cui sono stati implementati i metodi comuni al caso bi
 e tridimensionale, e di rimandare a SolverVEM2D e SolverVEM3D
 l'implementazione dei pochi metodi rimanenti. 
 
 Il solutore VEM segue il procedimento indicato nell'articolo
-\ref{beirao2014hitchhiker} attraverso il calcolo successivo delle
+\cite{beirao2014hitchhiker} attraverso il calcolo successivo delle
 matrici $G$, $B$, $D$, $\Pi^\Delta_\star$, $\Pi^\Delta$ e infine
 calcolando $$ \mathbf{K_E^h= (\Pi^\Delta_\star)^T \tilde{G}
   (\Pi^\Delta_\star)+(I-\Pi^\Delta)^T (I-\Pi^\Delta)} $$ 
 Sono state inoltre sfruttate le classi Monomials e MonomialsPolygon
 per la valutazione dei monomi caratteristici del metodo VEM. 
-Il calcolo di $\BB$ e del termine noto \`e stato delegato alle classi
+Il calcolo di $B$ e del termine noto \`e stato delegato alle classi
 figlie mentre il resto \`e implementato direttamente in SolverVEM. Il
 caso 3D ha richiesto una pi\`u complessa valutazione dei termini al
 bordo. \`E stato necessario calcolare il polinomio interpolante VEM su
 ogni faccia, il che causa un aumento notevole del tempo di calcolo.
 
 Una propriet\`a importante tra le matrici che caratterizzano i VEM \`e
-l'identit\`a $$G=BD$$, molto utile in fase di testing del codice. \`E
+l'identit\`a $$G=BD$$ molto utile in fase di testing del codice. \`E
 stato implementato un controllo che avverte l'utente nel caso tale
-identit\`a non sia soddisfatta.
+identit\`a non sia soddisfatta. Il test del codice \`e stato fatto
+prevalentemente su questa identit\`a, testandola con elementi con
+geometrie molto particolari, come quello in figura
+\ref{img:matplotlibPolyhedron}.
+
 
 \noindent\rule{14cm}{1pt}
 
@@ -1248,7 +1303,7 @@ SparseMatrix<real>& inputStiffnessMatrix);
 \label{sec:visualizzazione}
 Per la parte di visualizzazione, contrariamente alle precedenti
 abbiamo scelto di utilizzare il linguaggio Python per ragioni di
-semplicit\`a. Questa parte \`e suddivisa in 2 parti a seconda delle
+semplicit\`a. Questa parte \`e suddivisa in 2 sezioni a seconda delle
 librerie utilizzate:
 \begin{itemize}
 \item
@@ -1268,6 +1323,7 @@ tutta la mesh. Nel caso 3D ci si pu\`o avvalere dei tools di
 visualizzazione di Mayavi per, ad esempio, osservare la soluzione
 lungo una sezione della mesh.
 \end{itemize}
+Nelle immagini seguenti forniamo alcuni esempi visivi dei risultati ottenuti:
 
 \begin{figure}[h]
 \label{img:matplotlibPolyhedron}
@@ -1282,6 +1338,30 @@ lungo una sezione della mesh.
 \centering
 \includegraphics[scale=0.4]{Immagini/Project/matplotlibPlotMesh.png}
 \caption{Plot con Matplotlib. Mesh di cubi.}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:mayavi2D}
+\centering
+\includegraphics[scale=0.4]{Immagini/Project/mayavi2D.png}
+\caption{Plot con Mayavi. Mesh di quadrati in 2D con soluzione.}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:matplotlibMesh}
+\centering
+\includegraphics[scale=0.4]{Immagini/Project/mayavi3D.png}
+\caption{Plot con Mayavi. Mesh di tetraedri sferica in 3D con
+  soluzione in una sezione. Il piano secante pu\`o essere direzionato
+  a piacere.}
+\end{figure}
+
+\begin{figure}[h]
+\label{img:matplotlibMesh}
+\centering
+\includegraphics[scale=0.4]{Immagini/Project/mayavi3DPoints.png}
+\caption{Plot con Mayavi. Mesh di tetraedri sferica in 3D con
+  soluzione nei vertici}
 \end{figure}
 
 % \chapter{Un po' di fisiologia}
@@ -1331,9 +1411,9 @@ lungo una sezione della mesh.
 
 
 
-% \bibliographystyle{siam}
-% \addcontentsline{toc}{chapter}{Bibliografia}
-% \bibliography{bibliografia}
+\bibliographystyle{siam}
+%\addcontentsline{toc}{chapter}{Bibliografia}
+\bibliography{bibliografia}
 % %\input{Paper.bbl}
 
 

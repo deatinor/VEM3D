@@ -9,12 +9,12 @@
 //inputConnection=../../Mesh/Cube/CubeWithoutPart/conn-16.txt;
 
 // SPHERIC MESH
-//inputPoint=../../Mesh/Sphere3D/p_sphere_0_06.txt;
-//inputConnection=../../Mesh/Sphere3D/t_sphere_0_06.txt;
+inputPoint=../../Mesh/Sphere3D/p_sphere_0_10.txt;
+inputConnection=../../Mesh/Sphere3D/t_sphere_0_10.txt;
 
 // 2D MESH
-inputPoint=../../Mesh/Mesh2DSquare/point-16.txt
-inputConnection=../../Mesh/Mesh2DSquare/conn-16.txt;
+//inputPoint=../../Mesh/Mesh2DSquare/point-16.txt
+//inputConnection=../../Mesh/Mesh2DSquare/conn-16.txt;
 
 // TEST
 //inputPoint=../../Mesh/Test/point3.txt;
@@ -23,18 +23,18 @@ inputConnection=../../Mesh/Mesh2DSquare/conn-16.txt;
 
 // mesh type
 // meshType can be only Mesh2D or Mesh3D
-meshType=Mesh2D;
+meshType=Mesh3D;
 // fileType can be ANYTHING3D, TETRAHEDRON or ANYTHING 2D
-fileType=ANYTHING2D;
+fileType=TETRAHEDRON;
 
 
 // forceTermFunction
 // It can be forceTermSquare or forceTermSphere
-forceTermFunction=forceTermSquare;
+forceTermFunction=forceTermSphere;
 
 // solution function
 // It can be solutionSquare or solutionSphere
-solutionFunction=solutionSquare;
+solutionFunction=solutionSphere;
 
 
 // file output name
