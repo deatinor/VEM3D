@@ -1,45 +1,46 @@
-// nome file input
+// file input
 
 // CUBIC MESH
-//inputPoint=../../Mesh/Cube/Cubic/point-1.txt;
-//inputConnection=../../Mesh/Cube/Cubic/conn-1.txt;
+//inputPoint=../../Mesh/Cube/Cubic/point-16.txt;
+//inputConnection=../../Mesh/Cube/Cubic/conn-16.txt;
 
-// CUBO TAGLIATO
+// CUBE WITHOUT PART
 //inputPoint=../../Mesh/Cube/CubeWithoutPart/point-16.txt;
 //inputConnection=../../Mesh/Cube/CubeWithoutPart/conn-16.txt;
 
 // SPHERIC MESH
-inputPoint=../../Mesh/Sphere3D/p_sphere_0_10.txt;
-inputConnection=../../Mesh/Sphere3D/t_sphere_0_10.txt;
+//inputPoint=../../Mesh/Sphere3D/p_sphere_0_06.txt;
+//inputConnection=../../Mesh/Sphere3D/t_sphere_0_06.txt;
 
 // 2D MESH
-//inputPoint=../../Mesh/Mesh2DSquare/point-8.txt
-//inputConnection=../../Mesh/Mesh2DSquare/conn-8.txt;
+inputPoint=../../Mesh/Mesh2DSquare/point-16.txt
+inputConnection=../../Mesh/Mesh2DSquare/conn-16.txt;
 
 // TEST
 //inputPoint=../../Mesh/Test/point3.txt;
 //inputConnection=../../Mesh/Test/conn3.txt;
 
+
 // mesh type
-meshType=Mesh3D;
-fileType=TETRAHEDRON;
+// meshType can be only Mesh2D or Mesh3D
+meshType=Mesh2D;
+// fileType can be ANYTHING3D, TETRAHEDRON or ANYTHING 2D
+fileType=ANYTHING2D;
 
-// il solver e le boundary condition sono determinate automaticamente dalla mesh
-// solver type
-solverType=;
-// boundary condition type
-boundaryCondition=;
 
-// nome file output, devono essere definiti tutti o nessuno
+// forceTermFunction
+// It can be forceTermSquare or forceTermSphere
+forceTermFunction=forceTermSquare;
+
+// solution function
+// It can be solutionSquare or solutionSphere
+solutionFunction=solutionSquare;
+
+
+// file output name
 outputPoint=Output/point2D.txt;
 outputConnection=Output/conn2D.txt;
 outputSolution=Output/solution2D.txt;
 
-// forceTermFunction
-forceTermFunction=forceTermSquare;
-
-// solution function
-solutionFunction=solutionSquare;
-
-// typename real
-real=double;
+// typename real (double or long double)
+real=long double;
