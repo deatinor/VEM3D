@@ -114,8 +114,6 @@ real solutionSquare(const Point<embedded,real>& inputPoint) {
 
 int main(int argc, const char * argv[]) {
 	
-	
-	
 	////////////  PARAMETRI SETTABILI  /////////////
 	
 	long embedded=3;
@@ -136,7 +134,7 @@ int main(int argc, const char * argv[]) {
 	
 	////////////  LEGGO IL FILE  ///////////////////
 	string parametroInput,valore,linea;
-	ifstream inputFile("Datafile/datafile");
+	ifstream inputFile("Datafile/datafile.dat");
 	
 	
 	
