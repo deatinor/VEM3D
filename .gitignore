@@ -8,11 +8,12 @@
 
 # Ignore */build directories and Mesh and their content
 build/
-Mesh/
 Mesh3.xcodeproj/ 
 Mesh3/Mesh3/Doxygen/
 VEM/VEM/Doxygen/
 VEM/VEM.xcodeproj/
+/Images
+*Old/
 
 # Do not ignore Makefiles
 !Makefile
@@ -39,7 +40,6 @@ Latex/project.toc
 Latex/.#project.tex
 
 # Ignore all txt and same files
-*.txt
 *.point
 *.conn
 *.out
@@ -50,3 +50,4 @@ Python/Old/
 # Don't ignore README
 !READMEvem.txt 
 !READMEvisualization.txt
+!VEM/VEM/Doxyfile
