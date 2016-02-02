@@ -92,7 +92,7 @@ void Problem<embedded,MeshType,real>::operator()() {
 	
 	clock_t startTime;
 	double duration;
-	cout<<endl<<endl<<"Assembling..."<<endl;
+	cout<<endl<<endl<<"Assembling the matrix..."<<endl;
 	startTime=clock();
 	computeStiffnessMatrix();
 	computeKnownTerm();
@@ -101,13 +101,13 @@ void Problem<embedded,MeshType,real>::operator()() {
 	
 	
 	
-	cout<<"Solving..."<<endl;
+	cout<<"Solving the problem..."<<endl;
 	startTime=clock();
 	computeSolution();
 	duration = ( clock() - startTime ) / (double) CLOCKS_PER_SEC;
 	cout<<"Completed: "<<duration<<endl<<endl;
 	
-	cout<<"nonZeros: "<<stiffnessMatrix.nonZeros()<<endl;
+	//cout<<"nonZeros: "<<stiffnessMatrix.nonZeros()<<endl;
 	
 }
 
@@ -116,10 +116,7 @@ template <long embedded,typename MeshType,typename real>
 void Problem<embedded,MeshType,real>::displayError(std::function<real(Point<embedded,real>&)> realSolutionFunction) {
 	Error<embedded,real> error(solution,mesh.getPointVector(),realSolutionFunction,stiffnessMatrix);
 	
-	cout<<"prima"<<endl;
 	error.displayError();
-	
-	cout<<"dopo"<<endl;
 }
 
 // write

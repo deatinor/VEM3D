@@ -83,7 +83,7 @@ void Error<embedded,real>::computeRealSolution() {
 		
 		difference[i]=abs(realSolution[i]-solution[i]);
 
-		cout<<*pointVector[i]<<solution[i]<<"   "<<realSolution[i]<<"   "<<difference[i]<<endl;
+		//cout<<*pointVector[i]<<solution[i]<<"   "<<realSolution[i]<<"   "<<difference[i]<<endl;
 		
 		
 

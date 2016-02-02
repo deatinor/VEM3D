@@ -233,7 +233,7 @@ int main(int argc, const char * argv[]) {
             if (forceTermFunction=="forceTermSphere" && solutionFunction=="solutionSphere") {
                 Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
                 
-                cout<<"mesh finita"<<endl;
+                cout<<"Mesh created"<<endl;
                 
                 Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSphere3D,solutionSphere3D,1);
                 problem3();
@@ -247,7 +247,7 @@ int main(int argc, const char * argv[]) {
             } else if (forceTermFunction=="forceTermSquare" && solutionFunction=="solutionSquare") {
                 Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
                 
-                cout<<"mesh finita"<<endl;
+                cout<<"Mesh created"<<endl;
                 
                 Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSquare3D,solutionSquare3D,1);
                 problem3();
@@ -287,7 +287,7 @@ int main(int argc, const char * argv[]) {
             if (forceTermFunction=="forceTermSphere" && solutionFunction=="solutionSphere") {
                 Mesh3D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
                 
-                cout<<"mesh finita"<<endl;
+                cout<<"Mesh created"<<endl;
                 
                 Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double> problem3(newMesh,forceTermSphere3DLong,solutionSphere3DLong,1);
                 problem3();
@@ -301,7 +301,7 @@ int main(int argc, const char * argv[]) {
             } else if (forceTermFunction=="forceTermSquare" && solutionFunction=="solutionSquare") {
                 Mesh3D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
                 
-                cout<<"mesh finita"<<endl;
+                cout<<"Mesh created"<<endl;
                 
                 Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double>  problem3(newMesh,forceTermSquare3DLong,solutionSquare3DLong,1);
                 problem3();

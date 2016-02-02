@@ -9,8 +9,8 @@
 //inputConnection=../../Mesh/Cube/CubeWithoutPart/conn-16.txt;
 
 // SPHERIC MESH
-inputPoint=../../Mesh/Sphere3D/p_sphere_0_10.txt;
-inputConnection=../../Mesh/Sphere3D/t_sphere_0_10.txt;
+inputPoint=../../Mesh/Sphere3D/p_sphere_0_04.txt;
+inputConnection=../../Mesh/Sphere3D/t_sphere_0_04.txt;
 
 // 2D MESH
 //inputPoint=../../Mesh/Mesh2DSquare/point-16.txt
