@@ -1,0 +1,83 @@
+\hypertarget{class_monomials}{\section{\-Monomials$<$ embedded, base\-Element, real $>$ \-Class \-Template \-Reference}
+\label{class_monomials}\index{\-Monomials$<$ embedded, base\-Element, real $>$@{\-Monomials$<$ embedded, base\-Element, real $>$}}
+}
+
+
+\-Class to evaluate the characteristics monomials involved in \-V\-E\-M.  
+
+
+
+
+{\ttfamily \#include $<$\-Monomials.\-h$>$}
+
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_monomials_a212df6457fef6be449cfe3eb7d6db655}{{\bfseries \-Monomials} (const shared\-\_\-ptr$<$ base\-Element $>$ \&figure)}\label{class_monomials_a212df6457fef6be449cfe3eb7d6db655}
+
+\item 
+real \hyperlink{class_monomials_af0419328667c105b93cb65a7f4de2dd8}{evaluate} (const \hyperlink{class_point}{\-Point}$<$ embedded, real $>$ \&p, long i)
+\begin{DoxyCompactList}\small\item\em \-Function to evaluate the monomial in a point. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Public \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_monomials_a6e5a84ffd4592bb8f0562cfe96c6f463}{const shared\-\_\-ptr$<$ base\-Element $>$ \& \hyperlink{class_monomials_a6e5a84ffd4592bb8f0562cfe96c6f463}{element}}\label{class_monomials_a6e5a84ffd4592bb8f0562cfe96c6f463}
+
+\begin{DoxyCompactList}\small\item\em \-Element can be \hyperlink{class_polygon}{\-Polygon} or \hyperlink{class_polyhedron}{\-Polyhedron}. \end{DoxyCompactList}\item 
+\hypertarget{class_monomials_ab425c9bddc36c5a049d2b115b57fd8eb}{real \hyperlink{class_monomials_ab425c9bddc36c5a049d2b115b57fd8eb}{diameter}}\label{class_monomials_ab425c9bddc36c5a049d2b115b57fd8eb}
+
+\begin{DoxyCompactList}\small\item\em \-Diameter of the element. \end{DoxyCompactList}\item 
+\hypertarget{class_monomials_af171e16a3bcdde2d4a35f5e1d3640b8e}{\hyperlink{class_point}{\-Point}$<$ embedded, real $>$ \hyperlink{class_monomials_af171e16a3bcdde2d4a35f5e1d3640b8e}{centroid}}\label{class_monomials_af171e16a3bcdde2d4a35f5e1d3640b8e}
+
+\begin{DoxyCompactList}\small\item\em \-Centroid of the element. \end{DoxyCompactList}\item 
+real \hyperlink{class_monomials_ae02f241eae47b3a21bedbb1c6e653273}{gradient}
+\begin{DoxyCompactList}\small\item\em \-It's the gradient of the monomial. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\subsubsection*{template$<$long embedded, typename base\-Element, typename real = double$>$class Monomials$<$ embedded, base\-Element, real $>$}
+
+\-Class to evaluate the characteristics monomials involved in \-V\-E\-M. 
+
+\-It's appropriate for 2\-D and 3\-D case, but not for polygons embedded in 3\-D. 
+
+\subsection{\-Member \-Function \-Documentation}
+\hypertarget{class_monomials_af0419328667c105b93cb65a7f4de2dd8}{\index{\-Monomials@{\-Monomials}!evaluate@{evaluate}}
+\index{evaluate@{evaluate}!Monomials@{\-Monomials}}
+\subsubsection[{evaluate}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename base\-Element , typename real$>$ real {\bf \-Monomials}$<$ embedded, base\-Element, real $>$\-::{\bf evaluate} (
+\begin{DoxyParamCaption}
+\item[{const {\bf \-Point}$<$ embedded, real $>$ \&}]{p, }
+\item[{long}]{i}
+\end{DoxyParamCaption}
+)}}\label{class_monomials_af0419328667c105b93cb65a7f4de2dd8}
+
+
+\-Function to evaluate the monomial in a point. 
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em point} & \hyperlink{class_point}{\-Point} in which \-I want to evaluate the monomial \\
+\hline
+{\em i} & \-Coordinate to keep into account (from 0 to 2 in a \hyperlink{class_polyhedron}{\-Polyhedron}).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{\-Returns}
+the value of the component i of the monomial evaluated in p
+\end{DoxyReturn}
+\-No evaluation of the constant monomial, it can be made in an another part 
+
+\subsection{\-Member \-Data \-Documentation}
+\hypertarget{class_monomials_ae02f241eae47b3a21bedbb1c6e653273}{\index{\-Monomials@{\-Monomials}!gradient@{gradient}}
+\index{gradient@{gradient}!Monomials@{\-Monomials}}
+\subsubsection[{gradient}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename base\-Element, typename real = double$>$ real {\bf \-Monomials}$<$ embedded, base\-Element, real $>$\-::{\bf gradient}}}\label{class_monomials_ae02f241eae47b3a21bedbb1c6e653273}
+
+
+\-It's the gradient of the monomial. 
+
+\-It's 1/diameter
+
+\-It's a vector of elements that are all equals to 1/diameter, so it's sufficient to store it only one time. 
+
+\-The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\-Monomials.\-h\end{DoxyCompactItemize}

@@ -1,0 +1,337 @@
+\hypertarget{class_polyhedron}{\section{\-Polyhedron$<$ embedded, real $>$ \-Class \-Template \-Reference}
+\label{class_polyhedron}\index{\-Polyhedron$<$ embedded, real $>$@{\-Polyhedron$<$ embedded, real $>$}}
+}
+
+
+\-Class to represent a \hyperlink{class_polyhedron}{\-Polyhedron} in 3\-D.  
+
+
+
+
+{\ttfamily \#include $<$\-Polyhedron.\-h$>$}
+
+\subsection*{\-Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct {\bfseries private\-Struct}
+\begin{DoxyCompactList}\small\item\em \-Don't change, needed for make\-\_\-shared\-\_\-\-Polygon. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_polyhedron_ae7091aa1c81e60e701528ed4803f9d20}{\-Polyhedron} (const private\-Struct \&, const vector$<$ shared\-\_\-ptr$<$ \hyperlink{class_polygon}{\-Polygon}$<$ embedded, real $>$$>$$>$ \&input\-Polygon\-Vector)
+\begin{DoxyCompactList}\small\item\em \-Constructor from a vector of shared\-\_\-ptr. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_adaff1d63d7ed627999302120b6c98914}{{\bfseries volume} (0)}\label{class_polyhedron_adaff1d63d7ed627999302120b6c98914}
+
+\item 
+\hyperlink{class_polyhedron_a43f9a7fdfcf838c4aa07d95bb3717b51}{\-Polyhedron} (const private\-Struct \&)
+\begin{DoxyCompactList}\small\item\em \-Empty constructor. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_a0313d03022d9517453e3c74370e16154}{{\bfseries number\-Of\-Polygons} (0)}\label{class_polyhedron_a0313d03022d9517453e3c74370e16154}
+
+\item 
+\hypertarget{class_polyhedron_a03522cce68b4d9cd30eee4c43dfc2f72}{{\bfseries is\-Boundary} (false)}\label{class_polyhedron_a03522cce68b4d9cd30eee4c43dfc2f72}
+
+\item 
+\hypertarget{class_polyhedron_ae911984d4632328d2639e46162cae26e}{{\bfseries point\-Vector} (\{\})}\label{class_polyhedron_ae911984d4632328d2639e46162cae26e}
+
+\item 
+\hypertarget{class_polyhedron_adaff1d63d7ed627999302120b6c98914}{{\bfseries volume} (0)}\label{class_polyhedron_adaff1d63d7ed627999302120b6c98914}
+
+\item 
+{\footnotesize template$<$typename... \-Args$>$ }\\\hyperlink{class_polyhedron_a31d0c019cb8aeb7c74d58aa39f91e2f6}{\-Polyhedron} (const private\-Struct \&, \-Args...\-arguments)
+\begin{DoxyCompactList}\small\item\em \-Constructor with variadic template. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_ae911984d4632328d2639e46162cae26e}{{\bfseries point\-Vector} (\{\})}\label{class_polyhedron_ae911984d4632328d2639e46162cae26e}
+
+\item 
+\hypertarget{class_polyhedron_adaff1d63d7ed627999302120b6c98914}{{\bfseries volume} (0)}\label{class_polyhedron_adaff1d63d7ed627999302120b6c98914}
+
+\item 
+\hypertarget{class_polyhedron_a03522cce68b4d9cd30eee4c43dfc2f72}{{\bfseries is\-Boundary} (false)}\label{class_polyhedron_a03522cce68b4d9cd30eee4c43dfc2f72}
+
+\item 
+\hypertarget{class_polyhedron_a02b8869089bf78342875a197b6995901}{void \hyperlink{class_polyhedron_a02b8869089bf78342875a197b6995901}{add\-Polygon} (shared\-\_\-ptr$<$ \hyperlink{class_polygon}{\-Polygon}$<$ embedded, real $>$$>$ \&input\-Polygon)}\label{class_polyhedron_a02b8869089bf78342875a197b6995901}
+
+\begin{DoxyCompactList}\small\item\em \-Add a new vertex to the \hyperlink{class_polygon}{\-Polygon}. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_ad0b79656e93dcd92149f0f3ad53d54e4}{void \hyperlink{class_polyhedron_ad0b79656e93dcd92149f0f3ad53d54e4}{add\-Point} (shared\-\_\-ptr$<$ \hyperlink{class_mesh_point}{\-Mesh\-Point}$<$ embedded, real $>$$>$ \&input\-Point)}\label{class_polyhedron_ad0b79656e93dcd92149f0f3ad53d54e4}
+
+\begin{DoxyCompactList}\small\item\em \-Add a new \hyperlink{class_polyhedron}{\-Polyhedron} having this as face. \end{DoxyCompactList}\item 
+\hyperlink{class_point}{\-Point}$<$ embedded, real $>$ \hyperlink{class_polyhedron_a8fa603a39f094cba868b90c5087a9f01}{compute\-Centroid} ()
+\item 
+real \hyperlink{class_polyhedron_abc5b54102a217358bb0f3af69fdaf6f4}{compute\-Volume} ()
+\begin{DoxyCompactList}\small\item\em \-Computes the volume of the \hyperlink{class_polyhedron}{\-Polyhedron}. \end{DoxyCompactList}\item 
+real \hyperlink{class_polyhedron_acec44568add44445f3d87cc1673083aa}{get\-Diameter} ()
+\item 
+void \hyperlink{class_polyhedron_ace36af0e1b0638f3a0cb6ac2f828cba9}{fix\-External\-Normal} ()
+\begin{DoxyCompactList}\small\item\em \-Makes the normal to each face pointing towards the external of the \hyperlink{class_polyhedron}{\-Polyhedron}. \end{DoxyCompactList}\item 
+void \hyperlink{class_polyhedron_ab5a7edbaf82c77541bb7ed67eef1af78}{fix\-Faces\-Orientation} ()
+\begin{DoxyCompactList}\small\item\em \-Makes the normal of each face pointing in the same direction (or inward or outward) \end{DoxyCompactList}\item 
+real \hyperlink{class_polyhedron_ae055b1e499fc2ac20f0db25379c30390}{h\-Triangle} ()
+\item 
+\hypertarget{class_polyhedron_a9a64a02c8d5d1afd6c5d0ff4d0b6bcb4}{void {\bfseries initialize} ()}\label{class_polyhedron_a9a64a02c8d5d1afd6c5d0ff4d0b6bcb4}
+
+\item 
+\hypertarget{class_polyhedron_a2f266d7dac199c4ff5ceb7d06b1c4a3d}{void {\bfseries link\-Points} ()}\label{class_polyhedron_a2f266d7dac199c4ff5ceb7d06b1c4a3d}
+
+\item 
+\hypertarget{class_polyhedron_aafd989af8eb6e5728fd2791049100f41}{void \hyperlink{class_polyhedron_aafd989af8eb6e5728fd2791049100f41}{link\-Polygons} ()}\label{class_polyhedron_aafd989af8eb6e5728fd2791049100f41}
+
+\begin{DoxyCompactList}\small\item\em \-Makes all \-Polygons pointing to this. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_a4972488920bf2dd7824175435829e475}{void {\bfseries shrink\-\_\-to\-\_\-fit} ()}\label{class_polyhedron_a4972488920bf2dd7824175435829e475}
+
+\item 
+\hypertarget{class_polyhedron_a7b3f6b30e464fd1448d21cb43eb6f80c}{real {\bfseries space} ()}\label{class_polyhedron_a7b3f6b30e464fd1448d21cb43eb6f80c}
+
+\item 
+\hypertarget{class_polyhedron_a7d8f448cc9f8bbcf4a1e05ee4f8feb2f}{void \hyperlink{class_polyhedron_a7d8f448cc9f8bbcf4a1e05ee4f8feb2f}{switch\-Faces\-Orientation} ()}\label{class_polyhedron_a7d8f448cc9f8bbcf4a1e05ee4f8feb2f}
+
+\begin{DoxyCompactList}\small\item\em \-Invert the orientation of all faces. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_a609105d8805177c2d0e6d7298632a507}{void \hyperlink{class_polyhedron_a609105d8805177c2d0e6d7298632a507}{update\-Point\-Vector} ()}\label{class_polyhedron_a609105d8805177c2d0e6d7298632a507}
+
+\begin{DoxyCompactList}\small\item\em \-If a new face is added, also his vertexes are added to the point\-Vector. \end{DoxyCompactList}\item 
+string \hyperlink{class_polyhedron_af611c2257de6a3a6a2f41a0c6c61e118}{write} ()
+\begin{DoxyCompactList}\small\item\em \-Output to string. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_acde3f89641eafdca70566d187f9b5ac7}{bool {\bfseries get\-Is\-Boundary} () const }\label{class_polyhedron_acde3f89641eafdca70566d187f9b5ac7}
+
+\item 
+\hypertarget{class_polyhedron_a71d09b5b7f19ef47e9518aa974e9c10c}{void {\bfseries set\-Is\-Boundary} (bool input\-Is\-Boundary)}\label{class_polyhedron_a71d09b5b7f19ef47e9518aa974e9c10c}
+
+\item 
+\hypertarget{class_polyhedron_a5fb0dbbf7e0ff2673719623326fb15de}{real {\bfseries get\-Volume} () const }\label{class_polyhedron_a5fb0dbbf7e0ff2673719623326fb15de}
+
+\item 
+\hypertarget{class_polyhedron_a216ab5fbf3fd23a9112a3e1d16ec899d}{const \hyperlink{class_point}{\-Point}$<$ embedded, real $>$ \& {\bfseries get\-Centroid} () const }\label{class_polyhedron_a216ab5fbf3fd23a9112a3e1d16ec899d}
+
+\item 
+\hypertarget{class_polyhedron_a85926d30dec42f3d8d1c6b5af8a282d3}{const shared\-\_\-ptr$<$ \hyperlink{class_mesh_point}{\-Mesh\-Point}\*
+$<$ embedded, real $>$ $>$ \& \hyperlink{class_polyhedron_a85926d30dec42f3d8d1c6b5af8a282d3}{point} (long index) const }\label{class_polyhedron_a85926d30dec42f3d8d1c6b5af8a282d3}
+
+\begin{DoxyCompactList}\small\item\em \-Get a shared pointer to a \hyperlink{class_point}{\-Point} in point\-Vector. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_a8aaba4f1c62f24691648ca66419c83fb}{const shared\-\_\-ptr$<$ \hyperlink{class_polygon}{\-Polygon}\*
+$<$ embedded, real $>$ $>$ \& \hyperlink{class_polyhedron_a8aaba4f1c62f24691648ca66419c83fb}{polygon} (long index) const }\label{class_polyhedron_a8aaba4f1c62f24691648ca66419c83fb}
+
+\begin{DoxyCompactList}\small\item\em \-Get a shared pointer to a \hyperlink{class_polygon}{\-Polygon} in polygon\-Vector. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_a315560a1e132c15d06692a91a6ed69b5}{shared\-\_\-ptr$<$ \hyperlink{class_polygon}{\-Polygon}$<$ embedded, \*
+real $>$ $>$ \hyperlink{class_polyhedron_a315560a1e132c15d06692a91a6ed69b5}{operator\mbox{[}$\,$\mbox{]}} (long index)}\label{class_polyhedron_a315560a1e132c15d06692a91a6ed69b5}
+
+\begin{DoxyCompactList}\small\item\em \-Get the \hyperlink{class_mesh_point}{\-Mesh\-Point} with a particular index. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Static \-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename... \-Args$>$ }\\static shared\-\_\-ptr$<$ \hyperlink{class_polyhedron}{\-Polyhedron}\*
+$<$ embedded, real $>$ $>$ \hyperlink{class_polyhedron_afa6a4455081915cae5bf082f9f0a8cdf}{make\-\_\-shared\-\_\-\-Polyhedron} (\-Args...\-arguments)
+\begin{DoxyCompactList}\small\item\em \-The {\bfseries only} constructor for \hyperlink{class_polyhedron}{\-Polyhedron}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Public \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_polyhedron_ac6c8ccc4248cc0bbf64ef77cc412b844}{long \hyperlink{class_polyhedron_ac6c8ccc4248cc0bbf64ef77cc412b844}{number\-Of\-Points}}\label{class_polyhedron_ac6c8ccc4248cc0bbf64ef77cc412b844}
+
+\begin{DoxyCompactList}\small\item\em \-Number of vertexes. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_a6729506f577ffd64dce9cff14738a26d}{long \hyperlink{class_polyhedron_a6729506f577ffd64dce9cff14738a26d}{number\-Of\-Polygons}}\label{class_polyhedron_a6729506f577ffd64dce9cff14738a26d}
+
+\begin{DoxyCompactList}\small\item\em \-Number of faces. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Protected \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_polyhedron_a5079e0df2333cd47e4aa81be382dde10}{vector$<$ shared\-\_\-ptr$<$ \hyperlink{class_polygon}{\-Polygon}\*
+$<$ embedded, real $>$ $>$ $>$ \hyperlink{class_polyhedron_a5079e0df2333cd47e4aa81be382dde10}{polygon\-Vector}}\label{class_polyhedron_a5079e0df2333cd47e4aa81be382dde10}
+
+\begin{DoxyCompactList}\small\item\em \-Stores the faces of the \hyperlink{class_polyhedron}{\-Polyhedron}. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_a6ecb308fce1a68cb3cec39c71fe98ddd}{bool \hyperlink{class_polyhedron_a6ecb308fce1a68cb3cec39c71fe98ddd}{is\-Boundary}}\label{class_polyhedron_a6ecb308fce1a68cb3cec39c71fe98ddd}
+
+\begin{DoxyCompactList}\small\item\em \-Tells if the \hyperlink{class_polygon}{\-Polygon} is on the boundary. \end{DoxyCompactList}\item 
+real \hyperlink{class_polyhedron_a0f4ab3ccfdc65071201bdb0b55c2b683}{volume}
+\item 
+\hyperlink{class_point}{\-Point}$<$ embedded, real $>$ \hyperlink{class_polyhedron_ab7839d59898be24bb956fc41d1c66096}{centroid}
+\begin{DoxyCompactList}\small\item\em \-Not the real centroid, only the mean of the vertexes. \end{DoxyCompactList}\item 
+\hypertarget{class_polyhedron_afda67d1ac832dd4a04539b26aa1ca3f6}{vector$<$ shared\-\_\-ptr$<$ \hyperlink{class_mesh_point}{\-Mesh\-Point}\*
+$<$ embedded, real $>$ $>$ $>$ \hyperlink{class_polyhedron_afda67d1ac832dd4a04539b26aa1ca3f6}{point\-Vector}}\label{class_polyhedron_afda67d1ac832dd4a04539b26aa1ca3f6}
+
+\begin{DoxyCompactList}\small\item\em \-Stores the vertexes of the \hyperlink{class_polyhedron}{\-Polyhedron}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Friends}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_polyhedron_a7aff04af00c6a08042a83db43caa4999}{{\footnotesize template$<$long embedded2, typename real2 $>$ }\\ostream \& \hyperlink{class_polyhedron_a7aff04af00c6a08042a83db43caa4999}{operator$<$$<$} (ostream \&os, const \hyperlink{class_polyhedron}{\-Polyhedron}$<$ embedded2, real2 $>$ \&polyhedron)}\label{class_polyhedron_a7aff04af00c6a08042a83db43caa4999}
+
+\begin{DoxyCompactList}\small\item\em \-Output operator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\subsubsection*{template$<$long embedded, typename real = double$>$class Polyhedron$<$ embedded, real $>$}
+
+\-Class to represent a \hyperlink{class_polyhedron}{\-Polyhedron} in 3\-D. 
+
+\-The only way to initialize it is to call make\-\_\-shared\-\_\-\-Polygon \-Volume, faces orientation, normal orientation and centroid are computed during initialization and saved. \-Inheritance from enable\-\_\-shared\-\_\-from\-\_\-this to obtain a shared\-\_\-ptr from this. 
+
+\subsection{\-Constructor \& \-Destructor \-Documentation}
+\hypertarget{class_polyhedron_ae7091aa1c81e60e701528ed4803f9d20}{\index{\-Polyhedron@{\-Polyhedron}!\-Polyhedron@{\-Polyhedron}}
+\index{\-Polyhedron@{\-Polyhedron}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{\-Polyhedron}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real  = double$>$ {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf \-Polyhedron} (
+\begin{DoxyParamCaption}
+\item[{const private\-Struct \&}]{, }
+\item[{const vector$<$ shared\-\_\-ptr$<$ {\bf \-Polygon}$<$ embedded, real $>$$>$$>$ \&}]{input\-Polygon\-Vector}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_polyhedron_ae7091aa1c81e60e701528ed4803f9d20}
+
+
+\-Constructor from a vector of shared\-\_\-ptr. 
+
+\-D\-O \-N\-O\-T \-U\-S\-E.
+
+\-Called by make\-\_\-shared\-\_\-\-Polyhedron \hypertarget{class_polyhedron_a43f9a7fdfcf838c4aa07d95bb3717b51}{\index{\-Polyhedron@{\-Polyhedron}!\-Polyhedron@{\-Polyhedron}}
+\index{\-Polyhedron@{\-Polyhedron}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{\-Polyhedron}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real  = double$>$ {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf \-Polyhedron} (
+\begin{DoxyParamCaption}
+\item[{const private\-Struct \&}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_polyhedron_a43f9a7fdfcf838c4aa07d95bb3717b51}
+
+
+\-Empty constructor. 
+
+\-D\-O \-N\-O\-T \-U\-S\-E.
+
+\-Called by make\-\_\-shared\-\_\-\-Polyhedron \hypertarget{class_polyhedron_a31d0c019cb8aeb7c74d58aa39f91e2f6}{\index{\-Polyhedron@{\-Polyhedron}!\-Polyhedron@{\-Polyhedron}}
+\index{\-Polyhedron@{\-Polyhedron}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{\-Polyhedron}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real  = double$>$ template$<$typename... \-Args$>$ {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf \-Polyhedron} (
+\begin{DoxyParamCaption}
+\item[{const private\-Struct \&}]{, }
+\item[{\-Args...}]{arguments}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_polyhedron_a31d0c019cb8aeb7c74d58aa39f91e2f6}
+
+
+\-Constructor with variadic template. 
+
+\-D\-O \-N\-O\-T \-U\-S\-E.
+
+\-Source\-: \href{http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable}{\tt http\-://stackoverflow.\-com/questions/8158261/templates-\/how-\/to-\/control-\/number-\/of-\/constructor-\/args-\/using-\/template-\/variable} \-Called by make\-\_\-shared\-\_\-\-Polyhedron 
+
+\subsection{\-Member \-Function \-Documentation}
+\hypertarget{class_polyhedron_a8fa603a39f094cba868b90c5087a9f01}{\index{\-Polyhedron@{\-Polyhedron}!compute\-Centroid@{compute\-Centroid}}
+\index{compute\-Centroid@{compute\-Centroid}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{compute\-Centroid}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real $>$ {\bf \-Point}$<$ embedded, real $>$ {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf compute\-Centroid} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_polyhedron_a8fa603a39f094cba868b90c5087a9f01}
+\begin{DoxyReturn}{\-Returns}
+the centroid 
+\end{DoxyReturn}
+\hypertarget{class_polyhedron_abc5b54102a217358bb0f3af69fdaf6f4}{\index{\-Polyhedron@{\-Polyhedron}!compute\-Volume@{compute\-Volume}}
+\index{compute\-Volume@{compute\-Volume}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{compute\-Volume}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real $>$ real {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf compute\-Volume} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_polyhedron_abc5b54102a217358bb0f3af69fdaf6f4}
+
+
+\-Computes the volume of the \hyperlink{class_polyhedron}{\-Polyhedron}. 
+
+\-It uses the \-Gaus formula\-: \-The volume is the sum on all the faces of the area of the face multiplied by the x coordinate of the baricenter, multiplied by the x component of the normal to the polygon \hypertarget{class_polyhedron_ace36af0e1b0638f3a0cb6ac2f828cba9}{\index{\-Polyhedron@{\-Polyhedron}!fix\-External\-Normal@{fix\-External\-Normal}}
+\index{fix\-External\-Normal@{fix\-External\-Normal}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{fix\-External\-Normal}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real $>$ void {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf fix\-External\-Normal} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_polyhedron_ace36af0e1b0638f3a0cb6ac2f828cba9}
+
+
+\-Makes the normal to each face pointing towards the external of the \hyperlink{class_polyhedron}{\-Polyhedron}. 
+
+\-Ray casting algorithm\-:
+\begin{DoxyItemize}
+\item \-Consider the first face and a random point on it
+\item \-Consider the normal starting
+\item \-If the line intersect a vertex or an edge consider an another random 
+\end{DoxyItemize}\hypertarget{class_polyhedron_ab5a7edbaf82c77541bb7ed67eef1af78}{\index{\-Polyhedron@{\-Polyhedron}!fix\-Faces\-Orientation@{fix\-Faces\-Orientation}}
+\index{fix\-Faces\-Orientation@{fix\-Faces\-Orientation}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{fix\-Faces\-Orientation}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real $>$ void {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf fix\-Faces\-Orientation} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_polyhedron_ab5a7edbaf82c77541bb7ed67eef1af78}
+
+
+\-Makes the normal of each face pointing in the same direction (or inward or outward) 
+
+\-Algorithm\-:
+\begin{DoxyItemize}
+\item \-Order all the faces
+\item \-For each face check all the faces that are after it in the ordering. \-Check if they have common edges.
+\item \-If yes, make sure that the edge in common is in the opposite order in the 2 face. \-If it's in the same order invert the face. \-Put the face checked right in front of itself.
+\item \-If it has no common edge with any of the precedent faces do nothing
+\item \-Continue with the first face in the ordering not checked yet. 
+\end{DoxyItemize}\hypertarget{class_polyhedron_acec44568add44445f3d87cc1673083aa}{\index{\-Polyhedron@{\-Polyhedron}!get\-Diameter@{get\-Diameter}}
+\index{get\-Diameter@{get\-Diameter}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{get\-Diameter}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real $>$ real {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf get\-Diameter} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_polyhedron_acec44568add44445f3d87cc1673083aa}
+\begin{DoxyReturn}{\-Returns}
+the maximum distance between 2 \-Points 
+\end{DoxyReturn}
+\hypertarget{class_polyhedron_ae055b1e499fc2ac20f0db25379c30390}{\index{\-Polyhedron@{\-Polyhedron}!h\-Triangle@{h\-Triangle}}
+\index{h\-Triangle@{h\-Triangle}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{h\-Triangle}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real $>$ real {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf h\-Triangle} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_polyhedron_ae055b1e499fc2ac20f0db25379c30390}
+\begin{DoxyReturn}{\-Returns}
+\-The maximum distance between vertexes. \-Necessary for the mesh. 
+\end{DoxyReturn}
+\hypertarget{class_polyhedron_afa6a4455081915cae5bf082f9f0a8cdf}{\index{\-Polyhedron@{\-Polyhedron}!make\-\_\-shared\-\_\-\-Polyhedron@{make\-\_\-shared\-\_\-\-Polyhedron}}
+\index{make\-\_\-shared\-\_\-\-Polyhedron@{make\-\_\-shared\-\_\-\-Polyhedron}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{make\-\_\-shared\-\_\-\-Polyhedron}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real  = double$>$ template$<$typename... \-Args$>$ static shared\-\_\-ptr$<${\bf \-Polyhedron}$<$embedded, real$>$ $>$ {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf make\-\_\-shared\-\_\-\-Polyhedron} (
+\begin{DoxyParamCaption}
+\item[{\-Args...}]{arguments}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline, static\mbox{]}}}}\label{class_polyhedron_afa6a4455081915cae5bf082f9f0a8cdf}
+
+
+\-The {\bfseries only} constructor for \hyperlink{class_polyhedron}{\-Polyhedron}. 
+
+\-Using the variadic template it accepts as input a vector of shared\-\_\-ptr to \-Mesh\-Points or a sequence of \-Mesh\-Points. \-Then it calls the right constructor. \-It initialize the \hyperlink{class_polyhedron}{\-Polyhedron} calling the method initialize
+
+\begin{DoxyReturn}{\-Returns}
+\-A shared pointer to the \hyperlink{class_polyhedron}{\-Polyhedron} 
+\end{DoxyReturn}
+\hypertarget{class_polyhedron_af611c2257de6a3a6a2f41a0c6c61e118}{\index{\-Polyhedron@{\-Polyhedron}!write@{write}}
+\index{write@{write}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{write}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real $>$ string {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf write} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_polyhedron_af611c2257de6a3a6a2f41a0c6c61e118}
+
+
+\-Output to string. 
+
+\begin{DoxyReturn}{\-Returns}
+std\-::string representing the \hyperlink{class_point}{\-Point} 
+\end{DoxyReturn}
+
+
+\subsection{\-Member \-Data \-Documentation}
+\hypertarget{class_polyhedron_ab7839d59898be24bb956fc41d1c66096}{\index{\-Polyhedron@{\-Polyhedron}!centroid@{centroid}}
+\index{centroid@{centroid}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{centroid}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real  = double$>$ {\bf \-Point}$<$embedded,real$>$ {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf centroid}\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}\label{class_polyhedron_ab7839d59898be24bb956fc41d1c66096}
+
+
+\-Not the real centroid, only the mean of the vertexes. 
+
+\begin{DoxyReturn}{\-Returns}
+the centroid of the \hyperlink{class_polyhedron}{\-Polyhedron} 
+\end{DoxyReturn}
+\hypertarget{class_polyhedron_a0f4ab3ccfdc65071201bdb0b55c2b683}{\index{\-Polyhedron@{\-Polyhedron}!volume@{volume}}
+\index{volume@{volume}!Polyhedron@{\-Polyhedron}}
+\subsubsection[{volume}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename real  = double$>$ real {\bf \-Polyhedron}$<$ embedded, real $>$\-::{\bf volume}\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}\label{class_polyhedron_a0f4ab3ccfdc65071201bdb0b55c2b683}
+\begin{DoxyReturn}{\-Returns}
+the volume of the \hyperlink{class_polyhedron}{\-Polyhedron} 
+\end{DoxyReturn}
+
+
+\-The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\-Polyhedron.\-h\end{DoxyCompactItemize}

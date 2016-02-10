@@ -1,0 +1,120 @@
+\hypertarget{class_problem}{\section{\-Problem$<$ embedded, \-Mesh\-Type, real $>$ \-Class \-Template \-Reference}
+\label{class_problem}\index{\-Problem$<$ embedded, Mesh\-Type, real $>$@{\-Problem$<$ embedded, Mesh\-Type, real $>$}}
+}
+
+
+\-Virtual class to represent a very generic problem.  
+
+
+
+
+{\ttfamily \#include $<$\-Problem.\-h$>$}
+
+\-Inheritance diagram for \-Problem$<$ embedded, \-Mesh\-Type, real $>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_problem}
+\end{center}
+\end{figure}
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_problem_ae9308032115dd8b165d3047a263b6dcb}{\-Problem} (const \-Mesh\-Type \&input\-Mesh)
+\begin{DoxyCompactList}\small\item\em \-General constructor for the \hyperlink{class_problem}{\-Problem}. \end{DoxyCompactList}\item 
+\hypertarget{class_problem_a20ac3262ba227f49ff1e1b9765079d59}{virtual void \hyperlink{class_problem_a20ac3262ba227f49ff1e1b9765079d59}{compute\-Stiffness\-Matrix} ()=0}\label{class_problem_a20ac3262ba227f49ff1e1b9765079d59}
+
+\begin{DoxyCompactList}\small\item\em \-Virtual method to compute the stiffness matrix. \end{DoxyCompactList}\item 
+\hypertarget{class_problem_abb49b032c2cd29ed90a1966e3a7a8765}{virtual void \hyperlink{class_problem_abb49b032c2cd29ed90a1966e3a7a8765}{compute\-Known\-Term} ()=0}\label{class_problem_abb49b032c2cd29ed90a1966e3a7a8765}
+
+\begin{DoxyCompactList}\small\item\em \-Virtual method to compute the known term. \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_problem_a0eabd7cfaf0b183da21f7246e50abbea}{compute\-Solution} ()
+\begin{DoxyCompactList}\small\item\em \-Method to compute solution. \end{DoxyCompactList}\item 
+\hypertarget{class_problem_a9fd9a722387afd56922d0327ead502bf}{virtual void \hyperlink{class_problem_a9fd9a722387afd56922d0327ead502bf}{operator()} ()}\label{class_problem_a9fd9a722387afd56922d0327ead502bf}
+
+\begin{DoxyCompactList}\small\item\em \-Method to execute the method. \-Free\-Fem style. \end{DoxyCompactList}\item 
+\hypertarget{class_problem_a26a9288abd12658a65b26f0a0e42fca5}{virtual void \hyperlink{class_problem_a26a9288abd12658a65b26f0a0e42fca5}{display\-Error} (std\-::function$<$ real(\hyperlink{class_point}{\-Point}$<$ embedded, real $>$ \&)$>$ real\-Solution\-Function)}\label{class_problem_a26a9288abd12658a65b26f0a0e42fca5}
+
+\begin{DoxyCompactList}\small\item\em \-It displays the error after the computation. \end{DoxyCompactList}\item 
+\hypertarget{class_problem_ad64a7baa630e90b51006b94d76c6943b}{virtual void \hyperlink{class_problem_ad64a7baa630e90b51006b94d76c6943b}{write} (string output\-Points=\char`\"{}points.\-point\char`\"{}, string output\-Connections=\char`\"{}connections.\-conn\char`\"{}, string output\-Solution=\char`\"{}solution.\-sol\char`\"{})}\label{class_problem_ad64a7baa630e90b51006b94d76c6943b}
+
+\begin{DoxyCompactList}\small\item\em full output to file \end{DoxyCompactList}\item 
+\hypertarget{class_problem_a15f66edfd2d8672ed4941b65b03b9750}{virtual void \hyperlink{class_problem_a15f66edfd2d8672ed4941b65b03b9750}{write\-Solution} (string output\-Solution=\char`\"{}solution.\-sol\char`\"{})}\label{class_problem_a15f66edfd2d8672ed4941b65b03b9750}
+
+\begin{DoxyCompactList}\small\item\em \-Output to file of the solution. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Public \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_problem_ace94c8d8501fde93725f41b0ebd34564}{\-Sparse\-Matrix$<$ real $>$ {\bfseries stiffness\-Matrix}}\label{class_problem_ace94c8d8501fde93725f41b0ebd34564}
+
+\item 
+\hypertarget{class_problem_a5200b5adea61fcdfc73a1eec0d7074e3}{\-Vector\-X$<$ real $>$ {\bfseries known\-Term}}\label{class_problem_a5200b5adea61fcdfc73a1eec0d7074e3}
+
+\item 
+\hypertarget{class_problem_a7ac15171e17c2468d35ff477d61b0a57}{\-Vector\-X$<$ real $>$ {\bfseries solution}}\label{class_problem_a7ac15171e17c2468d35ff477d61b0a57}
+
+\end{DoxyCompactItemize}
+\subsection*{\-Protected \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_problem_aee574c7889ffaf5af64338379063dd10}{const \-Mesh\-Type \& \hyperlink{class_problem_aee574c7889ffaf5af64338379063dd10}{mesh}}\label{class_problem_aee574c7889ffaf5af64338379063dd10}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_mesh}{\-Mesh} on which the problem is based. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\subsubsection*{template$<$long embedded, typename Mesh\-Type, typename real = double$>$class Problem$<$ embedded, Mesh\-Type, real $>$}
+
+\-Virtual class to represent a very generic problem. 
+
+\-The idea is to provide a general set of method common to a large class of numerical problem. \-The class is well suited for all the problems that can be solved by solving a linear system with a stiffness matrix and a known term.
+
+\-The child classes have to override the methods \hyperlink{class_problem_a20ac3262ba227f49ff1e1b9765079d59}{compute\-Stiffness\-Matrix()} and \hyperlink{class_problem_abb49b032c2cd29ed90a1966e3a7a8765}{compute\-Known\-Term()}
+
+\-It uses \-Eigen for storing all the matrixes and to solve the linear system
+
+\-It also provide methods to display the error
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em embedded} & \-Dimension of the space \\
+\hline
+{\em \-Mesh\-Type} & \-Type of the file to read \\
+\hline
+{\em real} & double or long double \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{\-Constructor \& \-Destructor \-Documentation}
+\hypertarget{class_problem_ae9308032115dd8b165d3047a263b6dcb}{\index{\-Problem@{\-Problem}!\-Problem@{\-Problem}}
+\index{\-Problem@{\-Problem}!Problem@{\-Problem}}
+\subsubsection[{\-Problem}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename Mesh\-Type , typename real  = double$>$ {\bf \-Problem}$<$ embedded, \-Mesh\-Type, real $>$\-::{\bf \-Problem} (
+\begin{DoxyParamCaption}
+\item[{const \-Mesh\-Type \&}]{input\-Mesh}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}inline\mbox{]}}}}\label{class_problem_ae9308032115dd8b165d3047a263b6dcb}
+
+
+\-General constructor for the \hyperlink{class_problem}{\-Problem}. 
+
+\-It allocates the space for all the matrixes 
+
+\subsection{\-Member \-Function \-Documentation}
+\hypertarget{class_problem_a0eabd7cfaf0b183da21f7246e50abbea}{\index{\-Problem@{\-Problem}!compute\-Solution@{compute\-Solution}}
+\index{compute\-Solution@{compute\-Solution}!Problem@{\-Problem}}
+\subsubsection[{compute\-Solution}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename Mesh\-Type , typename real $>$ void {\bf \-Problem}$<$ embedded, \-Mesh\-Type, real $>$\-::{\bf compute\-Solution} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}virtual\mbox{]}}}}\label{class_problem_a0eabd7cfaf0b183da21f7246e50abbea}
+
+
+\-Method to compute solution. 
+
+\-It solves the linear system.
+
+\-It implements the biconjugate gradient stabilized method (\-Bi\-C\-G\-S\-T\-A\-B). \-Override if you want to change it. 
+
+\-The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\-Problem.\-h\end{DoxyCompactItemize}

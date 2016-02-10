@@ -1,0 +1,97 @@
+\hypertarget{class_boundary_condition}{\section{\-Boundary\-Condition$<$ embedded, \-Mesh\-Type, \-Mesh\-Element, real $>$ \-Class \-Template \-Reference}
+\label{class_boundary_condition}\index{\-Boundary\-Condition$<$ embedded, Mesh\-Type, Mesh\-Element, real $>$@{\-Boundary\-Condition$<$ embedded, Mesh\-Type, Mesh\-Element, real $>$}}
+}
+
+
+\-Abstract class for \hyperlink{class_boundary_condition}{\-Boundary\-Condition}.  
+
+
+
+
+{\ttfamily \#include $<$\-Boundary\-Condition.\-h$>$}
+
+\-Inheritance diagram for \-Boundary\-Condition$<$ embedded, \-Mesh\-Type, \-Mesh\-Element, real $>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_boundary_condition}
+\end{center}
+\end{figure}
+\subsection*{\-Public \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{class_boundary_condition_aba7cce27bd46f51026701a11ddca04f8}{add\-To\-Triplet\-List} (\-Matrix$<$ real, \-Dynamic, \-Dynamic $>$ \&\-Kloc, \-Mesh\-Element \&element, vector$<$ \-Triplet$<$ real $>$$>$ \&triplet\-List)=0
+\begin{DoxyCompactList}\small\item\em \-This is to decide if to add the \-Kloc computed to the matrix. \end{DoxyCompactList}\item 
+\hypertarget{class_boundary_condition_a19b5c27271977f40146d867ff281ad24}{virtual void \hyperlink{class_boundary_condition_a19b5c27271977f40146d867ff281ad24}{assign\-Boundary\-Condition\-On\-Stiffness\-Matrix} (vector$<$ \-Triplet$<$ real $>$$>$ \&triplet\-List)=0}\label{class_boundary_condition_a19b5c27271977f40146d867ff281ad24}
+
+\begin{DoxyCompactList}\small\item\em \-Changes the stiffness\-Matrix to keep into account the boundary condition. \end{DoxyCompactList}\item 
+\hypertarget{class_boundary_condition_a6bec19c145f0cae03d30cb2c2ea80594}{virtual void \hyperlink{class_boundary_condition_a6bec19c145f0cae03d30cb2c2ea80594}{assign\-Boundary\-Condition\-On\-Known\-Term} (\-Vector\-X$<$ real $>$ \&known\-Term)=0}\label{class_boundary_condition_a6bec19c145f0cae03d30cb2c2ea80594}
+
+\begin{DoxyCompactList}\small\item\em \-Changes the known term to keep into account the boundary condition. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Protected \-Member \-Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_boundary_condition_a93813e79c791932c9e10eb919e0ec371}{\hyperlink{class_boundary_condition_a93813e79c791932c9e10eb919e0ec371}{\-Boundary\-Condition} (const \-Mesh\-Type \&input\-Mesh, std\-::function$<$ real(\hyperlink{class_point}{\-Point}$<$ embedded, real $>$ \&)$>$ input\-Boundary\-Function)}\label{class_boundary_condition_a93813e79c791932c9e10eb919e0ec371}
+
+\begin{DoxyCompactList}\small\item\em \-Standard constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{\-Protected \-Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_boundary_condition_a14c5fa56ace975e989b5bc43f84ca048}{const \-Mesh\-Type \& {\bfseries mesh}}\label{class_boundary_condition_a14c5fa56ace975e989b5bc43f84ca048}
+
+\item 
+\hypertarget{class_boundary_condition_a0ac1cc3f463f7228e6be3171e9c0bb77}{std\-::function$<$ real(\hyperlink{class_point}{\-Point}\*
+$<$ embedded, real $>$ \&)$>$ {\bfseries boundary\-Function}}\label{class_boundary_condition_a0ac1cc3f463f7228e6be3171e9c0bb77}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{\-Detailed \-Description}
+\subsubsection*{template$<$long embedded, typename Mesh\-Type, typename Mesh\-Element, typename real = double$>$class Boundary\-Condition$<$ embedded, Mesh\-Type, Mesh\-Element, real $>$}
+
+\-Abstract class for \hyperlink{class_boundary_condition}{\-Boundary\-Condition}. 
+
+\-This class does 3 main things\-:
+\begin{DoxyItemize}
+\item \-It processes the \-Kloc matrix after the creation from \hyperlink{class_solver}{\-Solver} (e.\-g in \hyperlink{class_dirichlet}{\-Dirichlet} condition the upper part of the stiffness matrix is diagonal and there is no need to add these terms)
+\item \-Once the \-K matrix is completed it processes the full matrix to assign boundary condition (e.\-g in the same example it makes the upper part diagonal)
+\item \-It imposes boundary condition also on the known term
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{\-Parameters}
+{\em embedded} & \-Dimension of the space \\
+\hline
+{\em \-Mesh\-Type} & the kind of \hyperlink{class_mesh}{\-Mesh} \-I have \\
+\hline
+{\em \-Mesh\-Element} & \hyperlink{class_polygon}{\-Polygon} or \hyperlink{class_polyhedron}{\-Polyhedron} \\
+\hline
+{\em real} & double or long double \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{\-Member \-Function \-Documentation}
+\hypertarget{class_boundary_condition_aba7cce27bd46f51026701a11ddca04f8}{\index{\-Boundary\-Condition@{\-Boundary\-Condition}!add\-To\-Triplet\-List@{add\-To\-Triplet\-List}}
+\index{add\-To\-Triplet\-List@{add\-To\-Triplet\-List}!BoundaryCondition@{\-Boundary\-Condition}}
+\subsubsection[{add\-To\-Triplet\-List}]{\setlength{\rightskip}{0pt plus 5cm}template$<$long embedded, typename Mesh\-Type , typename Mesh\-Element , typename real  = double$>$ virtual void {\bf \-Boundary\-Condition}$<$ embedded, \-Mesh\-Type, \-Mesh\-Element, real $>$\-::{\bf add\-To\-Triplet\-List} (
+\begin{DoxyParamCaption}
+\item[{\-Matrix$<$ real, \-Dynamic, \-Dynamic $>$ \&}]{\-Kloc, }
+\item[{\-Mesh\-Element \&}]{element, }
+\item[{vector$<$ \-Triplet$<$ real $>$$>$ \&}]{triplet\-List}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}pure virtual\mbox{]}}}}\label{class_boundary_condition_aba7cce27bd46f51026701a11ddca04f8}
+
+
+\-This is to decide if to add the \-Kloc computed to the matrix. 
+
+\-It depends on the boundary condition.
+
+\-For \hyperlink{class_dirichlet}{\-Dirichlet} for example the upper part of the matrix is diagonal 
+
+\-Implemented in \hyperlink{class_dirichlet_a8fc4c08f205989873d3c0a7fcd82cfa4}{\-Dirichlet$<$ embedded, Mesh\-Type, Mesh\-Element, real $>$}.
+
+
+
+\-The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\-Boundary\-Condition.\-h\end{DoxyCompactItemize}

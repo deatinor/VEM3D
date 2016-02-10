@@ -1,9 +1,9 @@
-CXX=g++
+CXX=/usr/bin/g++-5
 CXXFLAGS=-I. -std=c++11 -O3
 
-vem: main.o
+vem: src/main.cpp
 	g++ -o $@ $^ $(CXXFLAGS) 
 
 
 clean:
-	$(RM) *.o *~
+	$(RM) *.o *~ vem
