@@ -1,0 +1,64 @@
+\newpage
+\section{Algorithms}
+In this chapter is given a theoretical description of the algorithms used to determine some specific properties of the mesh elements. Indeed, one of the principal characteristics of VEM is the possibility to consider meshes with any type of polygons/polyhedrons, even possibly concave. 
+
+Since it has not been possible to find one single article speaking about all of the encountered problems, the principal algorithms used are presented here. Most of them have been found online (see \textbf{REFERENCE}), but we have modified some to adapt them to the problem.
+
+\subsection{Polygons}
+In our implementation, a polygon is defined as an \textit{ordered} set of points. It is necessary to compute:
+\begin{itemize}
+\item its area,
+\item an oriented normal vector,
+\item its barycentre.
+\end{itemize}
+The implementation of each of those characteristics is different if the polygon belongs to a $2$D or to a $3$D space.
+
+\subsubsection{Area in $2$D}\label{area2d}
+Let $n$ be the number of vertices of a given polygon, and $(x_i,y_i)$ the coordinates of the $i$-th vertex, with $1\leq i\leq n$. To compute the area of a polygon, we have used the following Gauss-Green formula (\textbf{REFERENCE}):
+$$ A=\frac{1}{2} \bigg | \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i) \bigg
+|,$$
+where the following convention is used: $x_{n+1}=x_1,y_{n+1}=y_1$.
+
+\subsubsection{Area in $3$D}\label{area3d}
+For the $3$D case, we have used a similar algorithm. Let $(O;\mathbf{x}, \mathbf{y}, \mathbf{z})$ be an orthonormal Cartesian coordinate system of the space, and let $V=\lbrace V_i : 1\leq i\leq n\rbrace$ be the set of vertices of a given $n$-vertex polygon. For $i=1,\ldots,n$, let $(v_{1i},v_{2i},v_{3i})$ be the the coordinates of $V_i$. We also write $\mathbf{n}$ a normal vector to the polygon, with coordinates $(n_1,n_2,n_3)$. The algorithm is as follows:
+\begin{enumerate}
+\item \label{pt1area3d} Project the polygon on one of the three principal plane $(O;\mathbf{x},\mathbf{y})$, $(O;\mathbf{x},\mathbf{z})$ or $(O;\mathbf{y},\mathbf{z})$ in the following way: set to $0$ the component $v_{ji}$ of each vertex $i$ such that $j=\text{arg} \max_{1\leq k \leq 3} \|n_k\|$. In this way, the polygon is equivalent to a polygon embedded in a $2$D space instead of a $3$D one, and setting to $0$ such component of all the vertices avoids the case of a polygon that is already parallel to one of the three principal planes. That is, we avoid the case of a degenerated polygon by choosing in a reasonable way on which plane we project it.  
+\item Compute the area of the projected polygon with Gauss-Green formula (see paragraph \ref{area2d}). 
+\item Divide the area of the projected polygon by the following scale factor: 
+$$ \frac{\max_{1\leq i \leq 3}(n_i)}{\|n\|}. $$
+The results gives the area of the original polygon embedded in a $3$D space (see \textbf{REFERENCE}).
+\end{enumerate}
+
+\subsubsection{Oriented normal vector}\label{onv}
+Since in our definition of a polygon, the vertices are ordered, the orientation of the normal is obtained thanks to the right-hand rule. Such computation is non elementary for concave polygons, it would be easier to only compute the direction of the normal vector.
+
+Using again $n$ to be the number of vertices of a given polygon, let now $(x_i,y_i,z_i)$ be the coordinates of vertex $V_i$ for $i=1,\ldots,n$. 
+Using Newell algorithm (see \textbf{REFERENCE}), in the case of an embedded polygon in a $3$D space, the oriented normal vector of coordinates $(n_x,n_y,n_z)$ is obtained as follows:
+$$
+\begin{cases}
+n_x=\sum_{i=0}^{n} (y_i-y_{i+1})(z_i+z_{i+1}) \\
+n_y=\sum_{i=0}^{n} (z_i-z_{i+1})(x_i+x_{i+1}) \\
+n_z=\sum_{i=0}^{n} (x_i-x_{i+1})(y_i+y_{i+1}). 
+\end{cases}
+$$
+In the $2$D case, the algorithm is similar except that we do not need to compute $n_x$ and $n_y$ since they will be set to $0$. 
+
+\subsubsection{Barycentre}
+Given a polygon with $n$ vertices, embedded in a $2$D space, let $C$ be its barycentre. With the same notations as in paragraph \ref{onv}, we compute the coordinates $(c_x,c_y)$ of the barycenter as follows:
+$$
+\begin{cases}
+c_x=\frac{1}{6A}\sum_{i=0}^{n} (x_i+x_{i+1})(x_iy_{i+1}-x_{i+1}y_i) \\
+c_y=\frac{1}{6A}\sum_{i=0}^{n} (y_i+y_{i+1})(x_iy_{i+1}-x_{i+1}y_i), \\
+\end{cases}
+$$
+where $A$ is the signed area of the polygon, given by
+$$A=\frac{1}{2} \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i). $$
+
+\noindent The case of a polygon embedded in a $3$D space is similar:
+\begin{enumerate}
+\item If the polygon is embedded in one of the planes parallel to $(O;\mathbf{x},\mathbf{y})$, $(O;\mathbf{x},\mathbf{z})$ or $(O;\mathbf{y},\mathbf{z})$, then the computation is similar to the $2$D case. 
+\item Otherwise, we project the polygon on one of the three planes $(O;\mathbf{x},\mathbf{y})$, $(O;\mathbf{x},\mathbf{z})$ or $(O;\mathbf{y},\mathbf{z})$ as in step \ref{pt1area3d} of the algorithm described in \ref{area3d}, and then we proceed as in the $2$D case to determine $2$ out of the $3$ coordinates. To determine the last coordinate, it is projected on one of the two other planes and the procedure is the same. 
+\end{enumerate}
+
+\subsection{Polyhedron}
+In our implementation, a polyhedron is defined as a \textit{non-ordered} set of polygons. 
