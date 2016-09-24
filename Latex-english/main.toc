@@ -9,4 +9,8 @@
 \contentsline {subsubsection}{\numberline {2.1.3}Oriented normal vector}{5}
 \contentsline {subsubsection}{\numberline {2.1.4}Barycentre}{5}
 \contentsline {subsection}{\numberline {2.2}Polyhedron}{6}
-\contentsline {section}{\numberline {3}Conclusion}{7}
+\contentsline {subsubsection}{\numberline {2.2.1}Volume}{6}
+\contentsline {subsubsection}{\numberline {2.2.2}Coherent orientation of the normal vectors of the faces}{7}
+\contentsline {subsubsection}{\numberline {2.2.3}Exterior normal vectors to the polyhedron}{8}
+\contentsline {section}{\numberline {3}Implementation}{10}
+\contentsline {section}{\numberline {4}Conclusion}{11}
