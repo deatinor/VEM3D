@@ -343,7 +343,8 @@ void Polyhedron<embedded,real>::fixExternalNormal() {
 // fixFacesOrientation
 template <long embedded,typename real>
 void Polyhedron<embedded,real>::fixFacesOrientation() {
-	
+
+	// First unchecked polygon (no edges in common with any previously checked polygon)	
 	int nextJ=1;
 	for (int i=0; i<numberOfPolygons-1; i++) { // the last polygon is surely correctly orientated
 		if (i==nextJ) {
@@ -351,7 +352,7 @@ void Polyhedron<embedded,real>::fixFacesOrientation() {
 		}
 		
 		// for each polygon it checks all the ones after, it puts right in front of it the ones he found adjacent to it (so they are correct after the check)
-		auto& polygon1=*polygonVector[i];
+		auto& polygon1=*polygonVector[i]; // Current polygon
 		for (int j=nextJ; j<numberOfPolygons; j++) {
 			auto& polygon2=*polygonVector[j];
 			
