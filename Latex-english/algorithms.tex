@@ -87,11 +87,11 @@ Since the area, the barycentre and the normal vector to every face (polygon) of 
 \subsubsection{Coherent orientation of the normal vectors of the faces}
 Given a polyhedron, we have seen in paragraph \ref{onv} that it is possible to compute oriented normal vectors of all of its faces. However, we now want the normal vectors of all of its faces to be coherently oriented, that is we want all of them to be either internal or external to the polyhedron, but not part of them internal and the rest external. To do so, the algorithm used is the following:
 \begin{enumerate}
-\item Randomly \textbf{TODO: CHECK, is really random?} order the faces of the polyhedron. 
+\item Randomly order the faces of the polyhedron. 
 \item For every face, check if it has a common edge with any other face coming after it in the ordering.
 \begin{itemize}
 	\item If two faces do have a common edge, and if the points defining the common edge appear in an opposite order for both representations of this common edge, then the orientation of the normal vectors is coherent for these two faces (both normal vectors are either external or internal to the polyhedron). 
-	\item Otherwise, if two faces do have a common edge but the points appear in the same order for both representations of this common edge, then the order of the vertices in the second polyhedron face's edge has to be inverted to get a coherent orientation. Then modify the order of the faces in order to have the second face before the original one in the ordering. 
+	\item Otherwise, if two faces do have a common edge but the points appear in the same order for both representations of this common edge, then the order of the vertices in the second polyhedron face's edge has to be inverted to get a coherent orientation. Then, modify the order of the faces in order to have the second face right after the original one in the ordering. 
 	\item If a face does not have any common edge with any face coming after it in the ordering, continue without any further operation.
 \end{itemize}
 \end{enumerate}

@@ -1,2 +1,19 @@
 \newpage
 \section{Implementation}
+
+This part will explain our implementation of VEM for the resolution of Laplace problem with Dirichlet boundary conditions in $2$D and $2$D, on respectively polygonal or polyhedral meshes. C++ has been used, making the most of the fact that it is an object oriented programming language. Moreover, a Makefile has been written to automate compilation, and a Doxygen full documentation of the implementation can also be automatically generated. To visualize the results, we have however preferred to create some Python scripts, taking advantage of Mayavi library for $3$D plots. We have tried to adopt a coding style as coherent and easily readable as possible, to make the comprehension easier. 
+
+\subsection{Global view on the code}
+The code is based on $18$ classes and a main file. Making the most of \textit{template programming} techniques, declaration and implementation of each class are both in a header file. Memory layout has been done with the most recent C++ techniques in order to avoid memory leaks. In particular, where pointers are necessary, they have been implemented as smart (shared or weak) pointers. While writing the code, our aim has always been to create a code as general and reusable as possible. \newline
+
+The code is essentially and ideally divided into two main parts:
+\begin{itemize}
+\item \textbf{The mesh:} $7$ classes serve to its implementation, where any $2$D or $3$D mesh composed by non-necessarily convex elements are modelled. The flexibility brought by VEM with respect to the geometry makes this part quite complex and computationally not negligible. Computing some properties of the polygons/polyhedrons (as the elements volume, external normal, etc.) is significantly more complex than for standard grids or triangular meshes, but it is essential for the problem resolution. 
+\item \textbf{Problem solving using VEM:} in this part, we have first tried to create a code that solves Laplace problem on any mesh regardless of the type of solver and of the imposed boundary conditions. Based from this first working part, we have implemented the Virtual Element Method solver and Dirichlet boundary conditions, the only solver and boundary conditions considered in this project. The idea has been to implement a code that is as general as possible, so that we could modify the method (for example to use the Finite Element Mehod instead of VEM) by only writing a new class corresponding to a new solver, without touching the part corresponding to the problem or the boundary conditions. In the same way, we could easily add some classes to consider other equations or other boundary conditions. 
+\end{itemize}
+
+Apart from those two main parts, there is a \textit{main} file where the appropriate solver can be run. The parameters needed to solve the problem (type of geometry, type of mesh, force term, name of the output file, etc.) are specified in a \textit{datafile} so that we do not need to recompile the whole code for any small modification. 
+
+As already said, we have also added a separate part written in Python in order to have a graphical visualization of the results. Python has been chosen thanks to its simplicity compared to C++ for the implementation of graphical interfaces, and thanks to the presence of the library \textit{Mayavi}, well adapted to $3$D visualization. This has been implemented to be complementary to the rest of the code, in order to furnish a fast way to graphically verify  the solutions. 
+
+

@@ -13,4 +13,5 @@
 \contentsline {subsubsection}{\numberline {2.2.2}Coherent orientation of the normal vectors of the faces}{7}
 \contentsline {subsubsection}{\numberline {2.2.3}Exterior normal vectors to the polyhedron}{8}
 \contentsline {section}{\numberline {3}Implementation}{10}
-\contentsline {section}{\numberline {4}Conclusion}{11}
+\contentsline {subsection}{\numberline {3.1}Global view on the code}{10}
+\contentsline {section}{\numberline {4}Conclusion}{12}
