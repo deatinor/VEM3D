@@ -57,10 +57,10 @@ $$A=\frac{1}{2} \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i). $$
 \noindent The case of a polygon embedded in a $3$D space is similar:
 \begin{enumerate}
 \item If the polygon is embedded in one of the planes parallel to $(O;\mathbf{e_x},\mathbf{e_y})$, $(O;\mathbf{e_x},\mathbf{e_z})$ or $(O;\mathbf{e_y},\mathbf{e_z})$, then the computation is similar to the $2$D case. 
-\item Otherwise, we project the polygon on one of the three planes $(O;\mathbf{e_x},\mathbf{e_y})$, $(O;\mathbf{e_x},\mathbf{e_z})$ or $(O;\mathbf{e_y},\mathbf{e_z})$ as in step \ref{pt1area3d} of the algorithm described in \ref{area3d}, and then we proceed as in the $2$D case to determine $2$ out of the $3$ coordinates. To determine the last coordinate, it is projected on one of the two other planes and the procedure is the same. 
+\item Otherwise, we project the polygon on one of the $3$ planes $(O;\mathbf{e_x},\mathbf{e_y})$, $(O;\mathbf{e_x},\mathbf{e_z})$ or $(O;\mathbf{e_y},\mathbf{e_z})$ as in step \ref{pt1area3d} of the algorithm described in \ref{area3d}, and then we proceed as in the $2$D case to determine $2$ out of the $3$ coordinates. To determine the last coordinate, it is projected on one of the two other planes and the procedure is the same. 
 \end{enumerate}
 
-\subsection{Polyhedron}
+\subsection{Polyhedron} \label{polyhedron}
 In our implementation, a polyhedron is defined as a \textit{non-ordered} set of polygons. Unlike the implementation of polygons, no algorithm to compute the exact barycentre of polyhedrons has been implemented. Indeed, such value is not necessary for this project, and its implementation would just lose in a useless manner some computational time. It is instead necessary to determine the following characteristics of any polyhedron:
 \begin{itemize}
 \item its volume, 
