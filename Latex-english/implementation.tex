@@ -758,3 +758,46 @@ SparseMatrix<real>& inputStiffnessMatrix);
 \end{verbatim}
 \noindent\rule{12.7cm}{1pt}\\
 
+\subsection{Visualization of the results}
+For the visualization of the results, we have decided to use Python programming language instead of C++ thanks to a great choice of libraries. This part is divided into two parts, depending on the used libraries:
+\begin{itemize}
+\item With Matplotlib library, we have created $2$ scripts for the $3$D visualization of either a polyhedron or an entire mesh. The main goal of this script is mainly to test the code; it has not been optimized and thus it might be very slow for large meshes. It is however efficient for smaller mesh and allows us to have a quick visual feedback on the results and their coherence. 
+\item With Mayavi library, we have create $3$ scripts to visualize the solution. \verb|plotPoints3D| only shows the vertices of the polyhedrons that are part of the mesh, together with the solution at these points. \verb|plot2D| and \verb|plot3D|, instead, shows the solution on the whole mesh. In the $3$D case, Mayavi visualization tools can be used to see the solution in different part of the mesh, such as on a section of the mesh for instance. 
+\end{itemize}
+
+In the following Figures $1$ to $5$, we show some of the visual results that have been obtained:
+
+\begin{figure}[!h]
+\label{img:matplotlibPolyhedron}
+\centering
+\includegraphics[scale=0.4]{images/matplotlibTest5.png}
+\caption{Plot with Matplotlib. A specific mesh element that VEM can handle.}
+\end{figure}
+
+\begin{figure}[!h]
+\label{img:matplotlibMesh}
+\centering
+\includegraphics[scale=0.4]{images/matplotlibPlotMesh.png}
+\caption{Plot with Matplotlib. Cubic mesh.}
+\end{figure}
+
+\begin{figure}[!h]
+\label{img:mayavi2D}
+\centering
+\includegraphics[scale=0.35]{images/mayavi2D.png}
+\caption{Plot with Mayavi. $2$D grid mesh with solution.}
+\end{figure}
+
+\begin{figure}[!h]
+\label{img:matplotlibMesh}
+\centering
+\includegraphics[scale=0.35]{images/mayavi3D.png}
+\caption{Plot with Mayavi. Mesh of tetrahedron on a $3$D sphere with the solution on a section of the sphere. The section can be dynamically chosen.}
+\end{figure}
+
+\begin{figure}[!h]
+\label{img:matplotlibMesh}
+\centering
+\includegraphics[scale=0.4]{images/mayavi3DPoints.png}
+\caption{Plot with Mayavi. Mesh of tetrahedron on a $3$D mesh with the solution on every vertex.}
+\end{figure}

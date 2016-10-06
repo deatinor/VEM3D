@@ -24,4 +24,5 @@
 \contentsline {subsubsection}{\numberline {3.3.3}Solver, SolverVEM, SolverVEM2D and SolverVEM3D}{25}
 \contentsline {subsubsection}{\numberline {3.3.4}BoundaryCondition, Dirichlet}{29}
 \contentsline {subsubsection}{\numberline {3.3.5}Error}{31}
-\contentsline {section}{\numberline {4}Conclusion}{33}
+\contentsline {subsection}{\numberline {3.4}Visualization of the results}{32}
+\contentsline {section}{\numberline {4}Conclusion}{34}
