@@ -227,7 +227,7 @@ template <long embedded,typename real>
 Point<embedded,real> Polygon<embedded,real>::computeCentroid() {
 	Point<embedded,real> returnPoint;
 	
-	// I look for the indexes to project everything on a plane
+	// Look for the indices to project everything on a plane
 	long maxNormalIndex=0;
 	real maxNormalValue=0;
 	long minNormalIndex=0;
@@ -323,7 +323,7 @@ Point<embedded,real> Polygon<embedded,real>::computeCentroid() {
 // computeArea
 template <long embedded,typename real>
 real Polygon<embedded,real>::computeArea() {
-	static_assert(embedded==2 || embedded==3,"computing area possible only for embedded=2,3");
+	static_assert(embedded==2 || embedded==3,"computing the area is only possible for embedded=2,3");
 	
 	real area=0;
 	
@@ -339,9 +339,9 @@ real Polygon<embedded,real>::computeArea() {
 	
 
 	else if (embedded==3) {
-	// I obtaine the scale factor.
-	// I put to 0 the index with higher normal index.
-	// The Polygon so becomes a 2D Polygon
+	// Obtain the scale factor.
+	// Put to 0 the index with higher normal index.
+	// The Polygon then becomes a 2D Polygon.
 	long maxNormalIndex=0;
 	real maxNormalValue=0;
 	for (int i=0;i<3;i++) {
@@ -350,8 +350,8 @@ real Polygon<embedded,real>::computeArea() {
 			maxNormalValue=abs(normal[i]);
 		}
 	}
-	real normalReduced=abs(normal[maxNormalIndex]);
-	real scaleFactor=normalReduced/(normal.norm());
+	//real normalReduced=abs(normal[maxNormalIndex]);
+	real scaleFactor=maxNormalValue/(normal.norm());
 
 	
 	real reducedArea=0;
@@ -368,7 +368,7 @@ real Polygon<embedded,real>::computeArea() {
 	}
 	reducedArea+=(*pointVector[0])[index2]*(*pointVector[pointVector.size()-1])[index1]-(*pointVector[0])[index1]*(*pointVector[pointVector.size()-1])[index2];
 	
-	//  I compute the area
+	//  Compute the area.
 	area=reducedArea/scaleFactor;
 	return abs(area)/2;
 	}

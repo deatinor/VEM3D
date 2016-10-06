@@ -31,7 +31,7 @@ MESHGENERATION
 
 OUTPUT
 
-It's the output folder of MeshGeneration
+It is the output folder of MeshGeneration
 
 ##########################################################################################
 
@@ -45,6 +45,9 @@ PLOTMATPLOTLIB
 - plotSinglePolyhedron plot only the first element of a mesh. It can be useful for having
   a visual feedback in case one wants to create manually a complex polyhedron. 
   This can happen for example to create a complex polyhedron to test the G = BD identity.
+  
+On Ubuntu 14.04, to make it work, install the following packages:
+- python-matplotlib
   
 ##########################################################################################
 

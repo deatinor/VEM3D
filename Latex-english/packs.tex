@@ -1,0 +1,101 @@
+%PACKAGES--------------------------------
+%Langue et encodage
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+%Gestion de mise en page
+\usepackage{supertabular}
+%\usepackage{fullpage}
+\usepackage{here}% permet, avec [H] de mettre l'image ICI!!! (et pas au petit bonheur la chance LaTeXien)
+\usepackage[perpage,symbol]{footmisc} %remet à zéro le compteur des notes de bas de page après chaque page
+%\usepackage[hmargin={3cm,3cm}, vmargin={3cm,3cm}, dvips]{geometry}
+%\pagestyle{plain}
+%\parindent=0cm	%définit la longueur du retrait
+%Mathématiques
+\usepackage{amsmath} %Formules
+\usepackage{amssymb} %Formules
+\usepackage{amsthm} %Environnements
+%\usepackage{relsize,exscale} %changement taille symboles mathématiques
+%\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{esint}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{tikz}
+%\usepackage{mathrsfs}
+%\usepackage{mathtools}
+%\usepackage{multirow}
+%\usepackage[all]{xy} %xy-pic
+%style captions
+%\usepackage[font=small,labelfont=bf]{caption}
+
+% pour changer le nom des captions des figures
+\usepackage{ccaption}
+\addto\captionsfrench{\def\figurename{{Diagramme}}}
+
+%ENVIRONNEMENTS--------------------------
+%Définition des styles
+\newtheoremstyle{droit}
+{}%Space above
+{}%Space below
+{\upshape}%Body font
+{}%Indent amount (empty = no indent, \parindent = para indent)
+{\bfseries}%theoreme head font
+{}%Punctuation after theoreme head
+{ }%{\newline}%Space after theoreme head: " " = normal interword space; \newline = linebreak
+{}%theoreme head spec (can be left empty, meaning `normal')
+\newtheoremstyle{italique}
+{}%Space above
+{}%Space below
+{\itshape}%Body font
+{}%Indent amount (empty = no indent, \parindent = para indent)
+{\bfseries}%theoreme head font
+{}%Punctuation after theoreme head
+{ }%{\newline}%Space after theoreme head: " " = normal interword space; \newline = linebreak
+{}%theoreme head spec (can be left empty, meaning `normal')
+%Théorèmes
+\theoremstyle{italique}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{axiom}[theorem]{Axiom}
+\theoremstyle{droit}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{note}[theorem]{Note}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{terminology}[theorem]{Terminology}
+\newtheorem{question}[theorem]{Question}
+%Autres
+\renewcommand{\thefootnote}{\fnsymbol{footnote}} %dans les notes de bas de page, remplace les chiffres par un symbole
+\newenvironment{indice} %comme une liste, mais avec (i), (ii), (iii), (iv)
+{\begin{enumerate}[\textup{(}i\textup{)}] }
+{\end{enumerate}}
+\newenvironment{step}
+{\begin{enumerate}[\textup{Step }1\textup{ :}] }
+{\end{enumerate}}
+\newenvironment{case}
+{\begin{enumerate}[\textup{Case } 1\textup{ :}] }
+{\end{enumerate}}
+
+%COMMANDES-------------------------------
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+%\newcommand{\L}{\mathcal{L}}
+\newcommand{\Ker}{{\rm Ker}}
+\newcommand{\Tr}{{\rm Tr}}
+\newcommand{\im}{{\rm Im}}
+\newcommand{\ch}{{\rm ch}}
+\DeclareMathOperator{\spn}{span}
+\newcommand{\dans}{\longrightarrow}
+\newcommand{\ddans}{\rightrightarrows}
+%\newcommand{\tndans}{\Rightarrow}
+\newcommand{\Bdot}{\bullet}
+\newcommand{\noi}{\noindent}
+
