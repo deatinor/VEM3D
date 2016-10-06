@@ -434,9 +434,9 @@ m_\alpha:=\bigg( \frac{\mathbf{x}-\mathbf{x_k}}{h_k} \bigg) ^\alpha,
 $$
 where $\mathbf{x_k}$ is the barycentre of the element, and $h_k$ its diameter. For VEM solver of degree $1$, it is necessary to evaluate the monomials at the vertices of the elements, and to compute their gradients on the elements. 
 We note that for VEM of order $1$, neither $\mathbf{x_k}$ nor $h_k$ have to be exactly computed as far as the same values are used to compute all the monomials of a same element. Consequently, it has not been necessary to implement the computation of the exact barycentre of an element, operation computationally very expensive. 
-All of this has been implemented in class \verb|Monomials|, in the case a polygon is embedded in a $2$D space.
+All of this has been implemented in class \verb|Monomials| for the case in which a $2$D (resp. $3$D) element is embedded in a $2$D (resp. $3$D) space.
 
-Class \verb|MonomialsPolygon|, however, is used to compute the same quantities but in the case where the polygon is embedded in a $3$D space. The main difference comes from the fact that in the standard case, the gradient is a vector with identical components, while in a $3$D space the gradient has to be projected on the plane of the polygon we are considering. \textbf{TODO?????}
+Class \verb|MonomialsPolygon|, that inherits from  \verb|Monomials|, however, is used to compute the same quantities but in the case where a $2$D element (a polygon) is embedded in a $3$D space. The main difference comes from the fact that in the case of a $2$D (resp. $3$D) element in a $2$D (resp. $3$D) space, the gradient is a vector whose components are all equal, while for a $2$D element in a $3$D space the gradient has to be projected on the plane of the polygon we are considering.\\
 
 Here is reported the implementation of class \verb|Monomials| and its main methods:
 
@@ -499,7 +499,7 @@ $$ \mathbf{K_E^h= (\Pi^\Delta_\star)^T \tilde{G}
   (\Pi^\Delta_\star)+(I-\Pi^\Delta)^T (I-\Pi^\Delta)}. $$ 
 Classes \verb|Monomials| and \verb|MonomialsPolygon| have also been used to evaluate the monomials, characteristic of the virtual elements method. Computing $B$ and the forcing term has been left to the lower-level classes while the rest has been implemented in \verb|SolverVEM|. The $3$D case has required a more complex evaluation of boundary terms. Computing the interpolating VEM polynomial on every face has also been necessary, and this operation considerably increases the computational time. 
 
-An important matrix property of VEM is the identity $G = BD$, which is very useful to test the code. A control has thus been implemented in order to tell the user if this identity is not verified. We have indeed tested the code thanks to this identity, also on very particular geometries \textbf{TODO: WHICH ONES????}. 
+An important matrix property of VEM is the identity $G = BD$, which is very useful to test the code. A control has thus been implemented in order to tell the user if this identity is not verified. We have indeed tested the code thanks to this identity, also on very particular geometries, such as the one showed in Figure \ref{geom}. \\
 
 Here is reported the implementation of class \verb|Solver| and its main methods:
 
@@ -623,13 +623,13 @@ point);
 \noindent\rule{12.7cm}{1pt}\\
 
 \subsubsection{BoundaryCondition, Dirichlet}
-Class \verb|BoundaryCondition| is an abstract class that represents any type of boundary conditions and handle them. Class \verb|Dirichlet| inherits from \verb|BoundaryCondition| and takes only care of Dirichlet boundary conditions, as its name suggests. 
+Class \verb|BoundaryCondition| is an abstract class that represents any type of boundary conditions and handle them. Class \verb|Dirichlet| inherits from \verb|BoundaryCondition| and takes only care of Dirichlet boundary conditions, as its name suggests. To impose this type of condition, the upper-left block of the stiffness matrix (whose rows correspond to boundary elements) needs to be diagonal. Moreover, the same rows corresponding to the boundary elements in the forcing term need to be correctly set. 
 
 Those two classes are based on the three following main methods: 
 \begin{itemize}
-\item Process the local stiffness matrix before assembling the global stiffness matrix. In the case of Dirichlet boundary conditions, the stiffness matrix is diagonal \textbf{TODO?????}
-\item Process the global stiffness matrix after its assembling. \textbf{TODO?????}
-\item Process the forcing term after it has been created. \textbf{TODO?????}
+\item Process the local stiffness matrix before assembling the global stiffness matrix. In the Dirichlet case, if an element is on the boundary, its local stiffness matrix is not assembled with the other ones in order to keep the upper-left block of the global stiffness matrix diagonal. 
+\item Process the global stiffness matrix after its assembling. In the Dirichlet case, we make sure that the upper-left block is diagonal. 
+\item Process the forcing term after it has been created, that is we set correctly the rows corresponding to the boundary elements. 
 \end{itemize}
 
 Here is reported the implementation of class \verb|BoundaryCondition| and its main methods:
@@ -715,7 +715,7 @@ real>;
 \verb|Error| is a class reserved for error computation. The error is computed in two different ways:
 \begin{itemize}
 \item $l^\infty$ norm: the maximum between the exact and the numerical solution in the nodes;
-\item $H^1$ discrete norm: computed as $u^TKu$, where $u$ is the difference between the real and the numerical solutions, and $K$ is the stiffness matrix. 
+\item $H^1$ discrete norm: computed as $u^TKu$, where $u$ is the difference between the real and the numerical solutions on the nodes, and $K$ is the stiffness matrix. 
 \end{itemize}
 
 Here is reported the implementation of class \verb|Error| and its main methods:
@@ -770,7 +770,7 @@ In the following Figures $1$ to $5$, we show some of the visual results that hav
 \begin{figure}[!h]
 \label{img:matplotlibPolyhedron}
 \centering
-\includegraphics[scale=0.4]{images/matplotlibTest5.png}
+\includegraphics[scale=0.4]{images/matplotlibTest5.png}\label{geom}
 \caption{Plot with Matplotlib. A specific mesh element that VEM can handle.}
 \end{figure}
 
