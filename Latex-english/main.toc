@@ -20,4 +20,8 @@
 \contentsline {subsubsection}{\numberline {3.2.3}Mesh, Mesh2D, Mesh3D}{17}
 \contentsline {subsection}{\numberline {3.3}Laplace equation and VEM solver}{21}
 \contentsline {subsubsection}{\numberline {3.3.1}Problem and Laplace classes}{21}
-\contentsline {section}{\numberline {4}Conclusion}{22}
+\contentsline {subsubsection}{\numberline {3.3.2}Monomials and MonomialsPolygon}{23}
+\contentsline {subsubsection}{\numberline {3.3.3}Solver, SolverVEM, SolverVEM2D and SolverVEM3D}{25}
+\contentsline {subsubsection}{\numberline {3.3.4}BoundaryCondition, Dirichlet}{29}
+\contentsline {subsubsection}{\numberline {3.3.5}Error}{31}
+\contentsline {section}{\numberline {4}Conclusion}{33}

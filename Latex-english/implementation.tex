@@ -347,9 +347,414 @@ meshType=ANYTHING3D);
 \noindent\rule{12.7cm}{1pt}\\
 
 \subsection{Laplace equation and VEM solver}
-For the part of the code that solves a numerical problem, we have tried to write a code as modular as possible, to be able to change solver easily or to consider different boundary conditions (even if in this project, only VEM and Dirichlet boundary conditions have been implemented). We have deeply use \textit{template programming} techniques to guarantee this modularity. Indeed, classes that model the numerical problem are all template classes, for which two parameters are needed: one for the type of solver and one for boundary conditions. A last class has been implemented to compute the error. To manage matrices, vectors and linear systems, the open-source Eigen has been used. 
+For the part of the code that solves a numerical problem, we have tried to write a code as modular as possible, to be able to change solver easily or to consider different boundary conditions (even if in this project, only VEM and Dirichlet boundary conditions have been implemented). We have deeply use \textit{template programming} techniques to guarantee this modularity. Indeed, classes that model the numerical problem are all template classes, for which two parameters are needed: one for the type of solver, \verb|SolverType|, and one for the boundary conditions, \verb|BoundaryConditionType|. A last class has been implemented to compute the error. To manage matrices, vectors and linear systems, the open-source Eigen has been used. 
 
 \subsubsection{Problem and Laplace classes}
-The abstract class \verb|Problem| models a very generic numerical problem, that can be solve through a linear system made of a stiffness matrix and of a constant term. The aim of class \verb|Problem| is to define an common interface for all types of problems, containing the definition of all the necessary methods and the implementation of the most generic ones. In particular, the creating of the stiffness matrix and of the constant term are left to the derived classes while a default linear system solver is implemented in the parent class (BiCGSTAB) that can be overwritten. 
+The abstract class \verb|Problem| models a very generic numerical problem, that can be solve through a linear system made of a stiffness matrix and of a forcing term. The aim of class \verb|Problem| is to define an common interface for all types of problems, containing the definition of all the necessary methods and the implementation of the most generic ones. In particular, the creating of the stiffness matrix and of the forcing term are left to the derived classes while a default linear system solver is implemented in the parent class (BiCGSTAB) that can be overwritten. In \verb|Problem| are also implemented methods to compute the error and to write the output on a file, since this is common to all the solvers. 
 
+\verb|Laplace| is a class that inherits from \verb|Problem| in order to model Laplace problem, leaving the full choice of a type of solver and of appropriate boundary conditions, as discussed earlier. In this class are implemented the methods to assemble the linear system and the global stiffness matrix, even if it leaves the computation of the local stiffness matrix to the classes dedicated to the solver and to the boundary conditions. \\
+
+Here is reported the implementation of class \verb|Problem| and its main methods:
+
+\noindent\rule{12.7cm}{1pt}
+\begin{verbatim}
+template <long embedded,typename MeshType,typename real=double>
+class Problem {
+	
+protected:
+    const MeshType& mesh;	//!< Mesh on which the problem is
+based
+
+public:
+    SparseMatrix<real> stiffnessMatrix;
+    VectorX<real> knownTerm;
+    VectorX<real> solution;
+	
+public:
+    // General constructor for the Problem
+    Problem(const MeshType& inputMesh)
+
+    // Virtual method to compute the stiffness matrix
+    virtual void computeStiffnessMatrix()=0;
+    // Virtual method to compute the known term
+    virtual void computeKnownTerm()=0;	
+
+    virtual void computeSolution();
+    virtual void operator()();  // Method to execute the method.
+FreeFem style.
+
+    //  It displays the error after the computation
+    virtual void displayError(std::function<real(Point<embedded,
+real>&)>
+ realSolutionFunction);
+    // full output to file 
+    virtual void write(string outputPoints,string 
+outputConnections,
+string outputSolution);	
+    // Output to file of the solution
+    virtual void writeSolution(string outputSolution="solution.
+sol");
+\end{verbatim}
+\noindent\rule{12.7cm}{1pt}\\
+
+Here is reported the implementation of class \verb|Laplace| and its main methods:
+
+\noindent\rule{12.7cm}{1pt}
+
+\begin{verbatim}
+template <long embedded,typename MeshType,typename SolverType,
+typename BoundaryConditionType,typename real=double>
+class Laplace: public Problem<embedded,MeshType,real> {
+private:
+    real diffusionCoeff;	
+public:
+    // Vector used to fast build the stifnessMatrix.
+    vector<Triplet<real>> tripletList; 
+    BoundaryConditionType boundaryCondition;
+    SolverType solver;
+
+    // Standard constructor
+    Laplace(const MeshType& inputMesh,std::function<real(const 
+Point<embedded,real>&)> inputForceTerm,std::function<real(const 
+Point<embedded,real>&)> 
+inputBoundaryFunction,real inputDiffusionCoeff=1)
+
+    // General method. It invokes the methods of the Solver.
+    void computeStiffnessMatrix();
+    // General method. It invokes the methods of the Solver and 
+BoundaryCondition 
+    void computeKnownTerm();
+\end{verbatim}
+\noindent\rule{12.7cm}{1pt}\\
+
+\subsubsection{Monomials and MonomialsPolygon}
+First, we recall some VEM theory for a better comprehension. Given a mesh element, we call monomial $m_\alpha$ of degree $|\alpha|$ the following quantity:
+$$
+m_\alpha:=\bigg( \frac{\mathbf{x}-\mathbf{x_k}}{h_k} \bigg) ^\alpha,
+$$
+where $\mathbf{x_k}$ is the barycentre of the element, and $h_k$ its diameter. For VEM solver of degree $1$, it is necessary to evaluate the monomials at the vertices of the elements, and to compute their gradients on the elements. 
+We note that for VEM of order $1$, neither $\mathbf{x_k}$ nor $h_k$ have to be exactly computed as far as the same values are used to compute all the monomials of a same element. Consequently, it has not been necessary to implement the computation of the exact barycentre of an element, operation computationally very expensive. 
+All of this has been implemented in class \verb|Monomials|, in the case a polygon is embedded in a $2$D space.
+
+Class \verb|MonomialsPolygon|, however, is used to compute the same quantities but in the case where the polygon is embedded in a $3$D space. The main difference comes from the fact that in the standard case, the gradient is a vector with identical components, while in a $3$D space the gradient has to be projected on the plane of the polygon we are considering. \textbf{TODO?????}
+
+Here is reported the implementation of class \verb|Monomials| and its main methods:
+
+\noindent\rule{12.7cm}{1pt}
+\begin{verbatim}
+template <long embedded,typename baseElement,typename real=
+double>
+class Monomials {
+public:
+    const shared_ptr<baseElement>& element;	//!< Element can be 
+Polygon or Polyhedron
+    real diameter;  //!< Diameter of the element
+    Point<embedded,real> centroid;  //!< Centroid of the 
+element
+    // It's the gradient of the monomial. It's 1/diameter
+    real gradient;
+
+    // CONSTRUCTOR
+    Monomials(const shared_ptr<baseElement>& figure);
+
+    // Function to evaluate the monomial in a point
+    real evaluate (const Point<embedded,real>& p, long i);
+}
+\end{verbatim}
+\noindent\rule{12.7cm}{1pt}\\
+
+Here is reported the implementation of class \verb|MonomialsPolygon| and its main methods:
+
+\noindent\rule{12.7cm}{1pt}
+\begin{verbatim}
+template <typename real>
+class MonomialsPolygon: public Monomials<3, Polygon<3,real>,
+real> {
+public:
+    // these are virtual indexes used to project the Polygon on
+an appropriate plane
+    long indexX;
+    long indexY;
+    long indexZ;
+    Vector<3,real> gradientX;
+    Vector<3,real> gradientY;
+	
+    MonomialsPolygon(const shared_ptr<Polygon<3,real>>& figure); 
+    
+    // Function to evaluate the monomial in a point
+    real evaluate (const Point<3,real>& p, long i);
+\end{verbatim}
+
+\noindent\rule{12.7cm}{1pt}\\
+
+\subsubsection{Solver, SolverVEM, SolverVEM2D and SolverVEM3D}
+Class \verb|Solver| and its inherited classes contain the implementation of the numerical solvers. Concerning the VEM solver, we refer to chapter \ref{theory} for the description of the method, but we will give in this paragraph a description of its implementation. 
+
+\verb|Solver| is an abstract class that represents a generic solver. Only one method is present in this class, \verb|computeLocalK|, whose aim is to compute the local stiffness matrix. It is consequently a class that can be extended to any numerical method that need the computation of a local stiffness matrix on every element. 
+
+To implement the VEM solver, it has not been possible to create a unique class for the $2$D and the $3$D cases. As a consequence, a generic abstract class \verb|SolverVEM| has been created and directly inherits from \verb|Solver|, while \verb|SolverVEM2D| and \verb|SolverVEM3D| inherit from \verb|SolverVEM|. In \verb|SolverVEM| are implemented the methods that are common to the $2$D and the $3$D cases, while in the lower-level classes are implemented the few specific methods left. 
+
+The VEM solver follows the procedure explained in the article \textbf{TODO REFERENCE!!!!!!}, where matrices $G$, $B$, $D$, $\Pi_\star^\Delta,\Pi^\Delta$ need to be computed in order to then be able to get the local matrix:
+$$ \mathbf{K_E^h= (\Pi^\Delta_\star)^T \tilde{G}
+  (\Pi^\Delta_\star)+(I-\Pi^\Delta)^T (I-\Pi^\Delta)}. $$ 
+Classes \verb|Monomials| and \verb|MonomialsPolygon| have also been used to evaluate the monomials, characteristic of the virtual elements method. Computing $B$ and the forcing term has been left to the lower-level classes while the rest has been implemented in \verb|SolverVEM|. The $3$D case has required a more complex evaluation of boundary terms. Computing the interpolating VEM polynomial on every face has also been necessary, and this operation considerably increases the computational time. 
+
+An important matrix property of VEM is the identity $G = BD$, which is very useful to test the code. A control has thus been implemented in order to tell the user if this identity is not verified. We have indeed tested the code thanks to this identity, also on very particular geometries \textbf{TODO: WHICH ONES????}. 
+
+Here is reported the implementation of class \verb|Solver| and its main methods:
+
+\noindent\rule{12.7cm}{1pt}
+\begin{verbatim}
+template <long embedded,typename baseElement,typename 
+MatrixType,typename real>
+class Solver {
+protected:
+    std::function<real(const Point<embedded,real>&)> forceTerm;
+	
+public:
+    Solver(std::function<real(const Point<embedded,real>&)> 
+inputForceTerm);
+
+    // Main virtual method. To be implemented in subclasses
+    virtual MatrixType computeLocalK(const shared_ptr
+<baseElement>& element)=0;
+};
+\end{verbatim}
+
+\noindent\rule{12.7cm}{1pt}\\
+
+Here is reported the implementation of class \verb|SolverVEM| and its main methods:
+
+\noindent\rule{12.7cm}{1pt}
+\begin{verbatim}
+template <long embedded,long elementDimension,typename 
+baseElement, typename MonomialType,typename real=double>
+class SolverVEM: public Solver<embedded,baseElement,
+Matrix<real,Dynamic,Dynamic>,real> {
+protected:
+    virtual Matrix<real,elementDimension+1,elementDimension
++1> computeG(MonomialType& monomial);
+    virtual Matrix<real,elementDimension+1,Dynamic> 
+computeB(const shared_ptr<baseElement>& polyhedron,
+MonomialType& monomial)=0;
+    virtual Matrix<real,Dynamic,elementDimension+1> 
+computeD(MonomialType& monomial);
+	
+    virtual Matrix<real,elementDimension+1,Dynamic> 
+computePIStar(
+Matrix<real,elementDimension+1,elementDimension+1>&G,
+Matrix<real,elementDimension+1,Dynamic>&B);
+    virtual Matrix<real,Dynamic,Dynamic> computePI(
+Matrix<real,elementDimension+1,Dynamic>&PIStar,
+Matrix<real,Dynamic,elementDimension+1>&D);
+	
+public:
+    //Basic constructor. A lot of paramethers are given as 
+template.
+    SolverVEM(std::function<real(const Point<embedded,real>&)>
+inputForceTerm);
+	
+    // This is to compute the local stiffness matrix
+    virtual Matrix<real,Dynamic,Dynamic> computeLocalK(const
+shared_ptr<baseElement>& element); 
+    //!< Virtual method to compute the known term.
+    virtual real computeKnownTerm(const shared_ptr<baseElement>& 
+element, const shared_ptr<MeshPoint<embedded,real>>& point)=0; 
+};
+\end{verbatim}
+
+\noindent\rule{12.7cm}{1pt}\\
+
+Here is reported the implementation of class \verb|SolverVEM2D| and its main methods:
+
+\noindent\rule{12.7cm}{1pt}
+\begin{verbatim}
+template <typename real=double>
+class SolverVEM2D: public SolverVEM<2,2,Polygon<2,real>,
+Monomial2D<real>,real> {
+public:
+    virtual Matrix<real,3,Dynamic> computeB(const shared_ptr
+<Polygon<2,real>>& polygon,Monomial2D<real>& monomial);
+
+public:
+     SolverVEM2D(std::function<real(const Point<2,real>&)> 
+inputForceTerm);
+    
+     virtual real computeKnownTerm(const shared_ptr<Polygon<2,
+real>>& element,
+const shared_ptr<MeshPoint<2,real>>& point);
+};
+\end{verbatim}
+
+\noindent\rule{12.7cm}{1pt}\\
+
+Here is reported the implementation of class \verb|SolverVEM3D| and its main methods:
+
+\noindent\rule{12.7cm}{1pt}
+\begin{verbatim}
+template <typename real=double>
+class SolverVEM3D: public SolverVEM<3,3,Polyhedron<3,real>,
+Monomial3D<real>,real> {
+public:
+    virtual Matrix<real,3,3> computeGPolygon(MonomialsPolygon
+<real>& monomial);
+    virtual Matrix<real,4,Dynamic> computeB(const shared_ptr
+<Polyhedron<3,real>>& 
+polyhedron,Monomial3D<real>& monomial);
+    virtual Matrix<real,3,Dynamic> computeBPolygon(const 
+shared_ptr<Polygon<3,real>>& 
+polyhedron,MonomialsPolygon<real>& monomial);
+    virtual Matrix<real,Dynamic,3> computeDPolygon(
+MonomialsPolygon<real>& monomial);
+		
+    virtual Matrix<real,3,Dynamic> computePIStarPolygon(Matrix
+<real,3,3>&G, Matrix<real,3,Dynamic>&B);
+	
+public:
+    SolverVEM3D(std::function<real(const Point<3,real>&)> 
+inputForceTerm);
+ 
+    virtual real computeKnownTerm(const shared_ptr<Polyhedron
+<3, real>>& element, const shared_ptr<MeshPoint<3,real>>& 
+point);	
+};
+
+\end{verbatim}
+\noindent\rule{12.7cm}{1pt}\\
+
+\subsubsection{BoundaryCondition, Dirichlet}
+Class \verb|BoundaryCondition| is an abstract class that represents any type of boundary conditions and handle them. Class \verb|Dirichlet| inherits from \verb|BoundaryCondition| and takes only care of Dirichlet boundary conditions, as its name suggests. 
+
+Those two classes are based on the three following main methods: 
+\begin{itemize}
+\item Process the local stiffness matrix before assembling the global stiffness matrix. In the case of Dirichlet boundary conditions, the stiffness matrix is diagonal \textbf{TODO?????}
+\item Process the global stiffness matrix after its assembling. \textbf{TODO?????}
+\item Process the forcing term after it has been created. \textbf{TODO?????}
+\end{itemize}
+
+Here is reported the implementation of class \verb|BoundaryCondition| and its main methods:
+
+\noindent\rule{12.7cm}{1pt}
+\begin{verbatim}
+template <long embedded,typename MeshType,typename MeshElement,
+typename real=double>
+class BoundaryCondition {
+protected:
+    const MeshType& mesh;
+    std::function<real(Point<embedded,real>&)> boundaryFunction;
+
+    BoundaryCondition(const MeshType&
+inputMesh,std::function<real(Point<embedded,real>&)> 
+inputBoundaryFunction);
+
+public:
+    // This is to decide if to add the Kloc computed to the 
+matrix
+    virtual void addToTripletList(Matrix<real,Dynamic,
+Dynamic>& Kloc, MeshElement& element,vector<Triplet<real>>& 
+tripletList)=0;
+	
+    // Changes the stiffnessMatrix to keep into account the 
+boundary condition.
+    virtual void assignBoundaryConditionOnStiffnessMatrix
+(vector<Triplet<real>>& tripletList)=0;
+	
+    // Changes the known term to keep into account the boundary
+condition
+    virtual void assignBoundaryConditionOnKnownTerm
+(VectorX<real>& knownTerm)=0; 		
+};
+
+\end{verbatim}
+
+\noindent\rule{12.7cm}{1pt}\\
+
+Here is reported the implementation of class \verb|Dirichlet| and its main methods:
+
+\noindent\rule{12.7cm}{1pt}
+\begin{verbatim}
+template <long embedded,typename MeshType,typename MeshElement,
+typename real>
+class Dirichlet: public BoundaryCondition<embedded,MeshType,
+MeshElement,real> {
+    long numberOfPoints;
+    long numberOfBoundaryPoints;
+
+public:
+    // Standard constructor
+    Dirichlet(const MeshType& mesh,std::function<real(Point
+<embedded,real>&)> boundaryFunction);
+	
+    // This is to decide if to add the Kloc computed to the 
+matrix.
+    virtual void addToTripletList(Matrix<real,Dynamic,Dynamic>& 
+Kloc, MeshElement& element,vector<Triplet<real>>& tripletList);
+	
+    // Changes the stiffnessMatrix to keep into account the 
+boundary condition.
+    virtual void assignBoundaryConditionOnStiffnessMatrix
+(vector<Triplet<real>>& tripletList);
+	
+    // Changes the known term to keep into account the 
+boundary condition
+    virtual void assignBoundaryConditionOnKnownTerm(VectorX
+<real>& knownTerm);	
+};
+
+template <typename real=double>
+using Dirichlet3D=Dirichlet<3,Mesh3D<real>,Polyhedron<3,real>,
+real>;
+
+template <typename real=double>
+using Dirichlet2D=Dirichlet<2,Mesh2D<real>,Polygon<2,real>,
+real>;
+\end{verbatim}
+\noindent\rule{12.7cm}{1pt}\\
+
+\subsubsection{Error}
+\verb|Error| is a class reserved for error computation. The error is computed in two different ways:
+\begin{itemize}
+\item $l^\infty$ norm: the maximum between the exact and the numerical solution in the nodes;
+\item $H^1$ discrete norm: computed as $u^TKu$, where $u$ is the difference between the real and the numerical solutions, and $K$ is the stiffness matrix. 
+\end{itemize}
+
+Here is reported the implementation of class \verb|Error| and its main methods:
+
+\noindent\rule{12.7cm}{1pt}
+\begin{verbatim}
+template <long embedded,typename real=double>
+class Error {
+protected:
+    const VectorX<real>& solution;
+    VectorX<real> realSolution;
+    VectorX<real> difference;
+    const vector<shared_ptr<MeshPoint<embedded,real>>>& 
+pointVector;
+    std::function<real(Point<embedded,real>&)> 
+realSolutionFunction;
+	
+    SparseMatrix<real>& stiffnessMatrix;
+	
+    // This computes the exact solution, from 
+realSolutionFunction
+    void computeRealSolution(); 
+	
+public:
+    Error(const VectorX<real>& inputSolution,
+const vector<shared_ptr<MeshPoint<embedded,real>>>& 
+inputPointVector,
+std::function<real(Point<embedded,real>&)> 
+inputRealSolutionFunction,
+SparseMatrix<real>& inputStiffnessMatrix);
+
+    // L infinite norm of the error
+    real LInfinity();
+	
+    // H1 discrete norm of the error
+    real H1Discrete();
+	
+    void displayError();   //!< Print the computer error	
+};
+\end{verbatim}
+\noindent\rule{12.7cm}{1pt}\\
 
