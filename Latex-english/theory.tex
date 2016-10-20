@@ -1,4 +1,61 @@
 \newpage
-\section{THEORY}\label{theory}
+\section{Theoretical background}\label{theory}
 
-\subsection{THEORY subsection}
+
+
+\subsection{Variational problem}
+We recall the strong formulation of the general problem: on a polygonal domain $\Omega \subset \R^n$, find a solution $u$ of 
+\begin{equation}\label{strong}
+-\Delta u = f \text{ in } \Omega, \text{ and } u = g \text{ on } \Gamma = \partial \Omega,
+\end{equation}
+where $f$ and $g$ are given functions defined respectively in $\Omega$ and on $\Gamma$. 
+
+Suppose that $f\in L^2(\Omega)$ and $g\in H^{1/2}(\Gamma)$. We multiply equation (\ref{strong}) by an arbitrary function $v$, and we integrate the strong form. Thanks to Green formula, we obtain:
+\begin{equation}\label{varform} \int_\Omega \nabla u\cdot \nabla v \, \mathrm{d}\Omega- \int_\Gamma (\nabla u \cdot \vec{n}) v \, \mathrm{d}\Gamma = \int_\Omega fv \, \mathrm{d}\Omega, 
+\end{equation}
+where $\vec{n}$ is the exterior normal vector to the surface boundary $\Gamma$. Suppose there exist a continuous lifting of the boundary data $R_g \in H^1(\Omega)$ such that  $R_g|_{\Gamma} = g$. We set $\tilde{u} = u - R_g$, so that $\tilde{u}|_\Gamma = u|_\Gamma - R_g|\Gamma = g-g = 0$, and $\nabla \tilde{u} = \nabla \tilde{u} - \nabla \tilde{R_g}$. Consequently, equation (\ref{varform}) becomes: 
+\begin{equation*}
+\int_\Omega \nabla \tilde{u}\cdot \nabla v \, \mathrm{d}\Omega = \int_\Omega fv \, \mathrm{d}\Omega -	 \int_\Omega \nabla R_g \cdot \nabla v \, \mathrm{d}\Omega.
+\end{equation*}
+In the following, we omit the tilde on $\tilde{u}$ for a matter of simplicity. The variational formulation of our problem is thus now the following: find $u$ in $V=H^1_0(\Omega)$ such that for all $v\in V$, 
+\begin{equation}\label{weak}
+a(u,v) = F(v),
+\end{equation}
+where $a : V \times V \rightarrow \R$ is such that $a(w,v) = \int_\Omega \nabla w\cdot \nabla v \, \mathrm{d}\Omega$ for all $w,v\in V$, and $F:V\rightarrow\R$ is such that for all $v\in V$, $F(v) = -a(R_g, v) + \int_\Omega fv \, \mathrm{d}\Omega$.
+
+It is easy to show that $a$ is a continuous and coercive bilinear form, and that $F$ is a linear and continuous functional. We just prove here some of the main properties: for all $w,v\in V$, 
+\begin{align*}
+F(v) &= \int_\Omega fv \, \mathrm{d}\Omega -\int_\Omega \nabla R_g \cdot \nabla v \, \mathrm{d} \Omega \\
+& \leq \int_\Omega fv \, \mathrm{d}\Omega \\
+& \leq \|f\|_{L^2(\Omega)}\|v\|_{L^2(\Omega)}\\
+& \leq \|f\|_{L^2(\Omega)}\|v\|_{H_0^1(\Omega)},
+\end{align*}
+\begin{align*}
+a(v,v) &= \int_\Omega \nabla v \cdot \nabla v \, \mathrm{d} \Omega = \|v\|^2_{H_0^1(\Omega)}\\
+& \geq 1\cdot \|v\|^2_{H_0^1(\Omega)}, \text{ and }\\
+a(w,v) &= \int_\Omega \nabla w \cdot \nabla v \, \mathrm{d} \Omega \\
+& \leq 1 \cdot \|w\|_{H_0^1(\Omega)}\|v\|_{H_0^1(\Omega)}.
+\end{align*} 
+Cauchy-Schwarz inequality has been used to show both continuities. Thus by Lax-Milgram theorem, there exists a unique solution to the weak problem expressed in equation (\ref{weak}). 
+
+
+\subsection{Discrete problem}
+Consider a sequence of decompositions $\{T_h\}_h$ of $\Omega$, where $h$ corresponds to the maximum of the diameters $h_K$ of the elements $K$ of the decomposition $T_h$. Let us recall the definition of the diameter of an element: 
+
+\begin{definition}[Diameter]
+The \textit{diameter} of an element $K$ of a domain decomposition is defined as $h_K = \max_{x,y\in K}|x-y|$. 
+\end{definition}
+
+\noindent Since we only consider polygonal domains $\Omega$, then exact decompositions with simple polygons exist. 
+
+\begin{definition}[Simple polygon]
+A \textit{simple polygon} is an open simply connected set whose boundary is a non-intersecting line made of a finite number of straight line segments. 
+\end{definition}
+
+\noindent From now on, we suppose that every considered decomposition $T_h$ is made of a finite number of simple polygons. Note that a simple polygon is not necessarily convex, and this is what is the first difference that characterizes VEM with respect to FEM. 
+We can thus define the bilinear form $a$ reduced to any element $K$ of a decomposition $T_h$ of $\Omega$ as follows: for all $w,v\in V$,
+$$ a^K(w,v) := \int_K \nabla w \cdot \nabla v \, \mathrm{d}\Omega. $$
+So that for all $h$ and for all $w,v\in V$, $a(w,v) \sum_{K\in T_h} a^K(w,v)$. In the same way, we define for all $v\in V$
+$$ \|v\|_{1, K} := \|v\|_{H_0^1(K)}, \text{ so that } \|v\|_{H_0^1(\Omega)} = \left(\sum_{K\in T_h} \|v\|_{1,K}^2\right)^{1/2}.$$
+
+\noindent Moreover, for every $h$, we will denote $E_h$ the set of edges of the decomposition $T_h$. 
