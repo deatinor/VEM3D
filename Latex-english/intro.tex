@@ -1,14 +1,15 @@
 \newpage
 \section*{Introduction} \addcontentsline{toc}{section}{Introduction}
 
-The Virtual Element Method (VEM in short) is an advanced numerical method that generalizes the Finite Element Method (FEM in short). Indeed, the underlying virtual element space is the same as the finite element space, together with some suitable non-polynomial functions. Non polynomial functions are harder to create and to handle. This is why VEM works in such a way that, in order to compute the stiffness matrix of the problem, we only need to compute the value of those non-polynomial functions on well-chosen degrees of freedom, without actually computing the functions. An advantage of doing so comes from the fact that VEM can then deal with more complex element geometries, such that non-necessarily convex polygons.
+The Virtual Element Method (VEM in short) is an advanced numerical method that generalizes the Finite Element Method (FEM in short). Indeed, the underlying virtual element space is the same as the finite element space, together with some suitable non-polynomial functions. Non polynomial functions are harder to create and to handle. This is why VEM works in such a way that, in order to compute the stiffness matrix of the problem, we only need to compute the value of those non-polynomial functions on well-chosen degrees of freedom, without actually computing the functions. 
 
+Since the local stiffness matrix actually comes form a bilinear form, we want to be able to exactly compute every entry that corresponds to the result of the bilinear form with at least one polynomial argument. While when none of the arguments of the bilinear form are polynomials, we only require a result with the right order of magnitude ($k$-consistency) and with some stability properties. An advantage of doing so comes from the fact that VEM can then deal with more complex element geometries, such that non-necessarily convex polygons.\newline 
 
-In this project, we will concentrate on Laplace equation with Dirichlet boundary conditions on a polygonal domain $\Omega$ embedded in an $n$ dimentional space. The general problem writes as follows: find a solution $u$ of
+In this project, we will concentrate on Laplace equation with Dirichlet boundary conditions on a polygonal domain $\Omega$ embedded in an $n$ dimensional space. The general problem writes as follows: find a solution $u$ of
 $$ -\Delta u = f \text{ in } \Omega, \text{ and } u = g \text{ on } \Gamma = \partial \Omega, $$
 where $f$ and $g$ are given functions defined respectively in $\Omega$ and on $\Gamma$.
 We will treat this problem both in theoretical terms, and with a regard towards its C++ implementation. \newline
 
-The first chapter will concentrate on the theory of VEM, both general and more concentrated on its application on Laplace equation. It will then be followed by a chapter explaining the algorithms used for the implementation of VEM, and a last chapter on its implementation itself. Some results and a conclusion will close this report. 
+The first chapter will concentrate on the theory of VEM, both on a general framework, and on its application on Laplace equation. It will then be followed by a chapter explaining the algorithms used for the implementation of VEM, and a last chapter on its implementation itself. Some results and a conclusion will close this report. 
 
 

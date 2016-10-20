@@ -23,7 +23,7 @@ a(u,v) = F(v),
 \end{equation}
 where $a : V \times V \rightarrow \R$ is such that $a(w,v) = \int_\Omega \nabla w\cdot \nabla v \, \mathrm{d}\Omega$ for all $w,v\in V$, and $F:V\rightarrow\R$ is such that for all $v\in V$, $F(v) = -a(R_g, v) + \int_\Omega fv \, \mathrm{d}\Omega$.
 
-It is easy to show that $a$ is a continuous and coercive bilinear form, and that $F$ is a linear and continuous functional. We just prove here some of the main properties: for all $w,v\in V$, 
+We choose the semi-norm of $H^1(\Omega)$ to be the norm we will use for functions in $H^1_0(\Omega) = V$, thanks to Poincaré inequality. In $V$ equipped to this norm, it is easy to show that $a$ is a continuous and coercive bilinear form, and that $F$ is a linear and continuous functional. We just prove here some of the main properties: for all $w,v\in V$, 
 \begin{align*}
 F(v) &= \int_\Omega fv \, \mathrm{d}\Omega -\int_\Omega \nabla R_g \cdot \nabla v \, \mathrm{d} \Omega \\
 & \leq \int_\Omega fv \, \mathrm{d}\Omega \\
@@ -40,6 +40,8 @@ Cauchy-Schwarz inequality has been used to show both continuities. Thus by Lax-M
 
 
 \subsection{Discrete problem}
+
+\subsubsection{Domain decomposition}
 Consider a sequence of decompositions $\{T_h\}_h$ of $\Omega$, where $h$ corresponds to the maximum of the diameters $h_K$ of the elements $K$ of the decomposition $T_h$. Let us recall the definition of the diameter of an element: 
 
 \begin{definition}[Diameter]
@@ -52,10 +54,24 @@ The \textit{diameter} of an element $K$ of a domain decomposition is defined as 
 A \textit{simple polygon} is an open simply connected set whose boundary is a non-intersecting line made of a finite number of straight line segments. 
 \end{definition}
 
-\noindent From now on, we suppose that every considered decomposition $T_h$ is made of a finite number of simple polygons. Note that a simple polygon is not necessarily convex, and this is what is the first difference that characterizes VEM with respect to FEM. 
-We can thus define the bilinear form $a$ reduced to any element $K$ of a decomposition $T_h$ of $\Omega$ as follows: for all $w,v\in V$,
-$$ a^K(w,v) := \int_K \nabla w \cdot \nabla v \, \mathrm{d}\Omega. $$
-So that for all $h$ and for all $w,v\in V$, $a(w,v) \sum_{K\in T_h} a^K(w,v)$. In the same way, we define for all $v\in V$
-$$ \|v\|_{1, K} := \|v\|_{H_0^1(K)}, \text{ so that } \|v\|_{H_0^1(\Omega)} = \left(\sum_{K\in T_h} \|v\|_{1,K}^2\right)^{1/2}.$$
+\noindent From now on, we suppose that every considered decomposition $T_h$ is made of a finite number of simple polygons. Note that a simple polygon is not necessarily convex, and this is what is the first difference that characterizes VEM with respect to FEM. We now introduce the following notation: 
+\begin{notation}
+For any set of functions $W$, we note $W|_K$ the set of functions in $W$ restricted to $K$, that is $W|_K = \{f|_K : f\in W\}$. 
+\end{notation}
 
-\noindent Moreover, for every $h$, we will denote $E_h$ the set of edges of the decomposition $T_h$. 
+\noindent Let us define the bilinear form $a$ reduced to any element $K$ of a decomposition $T_h$ of $\Omega$ as follows: for all $w,v\in V$,
+$$ a^K(w,v) := \int_K \nabla w \cdot \nabla v \, \mathrm{d}\Omega. $$
+Since the restriction of any function of $H_0^1(\Omega)$ on a sub-domain $K$ of $\Omega$ is still in $H_0^1(\Omega)$ but not necessarily in $H_0^1(K)$, we note that $a^K$ is also a continuous bilinear form on $V\times V$, but it is not necessarily coercive. Moreover, for all $h$ and for all $w,v\in V$, $a(w,v) = \sum_{K\in T_h} a^K(w,v)$. In the same way, since $H_0^1(\Omega)|_K = V|_K \subset H^1(K)$, we define for all $v\in V$
+$$ |v|_{1, K} := |(v|_K)|_{H^1(K)}, \text{ so that } \|v\|_{H_0^1(\Omega)} = \left(\sum_{K\in T_h} |v|_{1,K}^2\right)^{1/2}.$$
+
+\noindent Furthermore, for every $h$, we will denote $E_h$ the set of edges of the decomposition $T_h$. 
+
+\subsubsection{Space discretization}
+For every domain decomposition $T_h$, the aim of VEM is to come up with a finite subspace $V_h$ of $V$ such that:
+\begin{itemize}
+\item we can obtain a discretized version of problem (\ref{weak}),
+\item the discretized problem has a unique solution,
+\item the unique solution of the discretized problem has good approximation properties with respect to the exact solution. 
+\end{itemize}
+
+Now, we thus need to find a suitable subspace $V_h$ of $V$, a symmetric bilinear form $a_h : V_h\times V_h \rightarrow \R$ and a bilinear form $a_h^K:V_h|_K \times V_h|_K \rightarrow \R$ such that 
