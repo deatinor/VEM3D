@@ -1,8 +1,6 @@
 \newpage
 \section{Theoretical background}\label{theory}
 
-
-
 \subsection{Variational problem}
 We recall the strong formulation of the general problem: on a polygonal domain $\Omega \subset \R^n$, find a solution $u$ of 
 \begin{equation}\label{strong}
@@ -26,16 +24,16 @@ where $a : V \times V \rightarrow \R$ is such that $a(w,v) = \int_\Omega \nabla 
 We choose the semi-norm of $H^1(\Omega)$ to be the norm we will use for functions in $H^1_0(\Omega) = V$, thanks to Poincaré inequality. In $V$ equipped to this norm, it is easy to show that $a$ is a continuous and coercive bilinear form, and that $F$ is a linear and continuous functional. We just prove here some of the main properties: for all $w,v\in V$, 
 \begin{align*}
 F(v) &= \int_\Omega fv \, \mathrm{d}\Omega -\int_\Omega \nabla R_g \cdot \nabla v \, \mathrm{d} \Omega \\
-& \leq \int_\Omega fv \, \mathrm{d}\Omega \\
+& \leq \int_\Omega fv \, \mathrm{d}\Omega \text{\textbf{ TODO NOOOOOOOOOOOOOOO!!}}\\
 & \leq \|f\|_{L^2(\Omega)}\|v\|_{L^2(\Omega)}\\
-& \leq \|f\|_{L^2(\Omega)}\|v\|_{H_0^1(\Omega)},
+& \leq \|f\|_{L^2(\Omega)}\|v\|_{H_0^1(\Omega)};
 \end{align*}
-\begin{align*}
-a(v,v) &= \int_\Omega \nabla v \cdot \nabla v \, \mathrm{d} \Omega = \|v\|^2_{H_0^1(\Omega)}\\
-& \geq 1\cdot \|v\|^2_{H_0^1(\Omega)}, \text{ and }\\
-a(w,v) &= \int_\Omega \nabla w \cdot \nabla v \, \mathrm{d} \Omega \\
-& \leq 1 \cdot \|w\|_{H_0^1(\Omega)}\|v\|_{H_0^1(\Omega)}.
-\end{align*} 
+\begin{align}
+a(v,v) &= \int_\Omega \nabla v \cdot \nabla v \, \mathrm{d} \Omega = \|v\|^2_{H_0^1(\Omega)} \nonumber \\
+& \geq 1\cdot \|v\|^2_{H_0^1(\Omega)}; \label{acoercive}\\
+a(w,v) &= \int_\Omega \nabla w \cdot \nabla v \, \mathrm{d} \Omega \nonumber \\
+& \leq 1 \cdot \|w\|_{H_0^1(\Omega)}\|v\|_{H_0^1(\Omega)}.\nonumber
+\end{align} 
 Cauchy-Schwarz inequality has been used to show both continuities. Thus by Lax-Milgram theorem, there exists a unique solution to the weak problem expressed in equation (\ref{weak}). 
 
 
@@ -61,8 +59,14 @@ For any set of functions $W$, we note $W|_K$ the set of functions in $W$ restric
 
 \noindent Let us define the bilinear form $a$ reduced to any element $K$ of a decomposition $T_h$ of $\Omega$ as follows: for all $w,v\in V$,
 $$ a^K(w,v) := \int_K \nabla w \cdot \nabla v \, \mathrm{d}\Omega. $$
-Since the restriction of any function of $H_0^1(\Omega)$ on a sub-domain $K$ of $\Omega$ is still in $H_0^1(\Omega)$ but not necessarily in $H_0^1(K)$, we note that $a^K$ is also a continuous bilinear form on $V\times V$, but it is not necessarily coercive. Moreover, for all $h$ and for all $w,v\in V$, $a(w,v) = \sum_{K\in T_h} a^K(w,v)$. In the same way, since $H_0^1(\Omega)|_K = V|_K \subset H^1(K)$, we define for all $v\in V$
-$$ |v|_{1, K} := |(v|_K)|_{H^1(K)}, \text{ so that } \|v\|_{H_0^1(\Omega)} = \left(\sum_{K\in T_h} |v|_{1,K}^2\right)^{1/2}.$$
+Since the restriction of any function of $H_0^1(\Omega)$ on a sub-domain $K$ of $\Omega$ is still in $H_0^1(\Omega)$ but not necessarily in $H_0^1(K)$, we note that $a^K$ is also a continuous bilinear form on $V\times V$, but it is not necessarily coercive. Moreover, for all $h$ and for all $w,v\in V$, \begin{equation}\label{aKvsa}
+a(w,v) = \sum_{K\in T_h} a^K(w,v).
+\end{equation}
+In the same way, since $H_0^1(\Omega)|_K = V|_K \subset H^1(K)$, we define for all $v\in V$
+\begin{align}
+&|v|_{1, K} := |(v|_K)|_{H^1(K)} = \left( a^K\left( v,v \right)\right)^{1/2}, \label{def1Knorm}\\
+&\text{so that } \|v\|_{H_0^1(\Omega)} = \left(\sum_{K\in T_h} |v|_{1,K}^2\right)^{1/2}.\label{H01normsplit}
+\end{align} 
 
 \noindent Furthermore, for every $h$, we will denote $E_h$ the set of edges of the decomposition $T_h$. 
 
@@ -74,4 +78,94 @@ For every domain decomposition $T_h$, the aim of VEM is to come up with a finite
 \item the unique solution of the discretized problem has good approximation properties with respect to the exact solution. 
 \end{itemize}
 
-Now, we thus need to find a suitable subspace $V_h$ of $V$, a symmetric bilinear form $a_h : V_h\times V_h \rightarrow \R$ and a bilinear form $a_h^K:V_h|_K \times V_h|_K \rightarrow \R$ such that 
+\noindent To do so, we first need to introduce a notation, and a broken $H^1$-semi-norm to deal with functions of $H^1(T_h) := \Pi_{K\in T_h}H^1(K)$, for all $h$. 
+\begin{notation}
+For every domain $D$ and every non-negative integer $k$, $\mathbb{P}_k(D)$ is the set of polynomials in $D$ of degree at most $k$, and $\mathbb{P}_{-1}(D)=\{0\}$.
+\end{notation}
+\begin{definition}[Broken semi-norm on $H^1(T_h)$]
+For all $v\in H^1(T_h)$, we define:
+$$ |v|_{h,1} := \left( \sum_{K\in T_h} |\nabla v|^2_{L^2(K)} \right)^{\frac{1}{2}}.$$
+\end{definition}
+
+\noindent To figure out what we exactly need to build, we state and prove the following theorem: 
+
+\begin{theorem}
+For each $h$, suppose that
+\begin{enumerate}
+\item on one hand, we have \begin{enumerate}
+\item a suitable finite dimensional subspace $V_h$ of $V$;
+\item a symmetric bilinear form $a_h : V_h\times V_h \rightarrow \R$, and for all $K$ in $T_h$ a bilinear form $a_h^K:V_h|_K \times V_h|_K \rightarrow \R$, such that for all $w_h,v_h\in V_h$, 
+$$ a_h(w_h, v_h) = \sum_{K\in T_h} a_h^K(w_h|_K,v_h|_K).$$ For simplicity, we write $a_h^K(w_h,v_h)$ instead of $a_h^K(w_h|_K,v_h|_K)$;
+\item an element $f_h \in V_h'$ where $V_h'$ is the dual of $V_h$;
+\end{enumerate}
+\item on the other hand, there exists an integer $k\geq 1$ such that for all $K \in T_h$,
+\begin{enumerate}
+\item $\mathbb{P}_k(K) \subset V_h|_K$, that is our virtual space restricted to any element of the domain decomposition contains the set of polynomials of order at most $k$;
+\item(k-consistency) for all $p\in \mathbb{P}_k(K)$, for all $v_h\in V_h|_K$, the relation $a_h^K(p, v_h) = a^K(p, v_h)$ is verified;
+\item (stability) there exist $\alpha^-, \alpha^+ \geq 0$ two constants independent of $h$ and of $K$ such that for all $v_h\in V_h|_K$,
+$$ \alpha^-a^K(v_h,v_h)\leq a_h^K(v_h,v_h)\leq \alpha^+a^K(v_h,v_h).$$
+\end{enumerate}
+\end{enumerate}
+Under these hypothesis, 
+\begin{enumerate}
+\item the following discrete problem: find $u_h\in V_h$ such that for all $v_h \in V_h$, \begin{equation}\label{discretepb}
+a_h(u_h,v_h) = \langle f_h,v_h\rangle,
+\end{equation} admits a unique solution;
+\item for every approximations $u_I\in V_h$ and $u_\pi$ that is piecewise in $\mathbb{P}_k$, of the exact solution $u$ of problem (\ref{weak}), $$|u-u_h|_{L^1(\Omega)} \leq C\left(|u-u_I|_{L^1(\Omega)} + |u-u_\pi|_{h,1} + \mathcal{F}_h\right),$$
+where $C=C(\alpha^-,\alpha^-)$, and $\mathcal{F}_h$ is the smallest constant such that for all $v\in V_h$, $$F(v)-\langle f_h,v\rangle \leq \mathcal{F}_h\|v\|_{H^0_1(\Omega)}.$$ 
+\end{enumerate}
+\end{theorem}
+\begin{notation}
+Note that here, for $f_h\in V_h'$ and $v_h \in V_h$, $\langle f_h,v_h\rangle$ designs the action of $f_h$ on $v_h$.
+\end{notation}
+
+\noindent Let us prove this theorem:
+\begin{proof}
+We will prove the two conclusions in order. The abbreviation CS is used to say that we use the Cauchy-Schwarz inequality.
+\begin{enumerate}
+\item We want to use Lax-Milgram theorem. 
+\begin{itemize}
+\item Since $V_h$ is a finite dimensional subspace of the Hilbert space $V$, then it is a closed subspace of an Hilbert space, so that $V_h$ is also an Hilbert space. We still consider the $H^1(\Omega)$-semi-norm as the $H_0^1(\Omega)$-norm, i.e. the $V$-norm, and thus as the $V_h$-norm as well.
+\item By hypothesis $1.b$ and $1.c$, $a_h$ is a bilinear form and $f_h$ is a linear and continuous functional.
+\item Continuity of $a_h$: first, for all $w,v\in V_h|_K$, 
+\begin{align}
+a_h^K(w,v) &\leq \left( a_h^K\left( w,w \right)\right)^{1/2}\left( a_h^K\left (v,v \right)\right)^{1/2} &\text{ (CS)} \nonumber \\
+&\leq \alpha^+\left( a^K\left( w,w \right)\right)^{1/2}\left( a^K\left (v,v \right)\right)^{1/2} &\text{ (stability)} \nonumber \\
+&= \alpha^+|u|_{1,K}|v|_{1,K}. &\text{ (definition)} \label{ahKalpha}
+\end{align}
+Consequently, for all $w_h, v_h \in V_h$, 
+\begin{align*}
+a_h(w_h,v_h) &= \sum_{K\in T_h} a_h^K(w_h,v_h) &\text{ (hypothesis }1.b)\\
+&\leq \alpha^+\sum_{K\in T_h} |w_h|_{1,K}|v_h|_{1,K} &\text{ (inequality \ref{ahKalpha})}\\
+&\leq \alpha^+\left( \sum_{K\in T_h}|w_h|_{1,K}^2 \right)^{1/2}\left( \sum_{K\in T_h}|v_h|_{1,K}^2 \right)^{1/2} &\text{ (discrete CS)}\\
+&= \alpha^+ \|w_h\|_{H_0^1(\Omega)}\|v_h\|_{H_0^1(\Omega)}. &\text{ (equation \ref{H01normsplit})}
+\end{align*}
+\item Coercivity of $a_h$: for all $v_h\in V_h$, 
+\begin{align*}
+a_h(v_h,v_h) &= \sum_{K\in T_h} a_h^K(v_h,v_h) &\text{ (hypothesis }1.b)\\
+&\geq \alpha^-\sum_{K\in T_h} a^K(v_h,v_h) &\text{ (stability)}\\
+&= \alpha^- a(v_h,v_h) &\text{ (equation \ref{aKvsa})}\\
+&= \alpha^- \|v_h\|_{H_0^1(\Omega)}^2. &\text{ (equation \ref{acoercive})}
+\end{align*}
+\end{itemize}
+Consequently, by Lax-Milgram theorem, the discrete problem (\ref{discretepb}) admits one unique solution $u_h$.
+\item Let $u_I\in V_h$ and $u_\pi$ piecewise in $\mathbb{P}_k$ such that they are approximations of the exact solution $u$ of problem (\ref{weak}). Let $\delta_h = u_h-u_I\in V_h$. Then, 
+\begin{align*}
+\alpha^-\|\delta_h\|^2_{H_0^1(\Omega)}
+&\leq a_h(\delta_h,\delta_h) \text{ (coercivity of }a_h)\\
+&= a_h(u_h,\delta_h) - a_h(u_I,\delta_h) \\
+& \text{    }(a_h \text{ linear and definition of }\delta_h)\\
+&= \langle f_h, \delta_h\rangle - \sum_{K\in T_h}a_h^K(u_I,\delta_h) \\
+& \text{    (problem (\ref{discretepb}) and hypothesis }1.b)\\
+&= \langle f_h, \delta_h\rangle - \sum_{K\in T_h}\left( a_h^K\left( u_I-u_\pi, \delta_h \right) + a_h^K\left( u_\pi,\delta_h\right) \right)\\
+&\text{    } (a_h \text{ linear and }\pm u_\pi)
+\end{align*}
+\end{enumerate}
+\end{proof}
+
+\begin{remark}
+\begin{itemize} A few remarks on the theorem:
+\item The integer $k\geq 1$ will be the order of accuracy. \textbf{TODO tell more??}
+\item The stability property (hypothesis $2.c$) is crucial to show the existence and uniqueness of the solution since without it, we cannot show that $a_h$ has the required properties to apply Lax-Milgram theorem.
+\end{itemize}
+\end{remark}
