@@ -32,7 +32,7 @@ F(v) &= \int_\Omega fv \, \mathrm{d}\Omega -\int_\Omega \nabla R_g \cdot \nabla 
 a(v,v) &= \int_\Omega \nabla v \cdot \nabla v \, \mathrm{d} \Omega = \|v\|^2_{H_0^1(\Omega)} \nonumber \\
 & \geq 1\cdot \|v\|^2_{H_0^1(\Omega)}; \label{acoercive}\\
 a(w,v) &= \int_\Omega \nabla w \cdot \nabla v \, \mathrm{d} \Omega \nonumber \\
-& \leq 1 \cdot \|w\|_{H_0^1(\Omega)}\|v\|_{H_0^1(\Omega)}.\nonumber
+& \leq 1 \cdot \|w\|_{H_0^1(\Omega)}\|v\|_{H_0^1(\Omega)}.\label{acontinue}
 \end{align} 
 Cauchy-Schwarz inequality has been used to show both continuities. Thus by Lax-Milgram theorem, there exists a unique solution to the weak problem expressed in equation (\ref{weak}). 
 
@@ -111,8 +111,11 @@ Under these hypothesis,
 \item the following discrete problem: find $u_h\in V_h$ such that for all $v_h \in V_h$, \begin{equation}\label{discretepb}
 a_h(u_h,v_h) = \langle f_h,v_h\rangle,
 \end{equation} admits a unique solution;
-\item for every approximations $u_I\in V_h$ and $u_\pi$ that is piecewise in $\mathbb{P}_k$, of the exact solution $u$ of problem (\ref{weak}), $$|u-u_h|_{L^1(\Omega)} \leq C\left(|u-u_I|_{L^1(\Omega)} + |u-u_\pi|_{h,1} + \mathcal{F}_h\right),$$
-where $C=C(\alpha^-,\alpha^-)$, and $\mathcal{F}_h$ is the smallest constant such that for all $v\in V_h$, $$F(v)-\langle f_h,v\rangle \leq \mathcal{F}_h\|v\|_{H^0_1(\Omega)}.$$ 
+\item for every approximations $u_I\in V_h$ and $u_\pi$ that is piecewise in $\mathbb{P}_k$, of the exact solution $u$ of problem (\ref{weak}), $$\|u-u_h\|_{H_0^1(\Omega)} \leq C\left(\|u-u_I\|_{H_0^1(\Omega)} + |u-u_\pi|_{h,1} + \mathcal{F}_h\right),$$
+where $C=C(\alpha^-,\alpha^-)$, and $\mathcal{F}_h$ is the smallest constant such that for all $v\in V_h$, 
+\begin{equation}\label{calFh}
+F(v)-\langle f_h,v\rangle| \leq \mathcal{F}_h\|v\|_{H^0_1(\Omega)}.
+\end{equation}
 \end{enumerate}
 \end{theorem}
 \begin{notation}
@@ -154,12 +157,24 @@ Consequently, by Lax-Milgram theorem, the discrete problem (\ref{discretepb}) ad
 \alpha^-\|\delta_h\|^2_{H_0^1(\Omega)}
 &\leq a_h(\delta_h,\delta_h) \text{ (coercivity of }a_h)\\
 &= a_h(u_h,\delta_h) - a_h(u_I,\delta_h) \\
-& \text{    }(a_h \text{ linear and definition of }\delta_h)\\
+& \hspace{4.1cm}(a_h \text{ linear and definition of }\delta_h)\\
 &= \langle f_h, \delta_h\rangle - \sum_{K\in T_h}a_h^K(u_I,\delta_h) \\
-& \text{    (problem (\ref{discretepb}) and hypothesis }1.b)\\
+& \hspace{3.7cm}\text{(problem (\ref{discretepb}) and hypothesis }1.b)\\
 &= \langle f_h, \delta_h\rangle - \sum_{K\in T_h}\left( a_h^K\left( u_I-u_\pi, \delta_h \right) + a_h^K\left( u_\pi,\delta_h\right) \right)\\
-&\text{    } (a_h \text{ linear and }\pm u_\pi)
+&\hspace{5.7cm} (a_h \text{ linear and }\pm u_\pi)\\
+&= \langle f_h, \delta_h\rangle - \sum_{K\in T_h}\left( a_h^K\left( u_I-u_\pi, \delta_h \right) + a^K\left( u_\pi,\delta_h\right) \right)\\
+&\hspace{6.7cm} (k\text{-consistency)}\\
+&= \langle f_h, \delta_h\rangle - \sum_{K\in T_h}\left( a_h^K\left( u_I-u_\pi,\delta_h \right) + a^K\left( u_\pi-u, \delta_h \right) \right) \\
+&\hspace{1.7cm}- a\left( u, \delta_h \right) \hspace{0.6cm} (\pm u, a^K \text{linear and equation \ref{aKvsa})}\\
+&= \langle f_h, \delta_h\rangle - \sum_{K\in T_h}\left( a_h^K\left( u_I-u_\pi,\delta_h \right) + a^K\left( u_\pi-u, \delta_h \right) \right) \\
+&\hspace{1.7cm}- F(\delta_h) \hspace{3.8cm}\text{(problem (\ref{weak}))}\\
+&\leq |F(\delta_h) - \langle f_h, \delta_h \rangle| \\
+&\hspace{0.5cm} - \sum_{K\in T_h}\left( a_h^K\left( u_I-u_\pi,\delta_h \right) + a^K\left( u_\pi-u, \delta_h \right) \right)\\
+&\leq \mathcal{F}_h\|\delta_h\|_{H_0^1(\Omega)}-a_h(u_I-u_\pi,\delta_h)-a(u_\pi-u,\delta_h)\\
+&\hspace{2.9cm} \text{(inequalities \ref{calFh}, \ref{aKvsa}, and hypothesis }1.b)\\
+&\leq  \|\delta_h\|_{H_0^1(\Omega)} \left (\mathcal{F}_h + \alpha^+\|u_I-u_\pi\|_{H_0^1(\Omega)} + \|u_\pi-u\|_{H_0^1(\Omega)} \right)
 \end{align*}
+
 \end{enumerate}
 \end{proof}
 
