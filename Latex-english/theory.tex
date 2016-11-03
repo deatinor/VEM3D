@@ -40,7 +40,7 @@ Cauchy-Schwarz inequality has been used to show both continuities. Thus by Lax-M
 \subsection{Discrete problem}
 
 \subsubsection{Domain decomposition}
-Consider a sequence of decompositions $\{T_h\}_h$ of $\Omega$, where $h$ corresponds to the maximum of the diameters $h_K$ of the elements $K$ of the decomposition $T_h$. Let us recall the definition of the diameter of an element: 
+Consider a sequence of decompositions $\{T_h\}_h$ of $\Omega$, where $h$ corresponds to the maximum of the diameters $h_K$ of the elements $K$ of the decomposition $T_h$. Note that since $\Omega$ is a polygonal domain, then for every $h$, $T_h = \Omega$. Let us recall the definition of the diameter of an element: 
 
 \begin{definition}[Diameter]
 The \textit{diameter} of an element $K$ of a domain decomposition is defined as $h_K = \max_{x,y\in K}|x-y|$. 
@@ -78,14 +78,10 @@ For every domain decomposition $T_h$, the aim of VEM is to come up with a finite
 \item the unique solution of the discretized problem has good approximation properties with respect to the exact solution. 
 \end{itemize}
 
-\noindent To do so, we first need to introduce a notation, and a broken $H^1$-semi-norm to deal with functions of $H^1(T_h) := \Pi_{K\in T_h}H^1(K)$, for all $h$. 
+\noindent To do so, we first need to introduce a notation:
 \begin{notation}
 For every domain $D$ and every non-negative integer $k$, $\mathbb{P}_k(D)$ is the set of polynomials in $D$ of degree at most $k$, and $\mathbb{P}_{-1}(D)=\{0\}$.
 \end{notation}
-\begin{definition}[Broken semi-norm on $H^1(T_h)$]
-For all $v\in H^1(T_h)$, we define:
-$$ |v|_{h,1} := \left( \sum_{K\in T_h} |\nabla v|^2_{L^2(K)} \right)^{\frac{1}{2}}.$$
-\end{definition}
 
 \noindent To figure out what we exactly need to build, we state and prove the following theorem: 
 
@@ -111,16 +107,16 @@ Under these hypothesis,
 \item the following discrete problem: find $u_h\in V_h$ such that for all $v_h \in V_h$, \begin{equation}\label{discretepb}
 a_h(u_h,v_h) = \langle f_h,v_h\rangle,
 \end{equation} admits a unique solution;
-\item for every approximations $u_I\in V_h$ and $u_\pi$ that is piecewise in $\mathbb{P}_k$, of the exact solution $u$ of problem (\ref{weak}), $$\|u-u_h\|_{H_0^1(\Omega)} \leq C\left(\|u-u_I\|_{H_0^1(\Omega)} + |u-u_\pi|_{h,1} + \mathcal{F}_h\right),$$
+\item for every approximations $u_I\in V_h$ and $u_\pi$ that is piecewise in $\mathbb{P}_k$, of the exact solution $u$ of problem (\ref{weak}), $$\|u-u_h\|_{H_0^1(\Omega)} \leq C\left(\|u-u_I\|_{H_0^1(\Omega)} + \|u-u_\pi\|_{H_0^1(\Omega)} + \mathcal{F}_h\right),$$
 where $C=C(\alpha^-,\alpha^-)$, and $\mathcal{F}_h$ is the smallest constant such that for all $v\in V_h$, 
 \begin{equation}\label{calFh}
 F(v)-\langle f_h,v\rangle| \leq \mathcal{F}_h\|v\|_{H^0_1(\Omega)}.
 \end{equation}
 \end{enumerate}
 \end{theorem}
-\begin{notation}
-Note that here, for $f_h\in V_h'$ and $v_h \in V_h$, $\langle f_h,v_h\rangle$ designs the action of $f_h$ on $v_h$.
-\end{notation}
+\begin{remark}
+Note that here, for $f_h\in V_h'$ and $v_h \in V_h$, $\langle f_h,v_h\rangle$ designs the action of $f_h$ on $v_h$. Moreover, $u_\pi$ of conclusion $2.$ is piecewise in $\mathbb{P}_k$ and $\mathbb{P}_k(K)$ is included in $V_h|_K$ for all $K\in T_h$ (from hypothesis $2.a$), so $u_\pi$ belongs to $\Pi_{K\in V_h} \mathbb{P}_k(K) \subset \Pi_{K\in V_h} V_h|_K = V_h \subset H_0^1(\Omega)$. This is why the norm of $u-u_\pi$ can be the $H_0^1(\Omega)$ norm. 
+\end{remark}
 
 \noindent Let us prove this theorem:
 \begin{proof}
@@ -172,15 +168,29 @@ Consequently, by Lax-Milgram theorem, the discrete problem (\ref{discretepb}) ad
 &\hspace{0.5cm} - \sum_{K\in T_h}\left( a_h^K\left( u_I-u_\pi,\delta_h \right) + a^K\left( u_\pi-u, \delta_h \right) \right)\\
 &\leq \mathcal{F}_h\|\delta_h\|_{H_0^1(\Omega)}-a_h(u_I-u_\pi,\delta_h)-a(u_\pi-u,\delta_h)\\
 &\hspace{2.9cm} \text{(inequalities \ref{calFh}, \ref{aKvsa}, and hypothesis }1.b)\\
-&\leq  \|\delta_h\|_{H_0^1(\Omega)} \left (\mathcal{F}_h + \alpha^+\|u_I-u_\pi\|_{H_0^1(\Omega)} + \|u_\pi-u\|_{H_0^1(\Omega)} \right)
+&\leq \|\delta_h\|_{H_0^1(\Omega)} \left (\mathcal{F}_h + \alpha^+\|u_I-u_\pi\|_{H_0^1(\Omega)} + \|u_\pi-u\|_{H_0^1(\Omega)} \right)\\
+&\hspace{5cm} (\text{continuity of } a_h \text{ and of } a)\\
+&\leq \|\delta_h\|_{H_0^1(\Omega)} \max\{\alpha^+,1\} \Big(\mathcal{F}_h + \|u_I-u_\pi\|_{H_0^1(\Omega)} \\
+& \hspace{4.85cm} + \|u_\pi-u\|_{H_0^1(\Omega)} \Big).
 \end{align*}
-
+Now, let $\tilde{C} := \max\{\alpha^+,1\}>0$, then:
+\begin{equation*}
+\alpha^- \|\delta_h\|_{H_0^1(\Omega)}\leq \tilde{C}\left(\mathcal{F}_h + \|u_I-u_\pi\|_{H_0^1(\Omega)} + \|u_\pi-u\|_{H_0^1(\Omega)} \right)
+\end{equation*}
+Therefore, we finally obtain:
+\begin{align*}
+\|u-u_h\|_{H_0^1(\Omega)} &\leq \|u-u_I\|_{H_0^1(\Omega)} + \|\delta_h\|_{H_0^1(\Omega)} \text{ (triangle inequality)}\\ 
+&\leq \left(\frac{\tilde{C}}{\alpha^-}+1\right)\left(\mathcal{F}_h + \|u_I-u_\pi\|_{H_0^1(\Omega)} + \|u_\pi-u\|_{H_0^1(\Omega)} \right).
+\end{align*}
+Consequently, we have proved conclusion $2.$ with $C=\frac{\tilde{C}}{\alpha^-}$, and the theorem is showed. 
 \end{enumerate}
 \end{proof}
 
 \begin{remark}
 \begin{itemize} A few remarks on the theorem:
-\item The integer $k\geq 1$ will be the order of accuracy. \textbf{TODO tell more??}
+\item The integer $k\geq 1$ will correspond to the order of accuracy of the method.
 \item The stability property (hypothesis $2.c$) is crucial to show the existence and uniqueness of the solution since without it, we cannot show that $a_h$ has the required properties to apply Lax-Milgram theorem.
 \end{itemize}
 \end{remark}
+
+Consequently, for every integer $k\geq 1$, our aim is now to build the subspace $V_h$, the symmetric bilinear form $a_h$ and the element $f_h$ so that they approximate well the original problem and they verify the properties of the theorem.
