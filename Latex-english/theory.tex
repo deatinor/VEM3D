@@ -2,13 +2,13 @@
 \section{Theoretical background}\label{theory}
 
 \subsection{Variational problem}
-We recall the strong formulation of the general problem: on a polygonal domain $\Omega \subset \R^n$, find a solution $u$ of 
+We recall the strong formulation of the general problem: on a polygonal domain $\Omega \subset \R^d$, find a solution $u$ of 
 \begin{equation}\label{strong}
 -\Delta u = f \text{ in } \Omega, \text{ and } u = g \text{ on } \Gamma = \partial \Omega,
 \end{equation}
 where $f$ and $g$ are given functions defined respectively in $\Omega$ and on $\Gamma$. 
 
-Suppose that $f\in L^2(\Omega)$ and $g\in H^{1/2}(\Gamma)$. We multiply equation (\ref{strong}) by an arbitrary function $v$, and we integrate the strong form. Thanks to Green formula, we obtain:
+Suppose that $f\in L^2(\Omega)$, $g\in H^{1/2}(\Gamma)$ and $d=1,2$ or $3$. We multiply equation (\ref{strong}) by a test function $v$, and we integrate the strong form. Thanks to Green formula, we obtain:
 \begin{equation}\label{varform} \int_\Omega \nabla u\cdot \nabla v \, \mathrm{d}\Omega- \int_\Gamma (\nabla u \cdot \vec{n}) v \, \mathrm{d}\Gamma = \int_\Omega fv \, \mathrm{d}\Omega, 
 \end{equation}
 where $\vec{n}$ is the exterior normal vector to the surface boundary $\Gamma$. Suppose there exist a continuous lifting of the boundary data $R_g \in H^1(\Omega)$ such that  $R_g|_{\Gamma} = g$. We set $\tilde{u} = u - R_g$, so that $\tilde{u}|_\Gamma = u|_\Gamma - R_g|\Gamma = g-g = 0$, and $\nabla \tilde{u} = \nabla \tilde{u} - \nabla \tilde{R_g}$. Consequently, equation (\ref{varform}) becomes: 
@@ -70,7 +70,7 @@ In the same way, since $H_0^1(\Omega)|_K = V|_K \subset H^1(K)$, we define for a
 
 \noindent Furthermore, for every $h$, we will denote $E_h$ the set of edges of the decomposition $T_h$. 
 
-\subsubsection{Space discretization}
+\subsubsection{Towards space discretization}
 For every domain decomposition $T_h$, the aim of VEM is to come up with a finite subspace $V_h$ of $V$ such that:
 \begin{itemize}
 \item we can obtain a discretized version of problem (\ref{weak}),
@@ -194,3 +194,31 @@ Consequently, we have proved conclusion $2.$ with $C=\frac{\tilde{C}}{\alpha^-}$
 \end{remark}
 
 Consequently, for every integer $k\geq 1$, our aim is now to build the subspace $V_h$, the symmetric bilinear form $a_h$ and the element $f_h$ so that they approximate well the original problem and they verify the properties of the theorem.
+
+\subsubsection{Choice of the degrees of freedom}
+
+\textbf{TODO: done only for d=2 --> to be precised somewhere, or to be generalised!}
+
+For this whole part, we consider a certain domain decomposition $T_h$ for some $h$, and $K$ any element of $T_h$. $K$ can consequently be any simple polygon. Moreover, let $n$ be the number of edges of $K$. Note that in $1$D, the edges and the vertices are the same, and their number is always $2$, for any element $K$. In $2$D, the number of edges is also equal to the number of vertices of $K$, even if now edges and vertices are two distinct geometrical entities. In $3$D, however, the number of vertices and of edges is not the same. We also fix an integer $k\geq 1$. Finally, to any domain $D\subset T_h$, we will denote $E_D$ the set of edges of $D$ with respect to the domain decomposition $T_h$.
+
+We now define the set $\mathbb{B}_k(\partial K)$ as the set of continuous functions on $\partial K$ that are polygonal on each edge of $\partial K$. That is: 
+$$ \mathbb{B}_k(\partial K) := \Big\{v\in C^0(\partial K): \forall e\in E_{\partial K}, v|_e \in \mathbb{P}_k(e)\Big\}.$$
+
+\begin{proposition}
+The space $\mathbb{B}_k(\partial K)$ is a linear space of dimension $nk$. 
+\end{proposition}
+\begin{proof}
+First, let us prove that it is a linear space. Let $v,w\in \mathbb{B}_k(\partial K)$ and $\lambda$ in $\R$. Then, since $v$ and $w$ are continuous on $\partial K$, then $\lambda v+w$ is also continuous on $\partial K$. Moreover, for all $e\in E_{\partial K}$, $v|_e, w|_e\in \mathbb{P}_k(e)$. Consequently, $\left(\lambda v + w\right)|_e = \lambda v|_e + w|_e \in \mathbb{P}_k(\partial K)$. \\
+Now, let us compute the dimension of $\mathbb{B}_k(\partial K)$. We know that a polynomial of degree at most $k$ is uniquely determined by its values in $k+1$ points. This is true for all the $n$ edges of $K$, so that it gives us $n(k+1)$ conditions. But we should take into account the values of the polynomial on the vertices of $K$, and count them only once and not twice (i.e. not once per edge that leaves this vertex). Consequently, the dimension of $\mathbb{B}_k(\partial K)$ is $n(k+1)-n = nk$. 
+\end{proof}
+
+Now, recall that we want to build a space $V_h$ such that for all $K\in T_h$, we have $\mathbb{P}_k(K) \subset V_h|_K$. Moreover, we remark that every function $v$ belongs to $\mathbb{P}_k(K)$ if and only if $\Delta v\in \mathbb{P}_{k-2}(K)$. This is why we decide to introduce the following space:
+$$ V^{K,k} = \Big\{ v\in H^1(K) : v|_{\partial K} \in \mathbb{B}_k(\partial K), \Delta v|_K \in \mathbb{P}_{k-2}(K)\Big\}.$$
+We recall that $\mathbb{P}_{-1} = \{0\}$. Note that if in $V^{K,k}$ we were asking $\Delta v|_K$ to belong to a lower-degree polynomial space, then we would have $\mathbb{P}_k(K)\not\subset V^{K,k}$, which is bad since we want the opposite. Instead, if in $V^{K,k}$ we were asking $\Delta v|_K$ to belong to a higher-degree polynomial space, then we would still have in $V^{K,k}$ all the polynomials of degree at most $k$ as well. However, it adds some useless complexity to the finite space, i.e. we would need to determine more degrees of freedom without obtaining a better method at the end.
+
+\begin{proposition}
+The space $V^{K,k}$ has dimension $N^K := nk + \frac{k(k-1)}{2}$. 
+\end{proposition}
+To have a first insight on this, let us first look at some particular cases. If $k=1$, $V^{K,k}$ is the space of harmonic functions (since for every function $v$ in $V^{K,1}, \Delta v|_K = 0$), that are linear on the $n$ edges of $K$. Consequently, these functions are completely determined by their values on the $n$ vertices of $K$ (we have indeed also $n$ vertices since we look at $2$D domains as for now \textbf{TODO: change?}).
+
+
