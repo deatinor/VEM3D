@@ -8,10 +8,10 @@ We recall the strong formulation of the general problem: on a polygonal domain $
 \end{equation}
 where $f$ and $g$ are given functions defined respectively in $\Omega$ and on $\Gamma$. 
 
-Suppose that $f\in L^2(\Omega)$, $g\in H^{1/2}(\Gamma)$ and $d=1,2$ or $3$. We multiply equation (\ref{strong}) by a test function $v$, and we integrate the strong form. Thanks to Green formula, we obtain:
+Suppose that $f\in L^2(\Omega)$, $g\in H^{1/2}(\Gamma)$ and $d=1,2$ or $3$. We multiply equation (\ref{strong}) by a test function $v$, and we integrate the strong formulation of the problem. Thanks to Green formula, we obtain:
 \begin{equation}\label{varform} \int_\Omega \nabla u\cdot \nabla v \, \mathrm{d}\Omega- \int_\Gamma (\nabla u \cdot \vec{n}) v \, \mathrm{d}\Gamma = \int_\Omega fv \, \mathrm{d}\Omega, 
 \end{equation}
-where $\vec{n}$ is the exterior normal vector to the surface boundary $\Gamma$. Suppose there exist a continuous lifting of the boundary data $R_g \in H^1(\Omega)$ such that  $R_g|_{\Gamma} = g$. We set $\tilde{u} = u - R_g$, so that $\tilde{u}|_\Gamma = u|_\Gamma - R_g|\Gamma = g-g = 0$, and $\nabla \tilde{u} = \nabla \tilde{u} - \nabla \tilde{R_g}$. Consequently, equation (\ref{varform}) becomes: 
+where $\vec{n}$ is the exterior normal vector to the surface boundary $\Gamma$. Suppose there exist a continuous lifting of the boundary data $R_g \in H^1(\Omega)$ such that  $R_g|_{\Gamma} = g$. We set $\tilde{u} = u - R_g$, so that $\tilde{u}|_\Gamma = u|_\Gamma - R_g|\Gamma = g-g = 0$, and $\nabla \tilde{u} = \nabla u - \nabla R_g$. Consequently, equation (\ref{varform}) becomes: 
 \begin{equation*}
 \int_\Omega \nabla \tilde{u}\cdot \nabla v \, \mathrm{d}\Omega = \int_\Omega fv \, \mathrm{d}\Omega -	 \int_\Omega \nabla R_g \cdot \nabla v \, \mathrm{d}\Omega.
 \end{equation*}
@@ -19,14 +19,14 @@ In the following, we omit the tilde on $\tilde{u}$ for a matter of simplicity. T
 \begin{equation}\label{weak}
 a(u,v) = F(v),
 \end{equation}
-where $a : V \times V \rightarrow \R$ is such that $a(w,v) = \int_\Omega \nabla w\cdot \nabla v \, \mathrm{d}\Omega$ for all $w,v\in V$, and $F:V\rightarrow\R$ is such that for all $v\in V$, $F(v) = -a(R_g, v) + \int_\Omega fv \, \mathrm{d}\Omega$.
+where $a : V \times V \rightarrow \R$ is such that $a(w,v) = \int_\Omega \nabla w\cdot \nabla v \, \mathrm{d}\Omega$ for all $w,v\in V$, and $F:V\rightarrow\R$ is such that for all $v\in V$, $F(v) = \int_\Omega fv \, \mathrm{d}\Omega - a(R_g, v)$.
 
-We choose the semi-norm of $H^1(\Omega)$ to be the norm we will use for functions in $H^1_0(\Omega) = V$, thanks to Poincaré inequality. In $V$ equipped to this norm, it is easy to show that $a$ is a continuous and coercive bilinear form, and that $F$ is a linear and continuous functional. We just prove here some of the main properties: for all $w,v\in V$, 
+We choose the semi-norm of $H^1(\Omega)$ to be the norm we will use for functions in $H^1_0(\Omega) = V$, thanks to Poincaré inequality. In $V$ equipped to this norm, it is easy to show that $a$ is a continuous and coercive bilinear form, and that $F$ is a linear and continuous functional. We just prove here some of the main properties: for all $v,w\in V$, 
 \begin{align*}
-F(v) &= \int_\Omega fv \, \mathrm{d}\Omega -\int_\Omega \nabla R_g \cdot \nabla v \, \mathrm{d} \Omega \\
-& \leq \int_\Omega fv \, \mathrm{d}\Omega \text{\textbf{ TODO NOOOOOOOOOOOOOOO!!}}\\
-& \leq \|f\|_{L^2(\Omega)}\|v\|_{L^2(\Omega)}\\
-& \leq \|f\|_{L^2(\Omega)}\|v\|_{H_0^1(\Omega)};
+\left|F(v)\right| &= \left|\int_\Omega fv \, \mathrm{d}\Omega -\int_\Omega \nabla R_g \cdot \nabla v \, \mathrm{d} \Omega\right| \\
+& \leq \left|\int_\Omega fv \, \mathrm{d}\Omega\right| + \left|\int_\Omega \nabla R_g \cdot \nabla v \, \mathrm{d} \Omega\right|\\
+& \leq \|f\|_{L^2(\Omega)}\|v\|_{L^2(\Omega)} + \|\nabla R_g\|_{L^2(\Omega)}\|\nabla v\|_{L^2(\Omega)}\\
+& \leq \left(\|f\|_{L^2(\Omega)}+\|\nabla R_g\|_{L^2(\Omega)}\right)\|v\|_{H_0^1(\Omega)};
 \end{align*}
 \begin{align}
 a(v,v) &= \int_\Omega \nabla v \cdot \nabla v \, \mathrm{d} \Omega = \|v\|^2_{H_0^1(\Omega)} \nonumber \\
@@ -134,10 +134,11 @@ a_h^K(w,v) &\leq \left( a_h^K\left( w,w \right)\right)^{1/2}\left( a_h^K\left (v
 \end{align}
 Consequently, for all $w_h, v_h \in V_h$, 
 \begin{align*}
-a_h(w_h,v_h) &= \sum_{K\in T_h} a_h^K(w_h,v_h) &\text{ (hypothesis }1.b)\\
-&\leq \alpha^+\sum_{K\in T_h} |w_h|_{1,K}|v_h|_{1,K} &\text{ (inequality \ref{ahKalpha})}\\
-&\leq \alpha^+\left( \sum_{K\in T_h}|w_h|_{1,K}^2 \right)^{1/2}\left( \sum_{K\in T_h}|v_h|_{1,K}^2 \right)^{1/2} &\text{ (discrete CS)}\\
-&= \alpha^+ \|w_h\|_{H_0^1(\Omega)}\|v_h\|_{H_0^1(\Omega)}. &\text{ (equation \ref{H01normsplit})}
+a_h(w_h,v_h) &= \sum_{K\in T_h} a_h^K(w_h,v_h) \hspace{3.2cm} \text{ (hypothesis }1.b)\\
+&\leq \alpha^+\sum_{K\in T_h} |w_h|_{1,K}|v_h|_{1,K} \hspace{2.4cm}\text{ (inequality \ref{ahKalpha})}\\
+&\leq \alpha^+\left( \sum_{K\in T_h}|w_h|_{1,K}^2 \right)^{1/2}\left( \sum_{K\in T_h}|v_h|_{1,K}^2 \right)^{1/2} \\
+&\hspace{6.9cm} \text{ (discrete CS)}\\
+&= \alpha^+ \|w_h\|_{H_0^1(\Omega)}\|v_h\|_{H_0^1(\Omega)}. \hspace{2.6cm}\text{ (equation \ref{H01normsplit})}
 \end{align*}
 \item Coercivity of $a_h$: for all $v_h\in V_h$, 
 \begin{align*}
