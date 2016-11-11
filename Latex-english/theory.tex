@@ -198,28 +198,114 @@ Consequently, for every integer $k\geq 1$, our aim is now to build the subspace 
 
 \subsubsection{Choice of the degrees of freedom}
 
-\textbf{TODO: done only for d=2 --> to be precised somewhere, or to be generalised!}
+For this whole part, we consider a certain domain decomposition $T_h$ for some $h$, and $K$ any element of $T_h$. In $2$D, $K$ can consequently be any simple polygon, while in $3$D, $K$ can be any polyhedron. Moreover, for any geometrical domain $D$, let $n_e^D$ be the number of edges of $D$, $n_v^D$ be its number of vertices, and $n_f^D$ be its number of faces. Note that for a $1$D domain, the faces, the edges and the vertices represent the same geometrical elements. As a convention, we will thus set $n_e^D = 0$ in this case, that is only if $D$ is $1$-dimensional. We also note that for a $2$D domain, the faces and the edges represent the same geometrical elements as well. Furthermore, in $2$D, the number of edges of $D$ is equal to the number of vertices of $D$, even if here edges and vertices are two distinct geometrical entities. In $3$D, however, the number of vertices and of edges is not the same.
 
-For this whole part, we consider a certain domain decomposition $T_h$ for some $h$, and $K$ any element of $T_h$. $K$ can consequently be any simple polygon. Moreover, let $n$ be the number of edges of $K$. Note that in $1$D, the edges and the vertices are the same, and their number is always $2$, for any element $K$. In $2$D, the number of edges is also equal to the number of vertices of $K$, even if now edges and vertices are two distinct geometrical entities. In $3$D, however, the number of vertices and of edges is not the same. We also fix an integer $k\geq 1$. Finally, to any domain $D\subset T_h$, we will denote $E_D$ the set of edges of $D$ with respect to the domain decomposition $T_h$.
+Let us also fix an integer $k\geq 1$. Finally, to any element $K\in T_h$, we will denote $E_K$ the set of edges of $K$ with respect to the domain decomposition $T_h$, and $F_K$ its set of faces. Note that as a consequence, $F_K=\{K\}$ if the dimension $d$ is $1$ or $2$, and $E_K=\{K\}$ if $d=1$. \\
 
-We now define the set $\mathbb{B}_k(\partial K)$ as the set of continuous functions on $\partial K$ that are polygonal on each edge of $\partial K$. That is: 
-$$ \mathbb{B}_k(\partial K) := \Big\{v\in C^0(\partial K): \forall e\in E_{\partial K}, v|_e \in \mathbb{P}_k(e)\Big\}.$$
+We now define, for every face $f_K$ of $K$, the set $\mathbb{B}_k(\partial f_K)$ as the set of continuous functions on $\partial f_K$ that are polygonal on each edge of $\partial f_K$. That is: 
+$$ \mathbb{B}_k(\partial f_K) := \Big\{v\in C^0(\partial f_K): \forall e\in E_{\partial f_K}, v|_e \in \mathbb{P}_k(e)\Big\}.$$
 
-\begin{proposition}
-The space $\mathbb{B}_k(\partial K)$ is a linear space of dimension $nk$. 
+\begin{proposition} \label{dimBk}
+The space $\mathbb{B}_k(\partial f_K)$ is a linear space. Moreover, its dimension is equal to $n_v^{f_K}+n_e^{f_K}(k-1)$.
 \end{proposition}
+
 \begin{proof}
-First, let us prove that it is a linear space. Let $v,w\in \mathbb{B}_k(\partial K)$ and $\lambda$ in $\R$. Then, since $v$ and $w$ are continuous on $\partial K$, then $\lambda v+w$ is also continuous on $\partial K$. Moreover, for all $e\in E_{\partial K}$, $v|_e, w|_e\in \mathbb{P}_k(e)$. Consequently, $\left(\lambda v + w\right)|_e = \lambda v|_e + w|_e \in \mathbb{P}_k(\partial K)$. \\
-Now, let us compute the dimension of $\mathbb{B}_k(\partial K)$. We know that a polynomial of degree at most $k$ is uniquely determined by its values in $k+1$ points. This is true for all the $n$ edges of $K$, so that it gives us $n(k+1)$ conditions. But we should take into account the values of the polynomial on the vertices of $K$, and count them only once and not twice (i.e. not once per edge that leaves this vertex). Consequently, the dimension of $\mathbb{B}_k(\partial K)$ is $n(k+1)-n = nk$. 
+First, let us prove that it is a linear space. Let $v,w\in \mathbb{B}_k(\partial f_K)$ and $\lambda$ in $\R$. Then, since $v$ and $w$ are continuous on $\partial f_K$, then $\lambda v+w$ is also continuous on $\partial f_K$. Moreover, for all $e\in E_{\partial f_K}$, $v|_e, w|_e\in \mathbb{P}_k(e)$. Consequently, $\left(\lambda v + w\right)|_e = \lambda v|_e + w|_e \in \mathbb{P}_k(\partial f_K)$. \\
+Now, let us compute the dimension of $\mathbb{B}_k(\partial f_K)$. We know that a polynomial of degree at most $k$ is uniquely determined by its values in $k+1$ points: 
+\begin{itemize}
+\item its values at the vertices, which gives us $n_v^{f_K}$ conditions;
+\item its values at $k-1$ additional points on each edge of $f_K$, if $\dim(f_K)>1$, which gives us $n_e^{f_K}(k-1)$ additional conditions.
+\end{itemize}
+Therefore, the dimension of $\mathbb{B}_k(\partial f_K)$ is equal to $n_v^{f_K}+n_e^{f_K}(k-1)$. 
 \end{proof}
 
-Now, recall that we want to build a space $V_h$ such that for all $K\in T_h$, we have $\mathbb{P}_k(K) \subset V_h|_K$. Moreover, we remark that every function $v$ belongs to $\mathbb{P}_k(K)$ if and only if $\Delta v\in \mathbb{P}_{k-2}(K)$. This is why we decide to introduce the following space:
-$$ V^{K,k} = \Big\{ v\in H^1(K) : v|_{\partial K} \in \mathbb{B}_k(\partial K), \Delta v|_K \in \mathbb{P}_{k-2}(K)\Big\}.$$
-We recall that $\mathbb{P}_{-1} = \{0\}$. Note that if in $V^{K,k}$ we were asking $\Delta v|_K$ to belong to a lower-degree polynomial space, then we would have $\mathbb{P}_k(K)\not\subset V^{K,k}$, which is bad since we want the opposite. Instead, if in $V^{K,k}$ we were asking $\Delta v|_K$ to belong to a higher-degree polynomial space, then we would still have in $V^{K,k}$ all the polynomials of degree at most $k$ as well. However, it adds some useless complexity to the finite space, i.e. we would need to determine more degrees of freedom without obtaining a better method at the end.
+\begin{remark}
+Since $f_K$ is either a polygon (if $d=1$ or $2$) or a segment (if $d=1$), then in any case, $n_e^{f_K} = n_f^{f_K}$, so that $$\dim\left(\mathbb{B}_k\left(\partial f_K\right)\right) = n_v^{f_K}+n_e^{f_K}(k-1) = kn_v^{f_K} = kn_e^{f_K}.$$ 
+But we have chosen to state the proposition without using this fact to make clear the choice of degrees of freedom that will follow in this report.
+\end{remark}
+
+Now, recall that we want to build a space $V_h$ such that for all $K\in T_h$, we have $\mathbb{P}_k(K) \subset V_h|_K$. Moreover, we remark that every function $v$ belongs to $\mathbb{P}_k(K)$ if and only if $\Delta v\in \mathbb{P}_{k-2}(K)$. This is the reason why we decide to introduce the following local spaces $V^{K,k}$. To define it, we separate the case $d=1$ or $2$ to the case $d=3$. \newline 
+
+\noindent \underline{Case 1:} $d=1$ or $2$. \\
+\noindent Let us define:
+$$ V^{K,k} := \Big\{ v\in H^1(K) : v|_{\partial K} \in \mathbb{B}_k(\partial K), \Delta v|_K \in \mathbb{P}_{k-2}(K)\Big\}.$$
+We recall that $\mathbb{P}_{-1} = \{0\}$. Note that if in $V^{K,k}$ we were asking $\Delta v|_K$ to belong to a lower-degree polynomial space, we would have $\mathbb{P}_k(K)\not\subset V^{K,k}$, which is bad since we want the opposite. Instead, if in $V^{K,k}$ we were asking $\Delta v|_K$ to belong to a higher-degree polynomial space, then we would still have in $V^{K,k}$ all the polynomials of degree at most $k$ as well. However, it adds some useless complexity to the finite space, i.e. we would need to determine more degrees of freedom without obtaining a better method at the end.
 
 \begin{proposition}
-The space $V^{K,k}$ has dimension $N^K := nk + \frac{k(k-1)}{2}$. 
+The dimension $N^{K,k}$ of the space $V^{K,k}$ is equal to $$N^{K,k} = n_v^K +(k-1)$$ if $d=1$, or if $d=2$, it is equal to $$N^{K,k} = n_v^K + n_e^K(k-1) + \frac{k(k-1)}{2}.$$
 \end{proposition}
-To have a first insight on this, let us first look at some particular cases. If $k=1$, $V^{K,k}$ is the space of harmonic functions (since for every function $v$ in $V^{K,1}, \Delta v|_K = 0$), that are linear on the $n$ edges of $K$. Consequently, these functions are completely determined by their values on the $n$ vertices of $K$ (we have indeed also $n$ vertices since we look at $2$D domains as for now \textbf{TODO: change?}).
+To have a first insight on this, let us first look at some particular cases. If $k=1$, $V^{K,1}$ is the space of harmonic functions (since for every function $v$ in $V^{K,1}, \Delta v|_K = 0$), that are linear on the edges of $K$. Consequently, these functions are completely determined by their values on the $n_v^K$ vertices of $K$, and $N^{K,1} = n_v^K$. 
+
+If $k=2$, $V^{K,2}$ is the space of functions that have a constant Laplacian and that are linear or quadratic on the boundary of $K$. Moreover, for every constant $c$ and every boundary function $h\in \mathbb{B}_2(\partial K)$, by Lax-Milgram theorem \textbf{(TODO: really?? because LM is in weak form, not in strong form)}, there is a unique function $v\in H^1(K)$ such that $\Delta v = c$ in $K$, and $v = h$ on $\partial K$. Consequently, $$N^{K,2} = \dim\big(\mathbb{B}_2(\partial K)\big)+1 = n_v^K + n_e^K+1.$$
+
+We give now the proof of the general case:
+\begin{proof}
+For every $q\in \mathbb{P}_{k-2}(K)$, and for every $h\in \mathbb{B}_k(\partial K)$, by Lax-Milgram theorem \textbf{(TODO: ????!!)}, there is a unique function $v\in H^1(K)$ such that $\Delta v = q$ in $K$ and $v = h$ on $\partial K$. Consequently, 
+\begin{align*}\dim\left(V^{K,k}\right) := N^{K,k} &= \dim\big(\mathbb{B}_k\left(\partial K\right)\big)+\dim\big(\mathbb{P}_{k-2}(K)\big)\\
+&= n_v^K + n_e^K(k-1) + \binom{k-2+d}{k-2}.
+\end{align*}
+So if $d=1$, 
+$N^{K,k} = n_v^K + n_e^K(k-1) + (k-1) = n_v^K + (k-1),$ since $n_e^K=0$, and if $d=2$, we obtain $N^{K,k} = n_v^K + n_e^K(k-1) + \frac{k(k-1)}{2}.$
+\end{proof}
+
+\noindent \underline{Case 2:} $d=3$. \\
+\noindent We need intermediate steps before defining $V^{K,k}$, so let us first define the following: for all $f_k\in F_K$, 
+$$V^{f_K,k} := \left\{v\in H^1(f_K) : v|_{\partial f_K} \in \mathbb{B}_k(f_K), \Delta v|_{f_K}\in \mathbb{P}_{k-2}(f_K)\right\}.$$
+Note that this is the exact same definition as the one of $V^{K,k}$ for $d=1,2$, except that this time, we define the set of functions that are $H^1$ on the faces of $K$, and not directly on the element $K$ itself. With the exact same proof as before, we consequently know that the dimension of $V^{f_K,k}$ is equal to $n_v^{f_K} + n_e^{f_K}(k-1) + \frac{k(k-1)}{2}$. 
+
+We now enlarge this space on functions that are continuous on $\partial K$ entirely. Since $\partial K = \cup_{f_K\in F_K}f_K$, This gives us the following definition:
+$$V^{\partial K,k} := \left\{v\in C^0(\partial K) : v|_{f_K}\in V^{f_K,k}, \forall f_K\in F_K\right\}.$$
+To compute the dimension of this space, we have to be careful not to take multiple times the same edge into account, since each edge is shared by two faces. That is, the dimension is not the sum over the faces $f_K$ of the dimension of $V^{f_K,k}$. Instead, if we come back from the proof of Proposition \ref{dimBk}, we get:
+\begin{align*}
+\dim\left(V^{\partial K, k}\right) &= n_v^K + n_e^K(k-1) + \sum_{f_K\in F_K}\Big(\dim\big(\mathbb{P}_{k-2} \left(f_K\right)\big)\Big)\\
+&= n_v^K + n_e^K(k-1) + n_f\frac{k(k-1)}{2}.
+\end{align*}
+
+We are now finally able to define the space $V^{K,k}$, similarly as in the $1$- and $2$-dimensional cases:
+$$V^{K,k} = \left\{v\in H^1(K):v|_{\partial K}\in V^{\partial K,k}, \Delta v|_K\in \mathbb{P}_{k-2}(K)\right\}.$$
+To sum up briefly, $V^{K,k}$ is the set of $H^1(K)$-functions that are polynomials of degree at most $k$ on each edge of $K$, and whose gradient is a polynomial of degree at most $k-2$ in element $K$ itself and on each face of $K$. 
+
+\begin{proposition}
+The dimension $N^{K,k}$ of the space $V^{K,k}$ is equal to $$N^{K,k} = n_v^K + n_e^K(k-1) + n_f\frac{k(k-1)}{2} + \frac{k(k^2-1)}{6}.$$
+\end{proposition}
+\begin{proof}
+Indeed, 
+\begin{align*}
+N^{K,k} &= \dim\left(V^{\partial K,k}\right) +  \dim\left(\mathbb{P}_{k-2}(K)\right)\\
+&= n_v^K + n_e^K(k-1) + n_f\frac{k(k-1)}{2} + \binom{k-2+d}{k-2} \\
+&= n_v^K + n_e^K(k-1) + n_f\frac{k(k-1)}{2} + \frac{k(k^2-1)}{6}.
+\end{align*}
+\end{proof}
 
 
+The dimension of the local space $V^{K,k}$ correspond to the number of degrees of freedom we have to choose to have an easy way to express any local function belonging to this space. VEM is based on the following choice. For all $v_h\in V^{K,k}$, $v_h$ is uniquely define if we know the following values:
+\begin{itemize}
+\item the values of $v_h$ at each vertex of $K$. Let $\mathcal{V}^{K,k}$ be the set of such values;
+\item if $d>1$, the values of $v_h$ at $k-1$ intermediate points on each edge of $K$. Let $\mathcal{E}^{K,k}$ be the set of such values;
+\item if $d=3$, the moments up to order $k-2$ of $v_h$ on each face $f_K\in F_K$, that is $\frac{1}{|f_K|}\int_{f_K}m(\mathbf{x})v_h(\mathbf{x})\, \mathrm{d}\mathbf{x}$, for all $m\in \mathcal{M}_{k-2}(f_K)$, where $$\mathcal{M}_{k-2}(D) = \left\{\left(\frac{\mathbf{x}-\mathbf{x}_D}{h_D}\right)^\mathbf{s} : |\mathbf{s}|\leq k-2\right\},$$ with $\mathbf{x}_D$ being the barycentre of the geometrical element $D$, $h_D$ its diameter, $|\mathbf{s}| = \sum_{i=1}^d s_i$ with $s_i\in \N_0$, and $\mathbf{x}^\mathbf{s}=\prod_{i=1}^d x_i^{s_i},$ $x_i$ being the $i$-th coordinate of $\mathbf{x}$. Let $\mathcal{F}^{K,k}$ be the set of such values.
+\item the moments up to order $k-2$ of $v_h$ in $K$, that is $\frac{1}{|K|}\int_Km(\mathbf{x})v_h(\mathbf{x})\, \mathrm{d}\mathbf{x}$, for all $m\in \mathcal{M}_{k-2}(K)$, where $\mathcal{M}_{k-2}(K)$ is defined in the previous point. Let $\mathcal{P}^{K,k}$ be the set of such values.
+\end{itemize}
+
+\noindent Note that for $k=2$, the only moment in $\mathcal{M}_{k-2}(D)$ is the mean value of $v_h$ in $D$, for every geometrical domain $D$.  Moreover, in $1$D, the degrees of freedom are only $\mathcal{V}^{K,k}\cup\mathcal{P}^{K,k}$, and in $2$D, the degrees of freedom are only $\mathcal{V}^{K,k}\cup\mathcal{E}^{K,k} \cup\mathcal{P}^{K,k}$.
+We easily verify that the total number of degrees of freedom is equal to $N^{K,k}$. Indeed, we first see straightforward that $\mathcal{V}^{K,k}$ contains $n_v^K$ degrees of freedom, and $\mathcal{E}^{K,k}$ contains $n_e^K(k-1)$ degrees of freedom. Then, we have to distinguish the cases $d=1$, $d=2$ and $d=3$. \\
+
+\noindent \underline{Case 1:} $d=1$. \\
+\noindent The cardinality of $\mathcal{P}^{K,k}$ is equal to the cardinality of $\mathcal{M}_{k-2}(K)$, which is the number of multi-indices $\mathbf{s}$ such that $|\mathbf{s}|\leq k-2$ is equal to the dimension of $\mathbb{P}_{k-2}(K)$, that is $k-1$. Consequently, 
+$$\#\left(\mathcal{V}^{K,k} \cup\mathcal{P}^{K,k}\right)=n_v^K
++(k-1)= \dim\left(V^{K,k}\right).
+$$
+
+\noindent \underline{Case 2:} $d=2$.\\
+\noindent In this case, we do not consider $\mathcal{F}^{K,k}$, but we do consider $\mathcal{P}^{K,k}$. Moreover, the number of multi-indices $\mathbf{s}$ such that $|\mathbf{s}|\leq k-2$ is also equal to the dimension of $\mathbb{P}_{k-2}(K)$, but with $K$ that is now in $2$ dimensions. So that $\#\big(\mathcal{M}_{k-2}(K)\big) = \frac{k(k-1)}{2}$. Consequently, 
+$$\#\left(\mathcal{V}^{K,k}\cup \mathcal{E}^{K,k} \cup\mathcal{P}^{K,k}\right)=n_v^K
++ n_e^K(k-1) + \frac{k(k-1)}{2}= \dim\left(V^{K,k}\right).
+$$
+
+\noindent \underline{Case 3:} $d=3$.\\
+\noindent In this case, the cardinal of $\mathcal{P}^{K,k}$ is also equal to the number of multi-indices $\mathbf{s}$ such that $|\mathbf{s}|\leq k-2$, that is to the dimension of $\mathbb{P}_{k-2}(K)$. But this time, $K$ is in $3$ dimensions, so $\dim\big(\mathbb{P}_{k-2}(K)\big) = \frac{k(k^2-1)}{6}.$ Moreover, we also have to consider the set $\mathcal{F}^{K,k}$ of degrees of freedom. This set has cardinality $n_f^K\cdot\#\left(\mathcal{M}_{k-2}(f_K)\right) = n_f^K\frac{k(k-1)}{2}$, since $f_K$ is a $2$-dimensional geometrical object. Consequently, we obtain:
+\begin{align*}
+&\#\left(\mathcal{V}^{K,k}\cup \mathcal{E}^{K,k}\cup\mathcal{F}^{K,k} \cup\mathcal{P}^{K,k}\right)\\
+= \hspace{1mm}&n_v^K
++ n_e^K(k-1) + n_f^K\frac{k(k-1)}{2} + \frac{k(k^2-1)}{6}\\
+= \hspace{1mm}&\dim\left(V^{K,k}\right).
+\end{align*}
