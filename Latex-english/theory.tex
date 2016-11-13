@@ -228,7 +228,7 @@ Now, recall that we want to build a space $V_h$ such that for all $K\in T_h$, we
 
 \noindent \underline{Case 1:} $d=1$ or $2$. \\
 \noindent Let us define:
-$$ V^{K,k} := \Big\{ v\in H^1(K) : v|_{\partial K} \in \mathbb{B}_k(\partial K), \Delta v|_K \in \mathbb{P}_{k-2}(K)\Big\}.$$
+$$ V^{K,k} := \Big\{ v\in H^1(K) : v|_{\partial K} \in \mathbb{B}_k(\partial K), \Delta v \in \mathbb{P}_{k-2}(K)\Big\}.$$
 We recall that $\mathbb{P}_{-1} = \{0\}$. Note that if in $V^{K,k}$ we were asking $\Delta v|_K$ to belong to a lower-degree polynomial space, we would have $\mathbb{P}_k(K)\not\subset V^{K,k}$, which is bad since we want the opposite. Instead, if in $V^{K,k}$ we were asking $\Delta v|_K$ to belong to a higher-degree polynomial space, then we would still have in $V^{K,k}$ all the polynomials of degree at most $k$ as well. However, it adds some useless complexity to the finite space, i.e. we would need to determine more degrees of freedom without obtaining a better method at the end.
 
 \begin{proposition}
@@ -236,11 +236,11 @@ The dimension $N^{K,k}$ of the space $V^{K,k}$ is equal to $$N^{K,k} = n_v^K +(k
 \end{proposition}
 To have a first insight on this, let us first look at some particular cases. If $k=1$, $V^{K,1}$ is the space of harmonic functions (since for every function $v$ in $V^{K,1}, \Delta v|_K = 0$), that are linear on the edges of $K$. Consequently, these functions are completely determined by their values on the $n_v^K$ vertices of $K$, and $N^{K,1} = n_v^K$. 
 
-If $k=2$, $V^{K,2}$ is the space of functions that have a constant Laplacian and that are linear or quadratic on the boundary of $K$. Moreover, for every constant $c$ and every boundary function $h\in \mathbb{B}_2(\partial K)$, by Lax-Milgram theorem \textbf{(TODO: really?? because LM is in weak form, not in strong form)}, there is a unique function $v\in H^1(K)$ such that $\Delta v = c$ in $K$, and $v = h$ on $\partial K$. Consequently, $$N^{K,2} = \dim\big(\mathbb{B}_2(\partial K)\big)+1 = n_v^K + n_e^K+1.$$
+If $k=2$, $V^{K,2}$ is the space of functions that have a constant Laplacian and that are linear or quadratic on the boundary of $K$. Moreover, for every constant $c$ and every boundary function $h\in \mathbb{B}_2(\partial K)$, by Lax-Milgram theorem, there is a unique function $v\in H^1(K)$ such that $\Delta v = c$ in $K$, and $v = h$ on $\partial K$. The differential problem has to be interpreted in a weak way. Consequently, $$N^{K,2} = \dim\big(\mathbb{B}_2(\partial K)\big)+1 = n_v^K + n_e^K+1.$$
 
 We give now the proof of the general case:
 \begin{proof}
-For every $q\in \mathbb{P}_{k-2}(K)$, and for every $h\in \mathbb{B}_k(\partial K)$, by Lax-Milgram theorem \textbf{(TODO: ????!!)}, there is a unique function $v\in H^1(K)$ such that $\Delta v = q$ in $K$ and $v = h$ on $\partial K$. Consequently, 
+For every $q\in \mathbb{P}_{k-2}(K)$, and for every $h\in \mathbb{B}_k(\partial K)$, by Lax-Milgram theorem, there is a unique function $v\in H^1(K)$ such that $\Delta v = q$ in $K$ and $v = h$ on $\partial K$, weakly. Consequently, 
 \begin{align*}\dim\left(V^{K,k}\right) := N^{K,k} &= \dim\big(\mathbb{B}_k\left(\partial K\right)\big)+\dim\big(\mathbb{P}_{k-2}(K)\big)\\
 &= n_v^K + n_e^K(k-1) + \binom{k-2+d}{k-2}.
 \end{align*}
@@ -250,7 +250,7 @@ $N^{K,k} = n_v^K + n_e^K(k-1) + (k-1) = n_v^K + (k-1),$ since $n_e^K=0$, and if 
 
 \noindent \underline{Case 2:} $d=3$. \\
 \noindent We need intermediate steps before defining $V^{K,k}$, so let us first define the following: for all $f_k\in F_K$, 
-$$V^{f_K,k} := \left\{v\in H^1(f_K) : v|_{\partial f_K} \in \mathbb{B}_k(f_K), \Delta v|_{f_K}\in \mathbb{P}_{k-2}(f_K)\right\}.$$
+$$V^{f_K,k} := \left\{v\in H^1(f_K) : v|_{\partial f_K} \in \mathbb{B}_k(f_K), \Delta v\in \mathbb{P}_{k-2}(f_K)\right\}.$$
 Note that this is the exact same definition as the one of $V^{K,k}$ for $d=1,2$, except that this time, we define the set of functions that are $H^1$ on the faces of $K$, and not directly on the element $K$ itself. With the exact same proof as before, we consequently know that the dimension of $V^{f_K,k}$ is equal to $n_v^{f_K} + n_e^{f_K}(k-1) + \frac{k(k-1)}{2}$. 
 
 We now enlarge this space on functions that are continuous on $\partial K$ entirely. Since $\partial K = \cup_{f_K\in F_K}f_K$, This gives us the following definition:
@@ -262,8 +262,8 @@ To compute the dimension of this space, we have to be careful not to take multip
 \end{align*}
 
 We are now finally able to define the space $V^{K,k}$, similarly as in the $1$- and $2$-dimensional cases:
-$$V^{K,k} = \left\{v\in H^1(K):v|_{\partial K}\in V^{\partial K,k}, \Delta v|_K\in \mathbb{P}_{k-2}(K)\right\}.$$
-To sum up briefly, $V^{K,k}$ is the set of $H^1(K)$-functions that are polynomials of degree at most $k$ on each edge of $K$, and whose gradient is a polynomial of degree at most $k-2$ in element $K$ itself and on each face of $K$. 
+$$V^{K,k} = \left\{v\in H^1(K):v|_{\partial K}\in V^{\partial K,k}, \Delta v\in \mathbb{P}_{k-2}(K)\right\}.$$
+To sum up briefly, $V^{K,k}$ is a finite dimensional subspace of $H^1(K)$ composed of functions that are polynomials of degree at most $k$ on each edge of $K$, and whose gradient is a polynomial of degree at most $k-2$ in the element $K$ itself and on each face of $K$. 
 
 \begin{proposition}
 The dimension $N^{K,k}$ of the space $V^{K,k}$ is equal to $$N^{K,k} = n_v^K + n_e^K(k-1) + n_f\frac{k(k-1)}{2} + \frac{k(k^2-1)}{6}.$$
@@ -309,3 +309,61 @@ $$
 + n_e^K(k-1) + n_f^K\frac{k(k-1)}{2} + \frac{k(k^2-1)}{6}\\
 = \hspace{1mm}&\dim\left(V^{K,k}\right).
 \end{align*}
+
+\begin{remark}\label{existvhfromdof}
+On one hand, the degrees of freedom in $\mathcal{V}^{K,k}$ and in $\mathcal{E}^{K,k}$ uniquely determine a polynomial of degree at most $k$ on each edge of $K$. That is, $v_h$ is uniquely determined on the edges of $K$ by those two sets of degrees of freedom. On the other hand, $\mathcal{F}^{K,k}$ and $\mathcal{P}^{K,k}$ determine the $L^2$-projection of $v_h$ onto $\mathbb{P}_{k-2}(f_K)$ for all $f_K \in F_K$, and onto $\mathbb{P}_{k-2}(K)$, respectively. 
+\end{remark}
+
+Let us show now this important proposition:
+\begin{proposition}
+The degrees of freedom of $\mathcal{V}^{K,k}\cup\mathcal{E}^{K,k}\cup \mathcal{F}^{K,k}\cup\mathcal{P}^{K,k}$ are unisolvent for $V^{K,k}$. This means that for any values of the degrees of freedom, there exist a unique $v_h$ in $V^{K,k}$ defined from them. 
+\end{proposition}
+\begin{proof}
+In remark \ref{existvhfromdof}, we have seen that from the degrees of freedom, we can define a $v_h$ in $V^{K,k}$. It thus remains to prove that the map that sends the degrees of freedom onto a function of $V^{K,k}$ is injective. 
+
+Let us call $P_{k-2}^D$ the projection operator, in the $L^2(D)$-norm, onto the space $\mathbb{P}_{k-2}(D)$, for any space $D$. We thus want to show that any function $v_h\in V^{K,k}$ such that:
+\begin{enumerate}
+\item $v_h=0$ on $\cup_{e\in E_K} \bar{e}$, 
+\item $P_{k-2}^{f_K}v_h = 0$ in $f_K$, for all $f_K\in F_K$,
+\item $P_{k-2}^Kv_h = 0$ in $K$,
+\end{enumerate}
+is identically zero in $K$. In particular, condition $1.$ means that $v_h = 0$ on $\partial f_K$, for all $f_K\in F_K$.
+
+To do so, we first show that $\Delta v_h|_{f_K}=0$ in $f_K$, for all $f_K\in K$. So that together with $1.$, we have the following problem for all $f_K\in F_K$: find $w_h\in V^{f_K,k}$ such that $\Delta w_h = 0$ in $f_K$ and $w_h = 0$ on $\partial f_K\subset E_K$. We can easily see that the function $w_h\equiv 0$ is solution of this problem. Moreover, by Strang theorem, the problem admits a unique solution. Consequently, the only solution is the identically zero solution in $V^{f_K,K}$. This would thus show that $v_h|_{f_K}$ is zero in $V^{f_K,K}$, for all $f_K\in F_K$. Therefore, $v_h|_{\partial K} \equiv 0$. 
+
+Then, if we show that $\Delta v_h = 0$ in the whole element $K$, then together with the preceding result, we would have the following problem: find $v_h$ in $V^{K,k}$ such that $\Delta v_h = 0$ in $K$ and $v_h=0$ on $\partial K$. Again by Strang theorem, the problem admits a unique solution, and the identically zero function in $V^{K,k}$ is this solution. Consequently, $v_h$ is identically zero in $K$, and thus the degrees of freedom chosen above are unisolvent for $V^{K,k}$. \\
+
+It thus remains to show the two points just mentioned. So let $f_K\in F_K$ and let $v_h\in V^{K,k}$ such that $v_h$ verifies $1.$, $2.$ and $3.$ In the following, we will write $v_h$ instead of $v_h|_{f_K}$ in order to lighten the proof. We will first solve the following auxiliary problem: $\forall q\in \mathbb{P}_{k-2}(f_K)$, find $w\in H_0^1(f_K)$ such that \begin{equation}\label{auxpb}
+a^{f_K}(w,v)=\int_{f_K}qv \,\mathrm{d}f_K\text{, for all } v\in H_0^1(f_K),
+\end{equation}
+which can also be written as $-\Delta w=q$ in $f_K$, $w=0$ on $\partial f_K$ but it is meant in a weak form. Since we know by Lax-Milgram theorem that there exists a unique solution $w$ to this problem, we will write this solution as $w=-\Delta_{L^2(f_K)}^{-1}(q)$. Now, let us define the map $R:\mathbb{P}_{k-2}(f_K)\rightarrow\mathbb{P}_{k-2}(f_K)$ such that:
+$$R(q) := P_{k-2}^{f_K}\left(-\Delta_{L^2(f_K)}^{-1}\left( q\right) \right)=P_{k-2}^{f_K}(w).$$
+Let us see that $R$ is injective. Indeed, for every $q\in \mathbb{P}_{k-2}(f_K)$, 
+\begin{align*}
+\int_{f_K} qR(q)\, \mathrm{d}f_K &= \int_{f_K} qP_{k-2}^{f_K}\left(-\Delta_{L^2(f_K)}^{-1} \left(q\right)\right)\,\mathrm{d}f_K\\
+&=\int_{f_K} qP_{k-2}^{f_K}(w)\, \mathrm{d}f_K \hspace{2.2cm}\left(\text{by definition of }\Delta_{L^2(f_K)}^{-1}\right)\\
+&=\int_{f_K} qw\,\mathrm{d}{f_K}\hspace{0.3cm}\left(\text{since }q\in\mathbb{P}_{k-2}(f_K)\text{ and definition of }P_{k-2}^{f_K}\right)\\
+&= a^{f_K}(w,w).\hspace{3.7cm} \text{(equation \ref{auxpb} with }v=w)
+\end{align*}
+So since $w\in H_0^1(f_K)$, we have:
+$$R(q)=0 \Leftrightarrow a^{f_K}(w,w)=0 \Leftrightarrow w=0 \text{ (}a^{f_K}\text{ coercive bilinear form) }\Leftrightarrow q=0.$$
+The implication left-to-right of the last implication is obvious since any identically zero function has a (weak) Laplacian equal to $0$. The implication right-to-left comes from Lax-Milgram theorem and from the fact that the identically zero function in $f_K$ is zero on the boundary of $f_K$ and has a Laplacian equal to zero in $f_K$. Consequently, the map $R$ is injective. 
+Moreover, since $v_h=0$ on $\partial f_K$, then $v_h\in H_0^1(f_K)$, and since $\Delta v_h \in \mathbb{P}_{k-2}(f_K)$, then:
+$$P_{k-2}^{f_K}(v_h)=P_{k-2}^{f_K}\left(-\Delta_{L^2(f_K)}^{-1}
+\left(-\Delta v_h\right)\right) = R\left(-\Delta v_h\right).$$
+The first equality comes from the definition of $\Delta_{L^2(f_K)}^{-1}$, while the second one comes from the definition of $R$. Finally, we get
+$$P_{k-2}^{f_K}(v_h)=0 \Rightarrow R\left(-\Delta v_h\right) = 0 \Rightarrow -\Delta v_h = 0.$$
+Therefore, we have just proved that for all $f_K\in F_K$, then $\Delta v_h|_{f_K}=0$. Consequently, following what we have said before, $v_h|_{\partial K} \equiv 0$. 
+
+We can now repeat the exact same proof with $v_h$ instead of $v_h|_{f_K}$, $a^K$ instead of $a^{f_K}$, and with $K$ instead of $f_K$, to show that we get $\Delta v_h = 0$ in $K$, knowing that $v_h = 0$ in $\partial K$ and assuming hypothesis $3.$ introduced at the beginning of the proof. Therefore, $v_h$ is identically zero in $K$, and thus the map that sends the degrees of freedom onto a function of $V^{K,k}$ is injective. Consequently, the degrees of freedom are unisolvent for $V^{K,k}$. 
+\end{proof}
+
+\begin{remark}
+We emphasis the fact that the Laplace operator present in the definition of $V^{K,k}$ is here the most natural choice, but it could be replaced by any other second-order elliptic operator. The only mandatory and required properties on $V^{K,k}$ are that: 
+\begin{itemize}
+\item $\dim\left(V^{K,k}\right) = N^{K,k}$, 
+\item $\mathbb{P}_{k}(K)\subset V^{K,k}$, 
+\item $V^{K,k}$ is made of functions that are in polynomials of degree at most $k$ on each edge, 
+\item the degrees of freedom $\mathcal{V}^{K,k}\cup\mathcal{E}^{K,k}\cup \mathcal{F}^{K,k}\cup\mathcal{P}^{K,k}$ are unisolvent for $V^{K,k}$.
+\end{itemize}
+\end{remark}

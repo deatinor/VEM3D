@@ -6,27 +6,27 @@
 \contentsline {subsubsection}{\numberline {1.2.1}Domain decomposition}{5}
 \contentsline {subsubsection}{\numberline {1.2.2}Towards space discretization}{6}
 \contentsline {subsubsection}{\numberline {1.2.3}Choice of the degrees of freedom}{10}
-\contentsline {section}{\numberline {2}Algorithms}{16}
-\contentsline {subsection}{\numberline {2.1}Polygons}{16}
-\contentsline {subsubsection}{\numberline {2.1.1}Area in $2$D}{16}
-\contentsline {subsubsection}{\numberline {2.1.2}Area in $3$D}{16}
-\contentsline {subsubsection}{\numberline {2.1.3}Oriented normal vector}{17}
-\contentsline {subsubsection}{\numberline {2.1.4}Barycentre}{17}
-\contentsline {subsection}{\numberline {2.2}Polyhedron}{18}
-\contentsline {subsubsection}{\numberline {2.2.1}Volume}{18}
-\contentsline {subsubsection}{\numberline {2.2.2}Coherent orientation of the normal vectors of the faces}{19}
-\contentsline {subsubsection}{\numberline {2.2.3}Exterior normal vectors to the polyhedron}{20}
-\contentsline {section}{\numberline {3}Implementation}{22}
-\contentsline {subsection}{\numberline {3.1}Global view on the code}{22}
-\contentsline {subsection}{\numberline {3.2}Mesh}{23}
-\contentsline {subsubsection}{\numberline {3.2.1}Point and MeshPoint}{24}
-\contentsline {subsubsection}{\numberline {3.2.2}Polygon and Polyhedron}{26}
-\contentsline {subsubsection}{\numberline {3.2.3}Mesh, Mesh2D, Mesh3D}{29}
-\contentsline {subsection}{\numberline {3.3}Laplace equation and VEM solver}{33}
-\contentsline {subsubsection}{\numberline {3.3.1}Problem and Laplace classes}{33}
-\contentsline {subsubsection}{\numberline {3.3.2}Monomials and MonomialsPolygon}{35}
-\contentsline {subsubsection}{\numberline {3.3.3}Solver, SolverVEM, SolverVEM2D and SolverVEM3D}{37}
-\contentsline {subsubsection}{\numberline {3.3.4}BoundaryCondition, Dirichlet}{41}
-\contentsline {subsubsection}{\numberline {3.3.5}Error}{43}
-\contentsline {subsection}{\numberline {3.4}Visualization of the results}{45}
-\contentsline {section}{\numberline {4}Conclusion}{46}
+\contentsline {section}{\numberline {2}Algorithms}{19}
+\contentsline {subsection}{\numberline {2.1}Polygons}{19}
+\contentsline {subsubsection}{\numberline {2.1.1}Area in $2$D}{19}
+\contentsline {subsubsection}{\numberline {2.1.2}Area in $3$D}{19}
+\contentsline {subsubsection}{\numberline {2.1.3}Oriented normal vector}{20}
+\contentsline {subsubsection}{\numberline {2.1.4}Barycentre}{20}
+\contentsline {subsection}{\numberline {2.2}Polyhedron}{21}
+\contentsline {subsubsection}{\numberline {2.2.1}Volume}{21}
+\contentsline {subsubsection}{\numberline {2.2.2}Coherent orientation of the normal vectors of the faces}{22}
+\contentsline {subsubsection}{\numberline {2.2.3}Exterior normal vectors to the polyhedron}{23}
+\contentsline {section}{\numberline {3}Implementation}{25}
+\contentsline {subsection}{\numberline {3.1}Global view on the code}{25}
+\contentsline {subsection}{\numberline {3.2}Mesh}{26}
+\contentsline {subsubsection}{\numberline {3.2.1}Point and MeshPoint}{27}
+\contentsline {subsubsection}{\numberline {3.2.2}Polygon and Polyhedron}{29}
+\contentsline {subsubsection}{\numberline {3.2.3}Mesh, Mesh2D, Mesh3D}{32}
+\contentsline {subsection}{\numberline {3.3}Laplace equation and VEM solver}{36}
+\contentsline {subsubsection}{\numberline {3.3.1}Problem and Laplace classes}{36}
+\contentsline {subsubsection}{\numberline {3.3.2}Monomials and MonomialsPolygon}{38}
+\contentsline {subsubsection}{\numberline {3.3.3}Solver, SolverVEM, SolverVEM2D and SolverVEM3D}{40}
+\contentsline {subsubsection}{\numberline {3.3.4}BoundaryCondition, Dirichlet}{44}
+\contentsline {subsubsection}{\numberline {3.3.5}Error}{46}
+\contentsline {subsection}{\numberline {3.4}Visualization of the results}{48}
+\contentsline {section}{\numberline {4}Conclusion}{49}
