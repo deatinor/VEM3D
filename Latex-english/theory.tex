@@ -57,9 +57,9 @@ A \textit{simple polygon} is an open simply connected set whose boundary is a no
 For any set of functions $W$, we note $W|_K$ the set of functions in $W$ restricted to $K$, that is $W|_K = \{f|_K : f\in W\}$. 
 \end{notation}
 
-\noindent Let us define the bilinear form $a$ reduced to any element $K$ of a decomposition $T_h$ of $\Omega$ as follows: for all $w,v\in V$,
-$$ a^K(w,v) := \int_K \nabla w \cdot \nabla v \, \mathrm{d}\Omega. $$
-Since the restriction of any function of $H_0^1(\Omega)$ on a sub-domain $K$ of $\Omega$ is still in $H_0^1(\Omega)$ but not necessarily in $H_0^1(K)$, we note that $a^K$ is also a continuous bilinear form on $V\times V$, but it is not necessarily coercive. Moreover, for all $h$ and for all $w,v\in V$, \begin{equation}\label{aKvsa}
+\noindent Let us define the bilinear form $a$ reduced to any sub-domain $D$ of $\Omega$ as follows: for all $w,v\in V$,
+$$ a^D(w,v) := \int_D \nabla w \cdot \nabla v \, \mathrm{d}\Omega. $$
+Since the restriction of any function of $H_0^1(\Omega)$ on a sub-domain $D$ of $\Omega$ is still in $H_0^1(\Omega)$, is in $H^1(D)$, but is not necessarily in $H_0^1(D)$, we note that $a^D$ is also a continuous bilinear form on $V\times V$, but it is not necessarily coercive. Moreover, if $D$ is some element $K$ of $T_h$, for all $h$ and for all $w,v\in V$, \begin{equation}\label{aKvsa}
 a(w,v) = \sum_{K\in T_h} a^K(w,v).
 \end{equation}
 In the same way, since $H_0^1(\Omega)|_K = V|_K \subset H^1(K)$, we define for all $v\in V$
@@ -336,7 +336,7 @@ Then, if we show that $\Delta v_h = 0$ in the whole element $K$, then together w
 It thus remains to show the two points just mentioned. So let $f_K\in F_K$ and let $v_h\in V^{K,k}$ such that $v_h$ verifies $1.$, $2.$ and $3.$ In the following, we will write $v_h$ instead of $v_h|_{f_K}$ in order to lighten the proof. We will first solve the following auxiliary problem: $\forall q\in \mathbb{P}_{k-2}(f_K)$, find $w\in H_0^1(f_K)$ such that \begin{equation}\label{auxpb}
 a^{f_K}(w,v)=\int_{f_K}qv \,\mathrm{d}f_K\text{, for all } v\in H_0^1(f_K),
 \end{equation}
-which can also be written as $-\Delta w=q$ in $f_K$, $w=0$ on $\partial f_K$ but it is meant in a weak form. Since we know by Lax-Milgram theorem that there exists a unique solution $w$ to this problem, we will write this solution as $w=-\Delta_{L^2(f_K)}^{-1}(q)$. Now, let us define the map $R:\mathbb{P}_{k-2}(f_K)\rightarrow\mathbb{P}_{k-2}(f_K)$ such that:
+which can also be written as $-\Delta w=q$ in $f_K$, $w=0$ on $\partial f_K$ but it is meant in a weak form. Since we know by Lax-Milgram theorem that there exists a unique solution $w$ to this problem, we will write this solution as $w=-\Delta_{L^2(f_K)}^{-1}(q)$. Indeed, since we look at functions in $H_0^1(f_K)$, then the bilinear form $a^{f_K}$ is continuous and coercive, and the proof is similar as the one done on the bilinear form $a$ (see equation \ref{acoercive}). Now, let us define the map $R:\mathbb{P}_{k-2}(f_K)\rightarrow\mathbb{P}_{k-2}(f_K)$ such that:
 $$R(q) := P_{k-2}^{f_K}\left(-\Delta_{L^2(f_K)}^{-1}\left( q\right) \right)=P_{k-2}^{f_K}(w).$$
 Let us see that $R$ is injective. Indeed, for every $q\in \mathbb{P}_{k-2}(f_K)$, 
 \begin{align*}
