@@ -85,7 +85,7 @@ For every domain $D$ and every non-negative integer $k$, $\mathbb{P}_k(D)$ is th
 
 \noindent To figure out what we exactly need to build, we state and prove the following theorem: 
 
-\begin{theorem}
+\begin{theorem} \label{conditions}
 For each $h$, suppose that
 \begin{enumerate}
 \item on one hand, we have \begin{enumerate}
@@ -110,7 +110,7 @@ a_h(u_h,v_h) = \langle f_h,v_h\rangle,
 \item for every approximations $u_I\in V_h$ and $u_\pi$ that is piecewise in $\mathbb{P}_k$, of the exact solution $u$ of problem (\ref{weak}), $$\|u-u_h\|_{H_0^1(\Omega)} \leq C\left(\|u-u_I\|_{H_0^1(\Omega)} + \|u-u_\pi\|_{H_0^1(\Omega)} + \mathcal{F}_h\right),$$
 where $C=C(\alpha^-,\alpha^-)$, and $\mathcal{F}_h$ is the smallest constant such that for all $v\in V_h$, 
 \begin{equation}\label{calFh}
-F(v)-\langle f_h,v\rangle| \leq \mathcal{F}_h\|v\|_{H^0_1(\Omega)}.
+F(v)-\langle f_h,v\rangle \leq \mathcal{F}_h\|v\|_{H^0_1(\Omega)}.
 \end{equation}
 \end{enumerate}
 \end{theorem}
@@ -231,7 +231,7 @@ Now, recall that we want to build a space $V_h$ such that for all $K\in T_h$, we
 $$ V^{K,k} := \Big\{ v\in H^1(K) : v|_{\partial K} \in \mathbb{B}_k(\partial K), \Delta v \in \mathbb{P}_{k-2}(K)\Big\}.$$
 We recall that $\mathbb{P}_{-1} = \{0\}$. Note that if in $V^{K,k}$ we were asking $\Delta v|_K$ to belong to a lower-degree polynomial space, we would have $\mathbb{P}_k(K)\not\subset V^{K,k}$, which is bad since we want the opposite. Instead, if in $V^{K,k}$ we were asking $\Delta v|_K$ to belong to a higher-degree polynomial space, then we would still have in $V^{K,k}$ all the polynomials of degree at most $k$ as well. However, it adds some useless complexity to the finite space, i.e. we would need to determine more degrees of freedom without obtaining a better method at the end.
 
-\begin{proposition}
+\begin{proposition} \label{dimVKkd12}
 The dimension $N^{K,k}$ of the space $V^{K,k}$ is equal to $$N^{K,k} = n_v^K +(k-1)$$ if $d=1$, or if $d=2$, it is equal to $$N^{K,k} = n_v^K + n_e^K(k-1) + \frac{k(k-1)}{2}.$$
 \end{proposition}
 To have a first insight on this, let us first look at some particular cases. If $k=1$, $V^{K,1}$ is the space of harmonic functions (since for every function $v$ in $V^{K,1}, \Delta v|_K = 0$), that are linear on the edges of $K$. Consequently, these functions are completely determined by their values on the $n_v^K$ vertices of $K$, and $N^{K,1} = n_v^K$. 
@@ -258,27 +258,27 @@ $$V^{\partial K,k} := \left\{v\in C^0(\partial K) : v|_{f_K}\in V^{f_K,k}, \fora
 To compute the dimension of this space, we have to be careful not to take multiple times the same edge into account, since each edge is shared by two faces. That is, the dimension is not the sum over the faces $f_K$ of the dimension of $V^{f_K,k}$. Instead, if we come back from the proof of Proposition \ref{dimBk}, we get:
 \begin{align*}
 \dim\left(V^{\partial K, k}\right) &= n_v^K + n_e^K(k-1) + \sum_{f_K\in F_K}\Big(\dim\big(\mathbb{P}_{k-2} \left(f_K\right)\big)\Big)\\
-&= n_v^K + n_e^K(k-1) + n_f\frac{k(k-1)}{2}.
+&= n_v^K + n_e^K(k-1) + n_f^K\frac{k(k-1)}{2}.
 \end{align*}
 
 We are now finally able to define the space $V^{K,k}$, similarly as in the $1$- and $2$-dimensional cases:
 $$V^{K,k} = \left\{v\in H^1(K):v|_{\partial K}\in V^{\partial K,k}, \Delta v\in \mathbb{P}_{k-2}(K)\right\}.$$
 To sum up briefly, $V^{K,k}$ is a finite dimensional subspace of $H^1(K)$ composed of functions that are polynomials of degree at most $k$ on each edge of $K$, and whose gradient is a polynomial of degree at most $k-2$ in the element $K$ itself and on each face of $K$. 
 
-\begin{proposition}
-The dimension $N^{K,k}$ of the space $V^{K,k}$ is equal to $$N^{K,k} = n_v^K + n_e^K(k-1) + n_f\frac{k(k-1)}{2} + \frac{k(k^2-1)}{6}.$$
+\begin{proposition}\label{dimVKkd3}
+The dimension $N^{K,k}$ of the space $V^{K,k}$ is equal to $$N^{K,k} = n_v^K + n_e^K(k-1) + n_f^K\frac{k(k-1)}{2} + \frac{k(k^2-1)}{6}.$$
 \end{proposition}
 \begin{proof}
 Indeed, 
 \begin{align*}
 N^{K,k} &= \dim\left(V^{\partial K,k}\right) +  \dim\left(\mathbb{P}_{k-2}(K)\right)\\
-&= n_v^K + n_e^K(k-1) + n_f\frac{k(k-1)}{2} + \binom{k-2+d}{k-2} \\
-&= n_v^K + n_e^K(k-1) + n_f\frac{k(k-1)}{2} + \frac{k(k^2-1)}{6}.
+&= n_v^K + n_e^K(k-1) + n_f^K\frac{k(k-1)}{2} + \binom{k-2+d}{k-2} \\
+&= n_v^K + n_e^K(k-1) + n_f^K\frac{k(k-1)}{2} + \frac{k(k^2-1)}{6}.
 \end{align*}
 \end{proof}
 
 
-The dimension of the local space $V^{K,k}$ correspond to the number of degrees of freedom we have to choose to have an easy way to express any local function belonging to this space. VEM is based on the following choice. For all $v_h\in V^{K,k}$, $v_h$ is uniquely define if we know the following values:
+The dimension of the local space $V^{K,k}$ correspond to the number of degrees of freedom we have to choose to have an easy way to express any local function belonging to this space. VEM is based on the following choice. For all $v_h\in V^{K,k}$, $v_h$ is uniquely defined if we know the following values:
 \begin{itemize}
 \item the values of $v_h$ at each vertex of $K$. Let $\mathcal{V}^{K,k}$ be the set of such values;
 \item if $d>1$, the values of $v_h$ at $k-1$ intermediate points on each edge of $K$. Let $\mathcal{E}^{K,k}$ be the set of such values;
@@ -287,7 +287,12 @@ The dimension of the local space $V^{K,k}$ correspond to the number of degrees o
 \end{itemize}
 
 \noindent Note that for $k=2$, the only moment in $\mathcal{M}_{k-2}(D)$ is the mean value of $v_h$ in $D$, for every geometrical domain $D$.  Moreover, in $1$D, the degrees of freedom are only $\mathcal{V}^{K,k}\cup\mathcal{P}^{K,k}$, and in $2$D, the degrees of freedom are only $\mathcal{V}^{K,k}\cup\mathcal{E}^{K,k} \cup\mathcal{P}^{K,k}$.
-We easily verify that the total number of degrees of freedom is equal to $N^{K,k}$. Indeed, we first see straightforward that $\mathcal{V}^{K,k}$ contains $n_v^K$ degrees of freedom, and $\mathcal{E}^{K,k}$ contains $n_e^K(k-1)$ degrees of freedom. Then, we have to distinguish the cases $d=1$, $d=2$ and $d=3$. \\
+We easily verify the following proposition:
+\begin{proposition} \label{chosenlocaldofnb}
+The total number of chosen degrees of freedom is equal to $N^{K,k}$. 
+\end{proposition}
+\begin{proof}
+Indeed, we first see straightforward that $\mathcal{V}^{K,k}$ contains $n_v^K$ degrees of freedom, and $\mathcal{E}^{K,k}$ contains $n_e^K(k-1)$ degrees of freedom. Then, we have to distinguish the cases $d=1$, $d=2$ and $d=3$. \\
 
 \noindent \underline{Case 1:} $d=1$. \\
 \noindent The cardinality of $\mathcal{P}^{K,k}$ is equal to the cardinality of $\mathcal{M}_{k-2}(K)$, which is the number of multi-indices $\mathbf{s}$ such that $|\mathbf{s}|\leq k-2$ is equal to the dimension of $\mathbb{P}_{k-2}(K)$, that is $k-1$. Consequently, 
@@ -309,13 +314,14 @@ $$
 + n_e^K(k-1) + n_f^K\frac{k(k-1)}{2} + \frac{k(k^2-1)}{6}\\
 = \hspace{1mm}&\dim\left(V^{K,k}\right).
 \end{align*}
+\end{proof}
 
 \begin{remark}\label{existvhfromdof}
 On one hand, the degrees of freedom in $\mathcal{V}^{K,k}$ and in $\mathcal{E}^{K,k}$ uniquely determine a polynomial of degree at most $k$ on each edge of $K$. That is, $v_h$ is uniquely determined on the edges of $K$ by those two sets of degrees of freedom. On the other hand, $\mathcal{F}^{K,k}$ and $\mathcal{P}^{K,k}$ determine the $L^2$-projection of $v_h$ onto $\mathbb{P}_{k-2}(f_K)$ for all $f_K \in F_K$, and onto $\mathbb{P}_{k-2}(K)$, respectively. 
 \end{remark}
 
 Let us show now this important proposition:
-\begin{proposition}
+\begin{proposition} \label{localunisolvent}
 The degrees of freedom of $\mathcal{V}^{K,k}\cup\mathcal{E}^{K,k}\cup \mathcal{F}^{K,k}\cup\mathcal{P}^{K,k}$ are unisolvent for $V^{K,k}$. This means that for any values of the degrees of freedom, there exist a unique $v_h$ in $V^{K,k}$ defined from them. 
 \end{proposition}
 \begin{proof}
@@ -367,3 +373,239 @@ We emphasis the fact that the Laplace operator present in the definition of $V^{
 \item the degrees of freedom $\mathcal{V}^{K,k}\cup\mathcal{E}^{K,k}\cup \mathcal{F}^{K,k}\cup\mathcal{P}^{K,k}$ are unisolvent for $V^{K,k}$.
 \end{itemize}
 \end{remark}
+
+\subsubsection{Construction of the discretized space $V_h$}
+Now, we have all the tools to build the discretized space $V_h$ on the whole space $\Omega$, that verifies all conditions of Theorem \ref{conditions}, as desired. So given a space decomposition $T_h$ into simple polygons, and for every integer $k\geq 1$, $V_h:=\prod_{K\in T_h} V^{K,k}$, with the right homogeneous Dirichlet boundary conditions imposed. More precisely, we define $V_h$ independently for the case $1$/$2$D or $3$D:\\
+
+\noindent \underline{Case 1:} $d=1$ or $2$.
+$$
+V_h := \prod_{K\in T_h} V^{K,k} = \left\{v\in H^1_0(\Omega): v|_{\partial K} \in \mathbb{B}_k(\partial K) \text{ and } \Delta v|_K \in \mathbb{P}_{k-2}(K), \forall K\in T_h \right\}.
+$$
+
+\noindent \underline{Case 2:} $d=3$.
+$$
+V_h := \prod_{K\in T_h} V^{K,k} = \left\{v\in H^1_0(\Omega): v|_{\partial K} \in V^{\partial K, k} \text{ and } \Delta v|_K \in \mathbb{P}_{k-2}(K), \forall K\in T_h \right\}.
+$$
+
+\begin{proposition}
+The dimension $N^\text{tot}$ of $V_h$ is equal to:
+\begin{itemize}
+\item $N^\text{tot} = N_v + N_p(k-1)$ if $d=1$;
+\item $N^\text{tot} = N_v + N_e(k-1) + N_p\frac{k(k-1)}{2}$ if $d=2$;
+\item $N^\text{tot} = N_v + N_e(k-1) + N_f\frac{k(k-1)}{2} + N_p\frac{k(k^2-1)}{6}$ if $d=3$, 
+\end{itemize}
+where $N_v$ is the total number of internal vertices, $N_e$ is the total number of internal edges, $N_f$ is the total number of internal faces, and $N_p$ is the total number of elements in $T_h$. 
+\end{proposition}
+
+\begin{proof}
+This is deduced in a straightforward manner from Propositions \ref{dimVKkd12} and \ref{dimVKkd3}, keeping in mind that we impose homogeneous Dirichlet boundary conditions. This is why we only consider \emph{internal} vertices, edges and faces. 
+\end{proof}
+
+Then, the global degrees of freedom in $V_h$ are chosen in the same way as the local degrees of freedom. For all $v_h\in V_h$, $v_h$ is uniquely determined if we know the following values:
+\begin{itemize}
+\item the values of $v_h$ at each internal vertex of $T_h$. Let $\mathcal{V}$ be the set of such values;
+\item if $d>1$, the values of $v_h$ at $k-1$ intermediate points on each internal edge of $T_h$. Let $\mathcal{E}$ be the set of such values;
+\item if $d=3$, the moments up to order $k-2$ of $v_h$ on each internal face $f$ of $T_h$, that is $\frac{1}{|f|}\int_{f}m(\mathbf{x})v_h(\mathbf{x})\, \mathrm{d}\mathbf{x}$, for all $m\in \mathcal{M}_{k-2}(f)$, where as before, $$\mathcal{M}_{k-2}(D) = \left\{\left(\frac{\mathbf{x}-\mathbf{x}_D}{h_D}\right)^\mathbf{s} : |\mathbf{s}|\leq k-2\right\},$$ with $\mathbf{x}_D$ being the barycentre of the geometrical element $D$, $h_D$ its diameter, $|\mathbf{s}| = \sum_{i=1}^d s_i$ with $s_i\in \N_0$, and $\mathbf{x}^\mathbf{s}=\prod_{i=1}^d x_i^{s_i},$ $x_i$ being the $i$-th coordinate of $\mathbf{x}$. Let $\mathcal{F}$ be the set of such values.
+\item the moments up to order $k-2$ of $v_h$ in every element $K\in T_h$, that is $\frac{1}{|K|}\int_Km(\mathbf{x})v_h(\mathbf{x})\, \mathrm{d}\mathbf{x}$, for all $m\in \mathcal{M}_{k-2}(K)$, where $\mathcal{M}_{k-2}(K)$ is defined in the previous point. Let $\mathcal{P}$ be the set of such values.
+\end{itemize}
+Finally, the homogeneous Dirichlet boundary conditions impose $v_h=0$ on the vertices, edges and faces belonging to $\partial \Omega$. In the exact same way as for Proposition \ref{chosenlocaldofnb}, it is straightforward to verify that the total number of chosen degrees of freedom (that is $\#\mathcal{P}+\#\mathcal{V}+\#\mathcal{E}+\#\mathcal{F}$) is indeed equal to the dimension $N^\text{tot}$ of $V_h$. Moreover, Proposition \ref{localunisolvent} implies that the degrees of freedom $\mathcal{P}\cup\mathcal{V}\cup\mathcal{E}\cup\mathcal{F}$ are unisolvent for $V_h$. \\
+%If we assume that there exists $\gamma>0$ such that all the elements $K$ of $T_h$ are unions of a finite number of star-shaped domains $D$ with respect to a ball of radius at least $\gamma h_D$, then we can ensure the existence of an optimal local approximation in $\mathbb{P}_k(K)$ of any smooth function on $K$. The proof can be found in \textbf{TODO REFERENCE 9!!!}. \\
+
+Consequently, since our aim is to be able to apply Theorem \ref{conditions}, it remains to build the symmetric bilinear form $a_h$ and the right-hand side element $f_h$ so that they approximate well the original problem and verify the properties needed. 
+
+\subsubsection{Projection operator $\Pi^\nabla$} \label{projop}
+
+To be able to build the symmetric bilinear form $a_h$, especially in $3$ dimensions, we need to introduce the projection operator $\Pi^\nabla:V^{K,k}\rightarrow \mathbb{P}_k(K)$, for all integer $k\geq 1$ and for all element $K\in T_h$. To be more precise, we should write this operator as $\Pi^\nabla_{K,k}$, but for a sake of simplicity, we will stick to the notation $\Pi^\nabla$. As before, we write $n_v^K$ the number of vertices of $K$. The operator is defined through the following orthogonality condition: for all $v\in V^{K,k}$, 
+\begin{align}
+&\int_K \nabla p\cdot\nabla\left(\Pi^\nabla v - v\right) \, \mathrm{d}K = 0, \text{ for all } p\in\mathbb{P}_k(K), \label{projopdef} \\
+&\begin{cases}
+\frac{1}{n_v^K}\sum_{i=1}^{n_v^K} v(v_i) = \frac{1}{n_v^K}\sum_{i=1}^{n_v^K} \Pi^\nabla v(v_i) \text{ if } k=1; \nonumber \\
+\text{ or }\\ 
+\frac{1}{|K|}\int_{K} v \, \mathrm{d}K = \frac{1}{|K|}\int_{K} \Pi^\nabla v \, \mathrm{d}K \text{ if } k\geq 2,
+\end{cases}
+\end{align}
+where $\{v_i\}_{i=1}^{n_v^K}$ is the set of vertices of $K$. 
+
+This projection operator is defined so that for every $v_h\in V^{K,k}$, we can compute $\Pi^\nabla v_h$ using only the degrees of freedom of $v_h$, defined in the previous section. The proof of this fact can be found in \cite{hitchhicker}.
+
+Note that the projection operator $\Pi$ corresponds to the $a^K$-orthogonal projection on $\mathbb{P}_k(K)$. Moreover, if we take $v=q\in\mathbb{P}_k(K)\subset V^{K,k}$, then $\Pi^\nabla q = q$, so in particular, 
+\begin{align*}
+\|\nabla q\|^2_{L^2(K)} &= \int_K (\nabla q)^2 \, \mathrm{d}K \\
+&\stackrel{(\ref{projopdef})}{=} \int_K \nabla q \cdot \nabla\left(\Pi^\nabla q\right) \,\mathrm{d}K \\
+&\stackrel{(\ref{projopdef})}{=} \int_K \nabla\left(\Pi^\nabla q\right) \cdot \nabla\left(\Pi^\nabla q\right) \,\mathrm{d}K \\
+&= \|\nabla\left(\Pi^\nabla q\right)\|^2_{L^2} .
+\end{align*}
+Consequently, $\Pi^\nabla q = q+C$, where $C$ is a constant, for all $q\in\mathbb{P}_k(K)$. But thanks to the second equation of (\ref{projopdef}), this constant is equal to $0$, so that $\Pi^\nabla q = q$. Let us see in the next section why this relation is useful. 
+
+\subsubsection{Construction of the symmetric bilinear form $a_h$}
+Let us recall that for all $K\in T_h$, for all $v,w\in V=H_0^1(\Omega)$, $a^K(w,v)= \int_K \nabla w \cdot \nabla v \, \mathrm{d}K$ and $a(w,v)=\sum_{K\in T_h} a^K(w,v)$. Now, for any element $K$ of $T_h$, if we fix an integer $k\geq 1$, then for all $v\in V^{K,k}$ and for all $p\in \mathbb{P}_k(K)$, 
+\begin{equation}\label{comput}
+a^K(p,v)= \int_K \nabla p \cdot \nabla v \, \mathrm{d}K = - \int_K \Delta p v \, \mathrm{d}K +  \int_{\partial K} \frac{\partial p}{\partial n} v \, \mathrm{d}s,
+\end{equation}
+thanks to an integration by parts.
+Since $\Delta p\in \mathbb{P}_{k-2}(K)$, $\Delta p$ can be written with respect to the basis of $\mathbb{P}_{k-2}(K)$ made by $\mathcal{M}_{k-2}(K)$, so that it is a linear combination of moments. Then, thanks to the chosen degrees of freedom, the first integral of the right hand side of equation (\ref{comput}) can be exactly computed. 
+
+Moreover, for every $e\in\partial K$, $\frac{\partial p}{\partial n}\in \mathbb{P}_{k-1}(e)$, and if $d=1$ or $d=2$, $v\in \mathbb{P}_k(e)$. So $\frac{\partial p}{\partial n}v\in \mathbb{P}_{2k-1}(e)$. In the case $d=1$, $\partial K$ is composed of $2$ points, i.e. vertices and edges are equal. So since we know $v_h$ at each internal vertex of $T_h$, then the second integral of the right hand side of equation (\ref{comput}) can be exactly computed. In the case $d=2$, $\partial K$ is composed of edges, and we know $v$ on $k$ points on each edge $e\in\partial K$ thanks to the chosen degrees of freedom. So if we choose an appropriate quadrature formula (Gauss-Legendre-Lobatto is fine), we can also compute exactly the second integral of the right hand side of equation (\ref{comput}). A good choice of degrees of freedom on each edge of $T_h$ would thus be the $k-1$ internal Gauss-Legendre-Lobatto points, plus the vertices. 
+
+Finally, if $d=3$, $\partial K$ is composed of faces. Unlike the case $d=1$ or $2$, on any face, $v$ does not necessarily belong to $\mathbb{P}_k(e)$. Consequently, to be able to compute exactly $\int_{\partial K} \frac{\partial p}{\partial n} v \, \mathrm{d}s$, we need to  slightly modify the definition of $V^{K,k}$ for $d=3$. Recall that $V^{K,k}$ has been defined from $V^{f_K,k}$ for all $f_K\in F_K$, so that we now make the following choice:
+\begin{align*}
+V^{f_K,k} := &\Bigg\{v\in H^1(f_K) : v|_{\partial f_K} \in \mathbb{B}_k(\partial f_K), \Delta v\in \mathbb{P}_{k}(f_K), \\
+&\left. \int_{f_K} v(\mathbf{x}) m(\mathbf{x}) \, \mathrm{d}\mathbf{x} = \int_{f_K} \Pi^\nabla v(\mathbf{x}) m(\mathbf{x})\mathrm{d}\mathbf{x}, \forall m\in\mathcal{M}_{k-1,k}(f_K) \right\},
+\end{align*}
+where we recall again that $$\mathcal{M}_{k-1,k}(f_K) = \left\{\left(\frac{\mathbf{x}- \mathbf{x}_{f_K}}{h_{f_K}}\right)^\mathbf{s} : |\mathbf{s}|= k-1, k\right\},$$ with $\mathbf{x}_{f_K}$ being the barycentre of the face $f_K$, $h_{f_K}$ its diameter, $|\mathbf{s}| = \sum_{i=1}^d s_i$ with $s_i\in \N_0$, and $\mathbf{x}^\mathbf{s}=\prod_{i=1}^d x_i^{s_i},$ $x_i$ being the $i$-th coordinate of $\mathbf{x}$. Note that here, the projection operator $\Pi^\nabla$ projects functions belonging to $V^{f_K,k}$ into $\mathbb{P}_k(f_K)$, for any $f_K\in F_K$. 
+Unlike the previous definition, the Laplacian is not required to be in $\mathbb{P}_{k-2}$ but in $\mathbb{P}_k$, and extra conditions on the moments of the function are required.
+
+Now we have to check that the dimension of $V^{f_K,k}$ is still the same as before. 
+To know the dimension of $V^{f_K,k}$, we first look more specifically into the last two conditions. $\Delta v\in\mathbb{P}_k(f_K)$ gives us $\dim\big(\mathbb{P}_k(f_K)\big)$ conditions. Moreover, we know that the moments on $f_K$ up to some order $\tilde{k}$ form a basis of $\mathbb{P}_{\tilde{k}}(f_K)$. Consequently, imposing the last condition of the definition of $V^{f_K,k}$ for all $m\in\mathcal{M}_{k-1,k}(f_K)$ and imposing $\Delta v\in\mathbb{P}_k(f_K)$ is equivalent to remaining with $\dim\big(\mathbb{P}_{k-2}(f_K)\big)$ degrees of freedom. Therefore, 
+$$\dim\left(V^{f_K,k}\right) = \dim\big(\mathbb{B}_k\left(\partial f_K\right)\big)+\dim\big(\mathbb{P}_{k-2}(f_K)\big)= n_v^{f_K} + n_e^{f_K}(k-1) + \frac{k(k-1)}{2}.$$
+For a more rigorous proof of this, and to prove the existence of functions in $V^{f_K,k}$, please refer to \cite{existenceW}. 
+
+Thanks to this new definition which will always be used from now on, one can prove that in the $3$D case, the second integral of the right hand side of equation (\ref{comput}) can be exactly computed from the chosen degrees of freedom. Indeed, since $\frac{\partial p}{\partial n}\in \mathbb{P}_{k-1}(f)$, for all face $f\in \partial K$, and since $\mathcal{M}_{k-1}(f)$ is a basis for $\mathbb{P}_{k-1}(f)$, then $\frac{\partial p}{\partial n}$ can be decomposed into a linear combination of moments of order at most $k-1$. Then, thanks to the last property of $V^{f,k}$, we know that for all $m\in\mathcal{M}_{k-1}(f)$, $\int_{f} v(\mathbf{x}) m(\mathbf{x}) \, \mathrm{d}\mathbf{x} = \int_{f} \Pi^\nabla v(\mathbf{x}) m(\mathbf{x})\mathrm{d}\mathbf{x}$. Any considered moment has degree at most $k-1$, and $\Pi^\nabla v$ is by definition a polynomial of degree at most $k$. So $\int_{\partial K} \frac{\partial p}{\partial n}v \, \mathrm{d}s$ can be written as a linear combination of integrals of polynomials of degree at most $2k-1$. Since we know from section \ref{projop} that we can exactly compute $\Pi^\nabla v$  using only the degrees of freedom of $v$, then if we choose an appropriate quadrature formula (as Gauss-Legendre-Lobatto), we can compute exactly the second integral of the right hand side of equation (\ref{comput}). 
+
+Consequently, with the chosen degrees of freedom and for $d=1,2$ or $3$, it is possible to compute exactly the value of $a^K(p,v)$ for any $K\in T_h$, $p\in \mathbb{P}_k(K)$ and $v\in V^{K,k}$. This result will be used to build a computable symmetric bilinear form $a_h$ that satisfies the conditions of Theorem \ref{conditions}. \\
+
+Let $k\geq 1$ and $K\in T_h$. Now, we want to build $a_h$ such that it verifies the conditions of Theorem \ref{conditions}, in particular the $k$-consistency and the stability properties that we recall here: 
+\begin{itemize}
+\item($k$-consistency) for all $p\in \mathbb{P}_k(K)$, for all $v_h\in V_h|_K$, the relation $a_h^K(p, v_h) = a^K(p, v_h)$ is verified;
+\item (stability) there exist $\alpha^-, \alpha^+ \geq 0$ two constants independent of $h$ and of $K$ such that for all $v_h\in V_h|_K$,
+$$ \alpha^-a^K(v_h,v_h)\leq a_h^K(v_h,v_h)\leq \alpha^+a^K(v_h,v_h).$$
+\end{itemize}
+
+In section \ref{projop}, we have seen that for all $q\in \mathbb{P}_k(K)$, $\Pi^\nabla q = q$, so that a natural choice to satisfy the $k$-consistency would be to take for all $u,v\in V^{K,k}, a_h^K(u,v) = a^K(\Pi^\nabla u, \Pi^\nabla v)$. However, in this case, stability cannot always be verified, so that an other term needs to be added, as explained in the following theorem. 
+
+\begin{theorem} \label{introSK}
+Let $S^K$  be a symmetric bilinear form such that there exist two constants $c_0, c_1>0$ independent from $K$ and $h$ that verify
+\begin{equation} \label{condSK}
+c_0 a^K(v,v) \leq S^K(v,v) \leq c_1a^K(v,v), \forall v\in V^{K,k} \text{ with } \Pi^\nabla v = 0.
+\end{equation}
+If for all $u,v\in V^{K,k}$, $a_h^K$ is defined by $$a_h^K(u,v):= a^K(\Pi^\nabla u, \Pi^\nabla v) + S^K(u-\Pi^\nabla u, v-\Pi^\nabla v),$$ then $a_h^K$ is a bilinear form that satisfies both the $k$-consistency and the stability properties.
+\end{theorem}
+
+\begin{remark}
+Note that the definition of $a_h^K$ in the previous theorem is inspired by the Pythagoras theorem on $a^K$, applied as follows. Since $\Pi^\nabla$ is the $a^K$-orthogonal projection of $V^{K,k}$ on $\mathbb{P}_k(K)$, we have for all $u,v\in V^{K,k}$,
+$$
+a^K(u,v) = a^K(\Pi^\nabla u, \Pi^\nabla v) + a^K(u-\Pi^\nabla u, v-\Pi^\nabla v).
+$$
+\end{remark}
+
+\begin{proof}
+First, $a_h^K$ is a symmetric bilinear form since $a^K$ and $S^K$ are, and since $\Pi^\nabla$ is linear too. Then, for all $p\in \mathbb{P}_k(K)$, we know that $p=\Pi^\nabla p$, so $S^K(p-\Pi^\nabla p, v-\Pi^\nabla v)=0,$ for all $v\in V^{K,k}$. Consequently, by definition of $a_h^K$ and of $\Pi^\nabla$, $$a_h^K(p,v) = a^K(\Pi^\nabla p, \Pi^\nabla v) = a^K(p, \Pi^\nabla v) = a^K(p,v),$$
+that is the $k$-consistency property is verified. 
+
+Finally, for all $v\in V^{K,k}$, $\Pi^\nabla\left(\Pi^\nabla v - v\right) = \Pi^\nabla v - \Pi^\nabla v = 0$ by linearity of $a^K$ and since $\Pi^\nabla v\in \mathbb{P}_k(K)$. So thanks to the definition of $a_h^K$ and to relation (\ref{condSK}), 
+\begin{align*}
+a_h^K(v,v)&\leq a^K(\Pi^\nabla v, \Pi^\nabla v) + c_1a^K(v-\Pi^\nabla v, v-\Pi^\nabla v)\\
+&\leq \max\{1,c_1\}\big(a^K(\Pi^\nabla v, \Pi^\nabla v) + a^K(v-\Pi^\nabla v, v-\Pi^\nabla v)\big).
+\end{align*}
+Very similarly, for all $v\in V^{K,k}$, 
+\begin{align*}
+a_h^K(v,v)&\leq a^K(\Pi^\nabla v, \Pi^\nabla v) + c_0a^K(v-\Pi^\nabla v, v-\Pi^\nabla v)\\
+&\geq \min\{1,c_0\}\big(a^K(\Pi^\nabla v, \Pi^\nabla v) + a^K(v-\Pi^\nabla v, v-\Pi^\nabla v)\big).
+\end{align*}
+Consequently, $a_h^K$ also verifies the stability property.
+\end{proof}
+
+It remains to find a suitable symmetric positive definite bilinear form $S^K$. In order to verify relation (\ref{condSK}), we need $S^K$ to scale like $a^K$ on $\Ker(\Pi^\nabla)$. We recall that $N^{K,k} = \dim(V^{K,k})$. Let $\{\phi_i\}_{i=1}^{N^{K,k}}$ be the Lagrangian basis of $V^{K,k}$, that is dof$_i(\phi_i)=\delta_{ij}, \forall i,j=1,\ldots,N^{K,k}$, where dof$_i:V^{K,k}\rightarrow \R$ maps each function of $V^{K,k}$ to its $i$-th degree of freedom. Before defining $S^K$, we need two lemmas.
+
+\begin{lemma}\label{lemma1}
+All the degrees of freedom scale as $1$, that is they are invariant under rescaling of the elements of the mesh. 
+\end{lemma}
+\begin{proof}
+Let $\hat{K}$ be an element of $T_h$ and consider the change of variable $\mathbf{x}=h\hat{\mathbf{x}}$ that maps the element $\hat{K}$ onto an element $K$. For each basis function $\hat{\phi}_i$, $i=1,\ldots,N^{\hat{K},k}$, we define $\phi_i$ on $K$ as $\phi_i(\mathbf{x}) = \phi_i(h\mathbf{\hat{x}}) := \hat{\phi}_i(\hat{\mathbf{x}}) = \hat{\phi}_i\left(\frac{\mathbf{x}}{h}\right)$, and $N^{K,k}=N^{\hat{K},k}$. If $\hat{\phi}_i$ is a basis function corresponding to a vertex or an edge-point degree of freedom, then dof$_i(\phi_i)=$dof$_i(\hat{\phi}_i) = 1$ since the change of variable maps vertices of $\hat{K}$ to vertices of $K$ and edge-points of $\hat{K}$ to edge-points of $K$. If instead, $\hat{\phi}_i$ is a basis function corresponding to a moment degree of freedom, then taking $\hat{D}=\hat{f}$ any face of $\hat{K}$ (if $d=3$) and $m=2$, or $\hat{D}=\hat{K}$ and $m=3$, and $D$ the image of $\hat{D}$ by the change of variables, then: for all $|\mathbf{s}|\leq k-2$, 
+\begin{align*}
+1&=\frac{1}{|\hat{D}|}\int_{\hat{D}} \hat{\phi}_i(\mathbf{\hat{x}}) \left(\frac{\mathbf{\hat{x}}-\mathbf{\hat{x}}_{\hat{D}}}{h_{\hat{D}}}\right)^\mathbf{s}\,\mathrm{d}\mathbf{\hat{x}} \\
+&= \frac{h^m}{|D|}\int_D \phi_i(\mathbf{x})\left(\frac{ h\left(\mathbf{x}-\mathbf{x}_D\right)}{hh_D}\right)^\mathbf{s}\frac{1}{h^m}\,\mathrm{d}\mathbf{x} \\
+&= \frac{1}{|D|} \int_D \phi_i(\mathbf{x})\left(\frac{\mathbf{x}-\mathbf{x}_D}{h_D}\right)^\mathbf{s}\,\mathrm{d}\mathbf{x}.
+\end{align*} 
+\end{proof}
+
+\begin{lemma} \label{lemma2}
+Given $h>0$ the size of a mesh decomposition $T_h$, $K$ an element of $T_h$ and $k\geq 1$ an integer, then $h^{2-d}a^K(\phi_i,\phi_i)$ scales like $1$ for all $i=1,\ldots,N^{K,k}$. That is, $h^{2-d}a^K(\phi_i,\phi_i)$ is independent from $K$ and $h$, or equivalently, it is invariant under rescaling the elements of the mesh. 
+\end{lemma}
+\begin{proof}
+Let $\hat{K}$ be an element of $T_{\hat{H}}$ and consider the change of variables $\mathbf{x}=h\hat{\mathbf{x}}$ that maps the element $\hat{K}$ onto an element $K$. More generally, this change of variables maps any element of the mesh $T_{\hat{H}}$ onto an element of the mesh $T_H$, where $H=h\hat{H}$. As the in the previous lemma, for each basis function $\hat{\phi}_i$, $i=1,\ldots,N^{\hat{K},k}$, we define $\phi_i$ on $K$ as $\phi_i(\mathbf{x}) = \phi_i(h\mathbf{\hat{x}}) := \hat{\phi}_i(\hat{\mathbf{x}}) = \hat{\phi}_i\left(\frac{\mathbf{x}}{h}\right)$, and $N^{K,k}=N^{\hat{K},k}$. Then for all $i=1,\ldots,N^{K,k}$, 
+\begin{align*}
+\hat{H}^{2-d}a^{\hat{K}}(\hat{\phi_i,\phi_i}) &= \hat{H}^{2-d}\int_{\hat{K}} |\nabla \hat{\phi_i}|^2 \, \mathrm{d}\hat{K} \\
+&= \frac{H^{2-d}}{h^{2-d}} \int_K |\nabla \phi_i h|^2 \frac{1}{h^d} \, \mathrm{d}K\\
+&= H^{2-d} \int_K |\nabla \phi_i|^2 \, \mathrm{d}K.
+\end{align*}
+\end{proof}
+
+Thanks to the two previous lemma, we can now choose correctly the symmetric bilinear form $S^K$ introduced in Theorem \ref{introSK}. 
+\begin{proposition}
+$S^K:V^{K,k}\times V^{K,k}\rightarrow \R$ defined by $S^K(u,v) = h^{d-2}\sum_{r=1}^{N^{K,k}} \text{\emph{dof}}_r(u)\text{\emph{dof}}_r(v)$, for all $u,v\in V^{K,k}$, is a symmetric bilinear form that verifies condition (\ref{condSK}) of Theorem \ref{introSK}. 
+\end{proposition}
+\begin{proof}
+It is straightforward to see that $S^K$ is symmetric. Moreover, since the functions dof$_i$ are linear for all $i=1,\ldots,N^{K,k}$, then $S^K$ is bilinear. It remains to prove condition (\ref{condSK}). Let $v\in V^{K,k}\cap \Ker(\Pi^\nabla)$. Since $\{\phi_i\}_{i=1}^{N^{K,k}}$ is a basis of $V^{K,k}$, then there exist $v_1,\ldots,v_{N^{K,k}}\in \R$ such that $v=\sum_{i=1}^{N^{K,k}} v_i\phi_i$. Consequently, 
+$$S^K(v,v) = h^{d-2}\sum_{r=1}^{N^{K,k}} \big(\text{dof}_r\left(v\right)\big)^2 = h^{d-2}\sum_{r=1}^{N^{K,k}} v_r^2.$$
+Moreover, 
+\begin{align*}
+a^K(v,v) &= \sum_{r=1}^{N^{K,k}} v_r^2 a^K(\phi_r,\phi_r)\\
+&\leq \max_r\Big\{a^K(\phi_r, \phi_r)\Big\} \sum_{r=1}^{N^{K,k}} v_r^2\\
+&= \max_r\Big\{h^{2-d}a^K(\phi_r, \phi_r)\Big\} h^{d-2} \sum_{r=1}^{N^{K,k}} v_r^2;\\
+a^K(v,v) &= \sum_{r=1}^{N^{K,k}} v_r^2 a^K(\phi_r,\phi_r)\\
+&\geq \min_r\Big\{a^K(\phi_r, \phi_r)\Big\} \sum_{r=1}^{N^{K,k}} v_r^2\\
+&= \min_r\Big\{h^{2-d}a^K(\phi_r, \phi_r)\Big\} h^{d-2} \sum_{r=1}^{N^{K,k}} v_r^2.
+\end{align*}
+Since we know from \ref{lemma2} that $h^{2-d}a^K(\phi_r,\phi_r)$ is independent from $h$ and $K$ for all $r=1,\ldots,N^{K,k}$, then $\frac{1}{c_1}:=\min_r\Big\{h^{2-d}a^K(\phi_r, \phi_r)\Big\}$ and $\frac{1}{c_0}:=\max_r\Big\{h^{2-d}a^K(\phi_r, \phi_r)\Big\}$ are two constants independent from $h$, $K$ and $r$. Moreover, $h^{d-2}\sum_{r=1}^{N^{K,k}}v_r^2=S^K(v,v)$, so that:
+$$ c_0a^K(v,v)\leq S^K(v,v) \leq c_1a^K(v,v),$$
+and thus $S^K$ verifies property (\ref{condSK}).
+\end{proof}
+
+To sum up, we have been able to define $a_h^K$ by $$a_h^K(u,v):=a^K(\Pi^\nabla u, \Pi^\nabla v) + S^K(u-\Pi^\nabla u, v-\Pi^\nabla v),$$ 
+for all $u,v\in V^{K,k}$, so that it verifies all the conditions of Theorem \ref{conditions}. The last remaining part to apply this theorem is to build the right-hand side element $f_h$.
+
+\subsubsection{Construction of the right-hand side $f_h$}
+In this part is presented the choice made to approximate $F$ present in the weak formulation of the differential problem (\ref{weak}). Since $F$ is a functional on the Hilbert space $V=H_0^1(\Omega)$ (the considered norm in $V$ is the semi-norm of $H^1(\Omega)$), we know by Riesz representation theorem that there is a unique element $x_f\in V$ such that for all $v\in V$, $F(v) = \int_\Omega \nabla v\cdot\nabla x_f\, \mathrm{d}\Omega$. We separate the case $k=1$ to the case $k\geq 2$ for technical reasons that will become obvious in the following.\\
+
+\noindent \underline{Case 1:} $k\geq 2$. \\
+$f_h$ is defined as the $L^2(K)$-projection of $x_f$ onto the space $\mathbb{P}_{k-2}(K)$, on each $K\in T_h$. Let us write it $f_h := P_{k-2}^Kx_f$, for all $K\in T_h$. In this way, we have: for all $v_h\in V_h$, 
+\begin{equation} \label{fhk2}
+\langle f_h, v_h \rangle = \sum_{K\in T_h} \int_K f_h v_h \, \mathrm{d}K := \sum_{K\in T_h}\int_K \left(P_{k-2}^Kx_f\right)v_h\, \mathrm{d}K
+\end{equation}
+Since for all $K\in T_h$, $P_{k-2}^Kx_f\in \mathbb{P}_{k-2}(K)$ and $\mathcal{M}_{k-2}(K)$ is a basis of $\mathbb{P}_{k-2}(K)$, then $P_{k-2}^Kx_f$ can be written as a linear combination of the elements of $\mathcal{M}_{k-2}(K)$. Plugging it into equation (\ref{fhk2}) gives us a linear combination of moments of $v_h$ of order at most $k-2$ in every element $K$ of $T_h$. These values are known since they exactly corresponds to some of the degrees of freedom of $v_h$. Consequently, this is a quantity that can be computed directly from the degrees of freedom. \\
+
+\noindent \underline{Case 2:} $k=1$. \\
+$f_h$ is a piecewise constant function defined as follows: for all $v_h\in V_h$, 
+$$\langle f_h, v_h \rangle := \sum_{K\in T_h} \int_K P_0^Kx_f\, \bar{v_h} \,\mathrm{d}K = \sum_{K\in T_h}P_0^Kx_f\,\bar{v_h},$$
+where $\bar{v_h} = \frac{1}{n_v^K}\sum_{i=1}^{n_v^K}v_h(V_i)$ with $\{V_i\}_{i=1}^{n_v^K}$ the set of vertices of $K$. 
+Since the value of $v_h$ at the vertices of every element are amongst the degrees of freedom of $v_h$, then this is a computable quantity from the degrees of freedom only. \\
+
+Therefore, we have now in hand all the tools to apply Theorem \ref{conditions}. In the next section, we will state results about approximation and interpolation errors, to make more precise the estimation of the $H^1$-error of the solution present in the theorem. 
+
+\subsubsection{Approximation and projection errors}
+Only results without proofs will be presented in this section. However, references where to find the proofs will be given. 
+
+\begin{theorem}[Projection error]
+Assume that there exists $\gamma>0$ such that for all $h$, each element $K$ in $T_h$ is a union of a finite number of star-shaped domains with respect to any point of a ball of radius greater then $\gamma h_K$. Then there exists a constant $C = C(k,\gamma)$ such that for every $s$ with $1\leq s\leq k+1$ and for every $w\in H^s(K)$, there is $w_\pi\in\mathbb{P}_k(K)$ such that 
+$$
+\|w-w_\pi\|_{L^2(K)} + h_K|w-w_\pi|_{H^1(K)} \leq Ch_K^s|w|_{H^s(K)}.
+$$
+\end{theorem}
+\begin{proof}
+The proof can be found in \cite{brennerscott} by S.C. Brenner and R.L. Scott.
+\end{proof}
+
+\begin{theorem}[Interpolation error]
+Assume that there exists $\gamma>0$ such that for all $h$, each element $K$ in $T_h$ is a union of a finite number of star-shaped domains with respect to any point of a ball of radius greater then $\gamma h_K$. Then there exists a constant $C=C(k,\gamma)$ such that for every $s$ with $2\leq s\leq k+1$, for every $h$, for all $K\in T_h$ and for all $w\in H^s(K)$, there exists $w_I\in V^{K,k}$ such that
+$$
+\|w-w_I\|_{L^2(K)} + h_K|w-w_I|_{H^1(K)} \leq Ch_K^s|w|_{H^s(K)}.
+$$
+\end{theorem}
+\begin{proof}
+The proof can also be found in \cite{brennerscott} by S.C. Brenner and R.L. Scott.
+\end{proof}
+
+\begin{theorem}[Approximation of the right-hand side]
+If $k=1$, for all $v_h\in V_h$, there exists a constant $C$ such that
+$$
+\langle f_h, v_h\rangle - F(v_h) \leq Ch\left(\sum_{K\in T_h} |f|^2_{H^1(K)}\right)^{\frac{1}{2}}|v_h|_{H^1(K)}.
+$$
+Now, if $k\geq 2$, for all $v_h\in V_h$, there exists a constant $C$ such that 
+$$
+\langle f_h, v_h\rangle - F(v_h) \leq Ch^k\left(\sum_{K\in T_h} |f|^2_{H^{k-1}(K)}\right)^{\frac{1}{2}}|v_h|_{H^1(K)}.
+$$
+\end{theorem}
+\begin{proof}
+The proof can be found in \cite{basicpples} by L. Beirão da Veiga, F. Brezzi, A. Cangiani, G. Manzini, L.D. Marini and A.Russo. 
+\end{proof}
