@@ -14,11 +14,12 @@ from mpl_toolkits.mplot3d import Axes3D
 ##################################################################
 ##################################################################
 
-## MODIFY ONLY THIS FILES
+## MODIFY ONLY THESE FILES
 
 pointFile="../../Mesh/Cube/Cubic/point-2.txt"
 connectionsFile="../../Mesh/Cube/Cubic/conn-2.txt"
-
+#pointFile="../../Mesh/Sphere3D/3D/point-2.txt"
+#connectionsFile="../../Mesh/Sphere3D/3D/conn-2.txt"
 
 ##################################################################
 ##################################################################
@@ -72,18 +73,18 @@ connections=[]
 content=f.read().splitlines()
 line=content[0]
 
-print content
+print(content)
 
 line=line.split(';')
 	
-print line
+print(line)
 	
 for i in line:
 	poly=i.split(',')
 	poly=[int(j) for j in poly]
 	connections.append(poly)
 
-print connections
+print(connections)
 	
 
 	
@@ -103,11 +104,11 @@ x=[]
 y=[]
 z=[]
 
-print len(points)
+print(len(points))
 
 j=0
 
-print 0
+print(0)
 
 for i in content:
 	line=i
@@ -115,14 +116,13 @@ for i in content:
 
 	line=line.split(';')
 	
-	print line
+	print(line)
 	
 	connections=[]
 	for j in line:
 		poly=j.split(',')
 		poly=[int(k) for k in poly]
 		connections.append(poly)
-
 
 	for face in connections:
 			
