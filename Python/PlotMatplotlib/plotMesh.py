@@ -16,10 +16,12 @@ from mpl_toolkits.mplot3d import Axes3D
 
 ## MODIFY ONLY THESE FILES
 
-pointFile="../../Mesh/Cube/Cubic/point-2.txt"
-connectionsFile="../../Mesh/Cube/Cubic/conn-2.txt"
-#pointFile="../../Mesh/Sphere3D/3D/point-2.txt"
-#connectionsFile="../../Mesh/Sphere3D/3D/conn-2.txt"
+#pointFile="../../Mesh/Cube/Cubic/point-2.txt"
+#connectionsFile="../../Mesh/Cube/Cubic/conn-2.txt"
+pointFile="../../Mesh/Sphere3D/point-2.txt"
+connectionsFile="../../Mesh/Sphere3D/conn-2.txt"
+#pointFile="../../Mesh/Sphere/coord1.txt"
+#connectionsFile="../../Mesh/Sphere/conn1.txt"
 
 ##################################################################
 ##################################################################
