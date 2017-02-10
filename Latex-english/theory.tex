@@ -21,7 +21,7 @@ a(u,v) = F(v),
 \end{equation}
 where $a : V \times V \rightarrow \R$ is such that $a(w,v) = \int_\Omega \nabla w\cdot \nabla v \, \mathrm{d}\Omega$ for all $w,v\in V$, and $F:V\rightarrow\R$ is such that for all $v\in V$, $F(v) = \int_\Omega fv \, \mathrm{d}\Omega - a(R_g, v)$.
 
-We choose the semi-norm of $H^1(\Omega)$ to be the norm we will use for functions in $H^1_0(\Omega) = V$, thanks to Poincaré inequality. In $V$ equipped to this norm, it is easy to show that $a$ is a continuous and coercive bilinear form, and that $F$ is a linear and continuous functional. We just prove here some of the main properties: for all $v,w\in V$, 
+We choose the semi-norm of $H^1(\Omega)$ to be the norm we will use for functions in $H^1_0(\Omega) = V$, thanks to Poincaré inequality. In $V$ equipped {\color{red}\textbf{to} this norm}, it is easy to show that $a$ is a continuous and coercive bilinear form, and that $F$ is a linear and continuous functional. We prove here some of the main properties: for all $v,w\in V$, 
 \begin{align*}
 \left|F(v)\right| &= \left|\int_\Omega fv \, \mathrm{d}\Omega -\int_\Omega \nabla R_g \cdot \nabla v \, \mathrm{d} \Omega\right| \\
 & \leq \left|\int_\Omega fv \, \mathrm{d}\Omega\right| + \left|\int_\Omega \nabla R_g \cdot \nabla v \, \mathrm{d} \Omega\right|\\
@@ -52,14 +52,14 @@ The \textit{diameter} of an element $K$ of a domain decomposition is defined as 
 A \textit{simple polygon} is an open simply connected set whose boundary is a non-intersecting line made of a finite number of straight line segments. 
 \end{definition}
 
-\noindent From now on, we suppose that every considered decomposition $T_h$ is made of a finite number of simple polygons. Note that a simple polygon is not necessarily convex, and this is what is the first difference that characterizes VEM with respect to FEM. We now introduce the following notation: 
+\noindent From now on, we suppose that every considered decomposition $T_h$ is made of a finite number of simple polygons. Note that a simple polygon is not necessarily convex, and this is what is the first difference that {\color{red}characterizes} VEM with respect to FEM. We now introduce the following notation: 
 \begin{notation}
 For any set of functions $W$, we note $W|_K$ the set of functions in $W$ restricted to $K$, that is $W|_K = \{f|_K : f\in W\}$. 
 \end{notation}
 
 \noindent Let us define the bilinear form $a$ reduced to any sub-domain $D$ of $\Omega$ as follows: for all $w,v\in V$,
 $$ a^D(w,v) := \int_D \nabla w \cdot \nabla v \, \mathrm{d}\Omega. $$
-Since the restriction of any function of $H_0^1(\Omega)$ on a sub-domain $D$ of $\Omega$ is still in $H_0^1(\Omega)$, is in $H^1(D)$, but is not necessarily in $H_0^1(D)$, we note that $a^D$ is also a continuous bilinear form on $V\times V$, but it is not necessarily coercive. Moreover, if $D$ is some element $K$ of $T_h$, for all $h$ and for all $w,v\in V$, \begin{equation}\label{aKvsa}
+Since the restriction of any function of $H_0^1(\Omega)$ on a sub-domain $D$ of $\Omega$ is still in $H_0^1(\Omega)$, is in $H^1(D)$, {\color{red} maybe put something like $H_0^1(\Omega) \cap H^1(D)$}but is not necessarily in $H_0^1(D)$, we note that $a^D$ is also a continuous bilinear form on $V\times V$, but it is not necessarily coercive. Moreover, if $D$ is some element $K$ of $T_h$, for all $h$ and for all $w,v\in V$, \begin{equation}\label{aKvsa}
 a(w,v) = \sum_{K\in T_h} a^K(w,v).
 \end{equation}
 In the same way, since $H_0^1(\Omega)|_K = V|_K \subset H^1(K)$, we define for all $v\in V$
@@ -115,12 +115,12 @@ F(v)-\langle f_h,v\rangle \leq \mathcal{F}_h\|v\|_{H^0_1(\Omega)}.
 \end{enumerate}
 \end{theorem}
 \begin{remark}
-Note that here, for $f_h\in V_h'$ and $v_h \in V_h$, $\langle f_h,v_h\rangle$ designs the action of $f_h$ on $v_h$. Moreover, $u_\pi$ of conclusion $2.$ is piecewise in $\mathbb{P}_k$ and $\mathbb{P}_k(K)$ is included in $V_h|_K$ for all $K\in T_h$ (from hypothesis $2.a$), so $u_\pi$ belongs to $\Pi_{K\in V_h} \mathbb{P}_k(K) \subset \Pi_{K\in V_h} V_h|_K = V_h \subset H_0^1(\Omega)$. This is why the norm of $u-u_\pi$ can be the $H_0^1(\Omega)$ norm. 
+Note that here, for $f_h\in V_h'$ and $v_h \in V_h$, $\langle f_h,v_h\rangle$ designs the action of $f_h$ on $v_h$. Moreover, $u_\pi$ of conclusion $2.${\color{red} thesis? (not sure)} is piecewise in $\mathbb{P}_k$ and $\mathbb{P}_k(K)$ is included in $V_h|_K$ for all $K\in T_h$ (from hypothesis $2.a$), so $u_\pi$ belongs to $\Pi_{K\in V_h} \mathbb{P}_k(K) \subset \Pi_{K\in V_h} V_h|_K = V_h \subset H_0^1(\Omega)$. This is why the norm of $u-u_\pi$ can be the $H_0^1(\Omega)$ norm. 
 \end{remark}
 
 \noindent Let us prove this theorem:
 \begin{proof}
-We will prove the two conclusions in order. The abbreviation CS is used to say that we use the Cauchy-Schwarz inequality.
+We will prove the two conclusions {\color{red} thesis? (not sure)}in order. The abbreviation CS is used to say that we use the Cauchy-Schwarz inequality.
 \begin{enumerate}
 \item We want to use Lax-Milgram theorem. 
 \begin{itemize}
@@ -183,7 +183,7 @@ Therefore, we finally obtain:
 \|u-u_h\|_{H_0^1(\Omega)} &\leq \|u-u_I\|_{H_0^1(\Omega)} + \|\delta_h\|_{H_0^1(\Omega)} \text{ (triangle inequality)}\\ 
 &\leq \left(\frac{\tilde{C}}{\alpha^-}+1\right)\left(\mathcal{F}_h + \|u_I-u_\pi\|_{H_0^1(\Omega)} + \|u_\pi-u\|_{H_0^1(\Omega)} \right).
 \end{align*}
-Consequently, we have proved conclusion $2.$ with $C=\frac{\tilde{C}}{\alpha^-}$, and the theorem is showed. 
+Consequently, we have proved conclusion {\color{red} thesis?} $2.$ with $C=\frac{\tilde{C}}{\alpha^-}$, and the theorem is showed. 
 \end{enumerate}
 \end{proof}
 
@@ -200,9 +200,9 @@ Consequently, for every integer $k\geq 1$, our aim is now to build the subspace 
 
 For this whole part, we consider a certain domain decomposition $T_h$ for some $h$, and $K$ any element of $T_h$. In $2$D, $K$ can consequently be any simple polygon, while in $3$D, $K$ can be any polyhedron. Moreover, for any geometrical domain $D$, let $n_e^D$ be the number of edges of $D$, $n_v^D$ be its number of vertices, and $n_f^D$ be its number of faces. Note that for a $1$D domain, the faces, the edges and the vertices represent the same geometrical elements. As a convention, we will thus set $n_e^D = 0$ in this case, that is only if $D$ is $1$-dimensional. We also note that for a $2$D domain, the faces and the edges represent the same geometrical elements as well. Furthermore, in $2$D, the number of edges of $D$ is equal to the number of vertices of $D$, even if here edges and vertices are two distinct geometrical entities. In $3$D, however, the number of vertices and of edges is not the same.
 
-Let us also fix an integer $k\geq 1$. Finally, to any element $K\in T_h$, we will denote $E_K$ the set of edges of $K$ with respect to the domain decomposition $T_h$, and $F_K$ its set of faces. Note that as a consequence, $F_K=\{K\}$ if the dimension $d$ is $1$ or $2$, and $E_K=\{K\}$ if $d=1$. \\
+Let us also fix an integer $k\geq 1$. Finally, {\color{red}to} any element $K\in T_h$, we will denote $E_K$ the set of edges of $K$ with respect to the domain decomposition $T_h$, and $F_K$ its set of faces. Note that as a consequence, $F_K=\{K\}$ if the dimension $d$ is $1$ or $2$, and $E_K=\{K\}$ if $d=1$. \\
 
-We now define, for every face $f_K$ of $K$, the set $\mathbb{B}_k(\partial f_K)$ as the set of continuous functions on $\partial f_K$ that are polygonal on each edge of $\partial f_K$. That is: 
+We now define, for every face $f_K$ of $K$, the set $\mathbb{B}_k(\partial f_K)$ as the set of continuous functions on $\partial f_K$ that are polygonal {\color{red} l'avevi già definito polygonal? Se no forse si può mettere in corsivo}on each edge of $\partial f_K$. That is: 
 $$ \mathbb{B}_k(\partial f_K) := \Big\{v\in C^0(\partial f_K): \forall e\in E_{\partial f_K}, v|_e \in \mathbb{P}_k(e)\Big\}.$$
 
 \begin{proposition} \label{dimBk}
@@ -221,7 +221,7 @@ Therefore, the dimension of $\mathbb{B}_k(\partial f_K)$ is equal to $n_v^{f_K}+
 
 \begin{remark}
 Since $f_K$ is either a polygon (if $d=1$ or $2$) or a segment (if $d=1$), then in any case, $n_e^{f_K} = n_f^{f_K}$, so that $$\dim\left(\mathbb{B}_k\left(\partial f_K\right)\right) = n_v^{f_K}+n_e^{f_K}(k-1) = kn_v^{f_K} = kn_e^{f_K}.$$ 
-But we have chosen to state the proposition without using this fact to make clear the choice of degrees of freedom that will follow in this report.
+We have chosen to state the proposition without using this fact to make clear the choice of degrees of freedom that will follow in this report.
 \end{remark}
 
 Now, recall that we want to build a space $V_h$ such that for all $K\in T_h$, we have $\mathbb{P}_k(K) \subset V_h|_K$. Moreover, we remark that every function $v$ belongs to $\mathbb{P}_k(K)$ if and only if $\Delta v\in \mathbb{P}_{k-2}(K)$. This is the reason why we decide to introduce the following local spaces $V^{K,k}$. To define it, we separate the case $d=1$ or $2$ to the case $d=3$. \newline 
