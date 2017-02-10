@@ -76,7 +76,7 @@ s=[]
 
 content=f.read().splitlines()
 for line in content:
-	print line
+	print(line)
 	line=float(line)
 	s.append(line)
 f.close()
@@ -112,9 +112,9 @@ mlab.ylabel("y")
 mlab.zlabel("z")
 mlab.show()
 
-print x
-print y
-print s
+print(x)
+print(y)
+print(s)
 
 
 

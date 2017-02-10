@@ -19,6 +19,9 @@ from mpl_toolkits.mplot3d import Axes3D
 pointFile="../../Mesh/Test/point5.txt"
 connectionsFile="../../Mesh/Test/conn5.txt"
 
+#pointFile="../../Mesh/Sphere3D/point-2.txt"
+#connectionsFile="../../Mesh/Sphere3D/conn-2.txt"
+
 
 ##################################################################
 ##################################################################
@@ -72,14 +75,14 @@ line=content[0]
 
 line=line.split(';')
 	
-print line
+print(line)
 	
 for i in line:
 	poly=i.split(',')
 	poly=[int(j) for j in poly]
 	connections.append(poly)
 
-print connections
+print(connections)
 	
 
 	
@@ -99,14 +102,14 @@ x=[]
 y=[]
 z=[]
 
-print len(points)
+print(len(points))
 
 j=0
 
 for face in connections:
 	
 	
-	print i
+	print(i)
 	
 	for j in range(len(face)):
 

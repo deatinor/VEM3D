@@ -59,6 +59,7 @@ public:
 	real H1Discrete();
 	
 	void displayError();	//!< Print the computer error
+	void writeError(string outputError); 		//!< Print the error to a file (append the file)
 	
 };
 
@@ -106,10 +107,17 @@ real Error<embedded,real>::H1Discrete() {
 template <long embedded,typename real>
 void Error<embedded,real>::displayError() {
 	cout<<endl<<"LInfinity norm: "<<LInfinity();
-	cout<<endl<<endl<<"H1 discete norm: "<<H1Discrete()<<endl<<endl;
+	cout<<endl<<endl<<"H1 discrete norm: "<<H1Discrete()<<endl<<endl;
 }
 
+template <long embedded,typename real>
+void Error<embedded,real>::writeError(string outputError) {
+	//std::ofstream outfile;
 
+	//outfile.open("../Output/error.txt", std::ios_base::app);
+	//outfile << LInfinity() << "," << H1Discrete() << endl; 
+	//outfile.close();
+}
 
 
 
