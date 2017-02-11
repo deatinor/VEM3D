@@ -100,8 +100,8 @@ for i in x:
 		points.add(point)
 			
 
-print points
-print points.len()
+print(points)
+print(points.len())
 
 
 # scrivo i punti

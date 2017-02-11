@@ -1,51 +1,58 @@
 // file input
 
 // CUBIC MESH
-inputPoint=../Mesh/Cube/Cubic/point-16.txt;
-inputConnection=../Mesh/Cube/Cubic/conn-16.txt;
+//inputPoint=../Mesh/Cube/Cubic/point-16.txt;
+//inputConnection=../Mesh/Cube/Cubic/conn-16.txt;
 
 // CUBE WITHOUT PART
 //inputPoint=../Mesh/Cube/CubeWithoutPart/point-16.txt;
 //inputConnection=../Mesh/Cube/CubeWithoutPart/conn-16.txt;
 
 // SPHERIC MESH 3D
-//inputPoint=../Mesh/Sphere3D/point-8.txt;
-//inputConnection=../Mesh/Sphere3D/conn-8.txt;
+//inputPoint=../Mesh/Sphere3D/point-2.txt;
+//inputConnection=../Mesh/Sphere3D/conn-2.txt;
 
-// 2D MESH
-//inputPoint=../Mesh/Mesh2DSquare/point-16.txt
-//inputConnection=../Mesh/Mesh2DSquare/conn-16.txt;
+// 2D MESH SQUARE
+//inputPoint=../Mesh/Mesh2DSquare/point-32.txt
+//inputConnection=../Mesh/Mesh2DSquare/conn-32.txt;
 
 // TEST
 //inputPoint=../Mesh/Test/point3.txt;
 //inputConnection=../Mesh/Test/conn3.txt;
 
+// CONVERGENCE 2D (MESH SQUARE (0,1)X(0,1))
+inputPoint=../Convergence/Mesh2D/point-16.txt;
+inputConnection=../Convergence/Mesh2D/conn-16.txt;
 
 // mesh type
 // meshType can be only Mesh2D or Mesh3D
-meshType=Mesh3D;
+meshType=Mesh2D;
 // fileType can be ANYTHING3D, TETRAHEDRON or ANYTHING2D
-fileType=TETRAHEDRON;
+fileType=ANYTHING2D;
 
 
 // forceTermFunction
-// It can be forceTermSquare or forceTermSphere
-forceTermFunction=forceTermSquare;
+// It can be forceTermSquare or forceTermSphere or forceTermConvergence
+forceTermFunction=forceTermConvergence;
 
 // solution function
-// It can be solutionSquare or solutionSphere
-solutionFunction=solutionSquare;
+// It can be solutionSquare or solutionSphere or solutionConvergence
+solutionFunction=solutionConvergence;
 
 
 // file output name
-outputPoint=Output/point3D.txt;
-outputConnection=Output/conn3D.txt;
-outputError=Output/error3D.txt;
-outputSolution=Output/solution3D.txt;
+outputPoint=Output/point2D.txt;
+outputConnection=Output/conn2D.txt;
+outputError=Output/error2D.txt;
+outputSolution=Output/solution2D.txt;
+//outputPoint=../Convergence/Output/point2D_ne64.txt;
+//outputConnection=../Convergence/Output/conn2D_ne64.txt;
+//outputError=../Convergence/Output/error2D_bis.txt;
+//outputSolution=../Convergence/Output/solution2D_ne64.txt;
 
 // override or append error to error file
 // errorAction can only be override or append
-errorAction=override
+errorAction=override;
 
 // typename real (double or long double)
 real=long double;

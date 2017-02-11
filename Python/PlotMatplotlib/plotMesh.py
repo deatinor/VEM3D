@@ -18,8 +18,8 @@ from mpl_toolkits.mplot3d import Axes3D
 
 #pointFile="../../Mesh/Cube/Cubic/point-2.txt"
 #connectionsFile="../../Mesh/Cube/Cubic/conn-2.txt"
-pointFile="../../Mesh/Sphere3D/point-2.txt"
-connectionsFile="../../Mesh/Sphere3D/conn-2.txt"
+pointFile="../../Mesh/Sphere3D/point-1.txt"
+connectionsFile="../../Mesh/Sphere3D/conn-1.txt"
 #pointFile="../../Mesh/Sphere/coord1.txt"
 #connectionsFile="../../Mesh/Sphere/conn1.txt"
 
