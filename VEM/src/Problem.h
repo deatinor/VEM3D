@@ -71,7 +71,7 @@ public:
 	virtual void computeSolution();
 	virtual void operator()();			//!< Method to execute the method. FreeFem style.
 	
-	virtual void displayError(std::function<real(Point<embedded,real>&)> realSolutionFunction,string outputError="error.sol"); //!<  It displays the error after the computation and prints it to a file
+	virtual void displayError(std::function<real(Point<embedded,real>&)> realSolutionFunction,string outputError="error.sol",string errorAction="append"); //!<  It displays the error after the computation and prints it to a file
 	virtual void write(string outputPoints="points.point",string outputConnections="connections.conn",string outputSolution="solution.sol");	//!< full output to file
 	virtual void writeSolution(string outputSolution="solution.sol"); //!< Output to file of the solution
 	
@@ -113,11 +113,11 @@ void Problem<embedded,MeshType,real>::operator()() {
 
 // displayError
 template <long embedded,typename MeshType,typename real>
-void Problem<embedded,MeshType,real>::displayError(std::function<real(Point<embedded,real>&)> realSolutionFunction,string outputError) {
+void Problem<embedded,MeshType,real>::displayError(std::function<real(Point<embedded,real>&)> realSolutionFunction,string outputError,string errorAction) {
 	Error<embedded,real> error(solution,mesh.getPointVector(),realSolutionFunction,stiffnessMatrix);
 	
 	error.displayError();
-	error.writeError(outputError);
+	error.writeError(outputError,errorAction);
 }
 
 // write

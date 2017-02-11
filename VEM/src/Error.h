@@ -59,7 +59,12 @@ public:
 	real H1Discrete();
 	
 	void displayError();	//!< Print the computer error
-	void writeError(string outputError); 		//!< Print the error to a file (append the file)
+	/** Print the error to a file
+	 * 
+	 * \param outputError output file
+	 * \param errorAction string that can be either "append" or "override", if we want to append the file or override it with the new computed errors
+	 */
+	void writeError(string outputError,string errorAction);
 	
 };
 
@@ -111,12 +116,20 @@ void Error<embedded,real>::displayError() {
 }
 
 template <long embedded,typename real>
-void Error<embedded,real>::writeError(string outputError) {
-	//std::ofstream outfile;
+void Error<embedded,real>::writeError(string outputError,string errorAction) {
+	std::ofstream outfile;
 
-	//outfile.open("../Output/error.txt", std::ios_base::app);
-	//outfile << LInfinity() << "," << H1Discrete() << endl; 
-	//outfile.close();
+	if (errorAction == "override")
+		outfile.open(outputError);
+	else {
+		if (errorAction != "append") {
+			std::cout << "The error is written is the file " << outputError << " (append, no override)." << std::endl;
+		}
+		outfile.open(outputError, std::ios_base::app);
+	}
+
+	outfile << LInfinity() << "," << H1Discrete() << endl; 
+	outfile.close(); 
 }
 
 
