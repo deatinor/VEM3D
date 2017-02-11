@@ -11,6 +11,19 @@
 \usepackage[perpage,symbol]{footmisc} %remet à zéro le compteur des notes de bas de page après chaque page
 \usepackage[hmargin={3cm,3cm}, vmargin={3cm,3cm}, dvips]{geometry}
 \usepackage{url}
+\usepackage{listings}
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+\lstset{escapechar=@,style=customc}
+
 %\pagestyle{plain}
 %\parindent=0cm	%définit la longueur du retrait
 %Mathématiques

@@ -26,14 +26,14 @@
 \contentsline {subsection}{\numberline {3.2}Mesh}{31}
 \contentsline {subsubsection}{\numberline {3.2.1}Point and MeshPoint}{31}
 \contentsline {subsubsection}{\numberline {3.2.2}Polygon and Polyhedron}{33}
-\contentsline {subsubsection}{\numberline {3.2.3}Mesh, Mesh2D, Mesh3D}{36}
-\contentsline {subsection}{\numberline {3.3}Laplace equation and VEM solver}{39}
-\contentsline {subsubsection}{\numberline {3.3.1}Problem and Laplace classes}{39}
-\contentsline {subsubsection}{\numberline {3.3.2}Monomials and MonomialsPolygon}{41}
-\contentsline {subsubsection}{\numberline {3.3.3}Solver, SolverVEM, SolverVEM2D and SolverVEM3D}{42}
-\contentsline {subsubsection}{\numberline {3.3.4}BoundaryCondition, Dirichlet}{45}
-\contentsline {subsubsection}{\numberline {3.3.5}Error}{47}
-\contentsline {section}{\numberline {4}Results}{49}
-\contentsline {subsection}{\numberline {4.1}Visualization of the results}{49}
-\contentsline {subsection}{\numberline {4.2}Numerical results}{49}
-\contentsline {section}{\numberline {5}Conclusion}{50}
+\contentsline {subsubsection}{\numberline {3.2.3}Mesh, Mesh2D, Mesh3D}{35}
+\contentsline {subsection}{\numberline {3.3}Laplace equation and VEM solver}{38}
+\contentsline {subsubsection}{\numberline {3.3.1}Problem and Laplace classes}{38}
+\contentsline {subsubsection}{\numberline {3.3.2}Monomials and MonomialsPolygon}{40}
+\contentsline {subsubsection}{\numberline {3.3.3}Solver, SolverVEM, SolverVEM2D and SolverVEM3D}{41}
+\contentsline {subsubsection}{\numberline {3.3.4}BoundaryCondition, Dirichlet}{44}
+\contentsline {subsubsection}{\numberline {3.3.5}Error}{46}
+\contentsline {section}{\numberline {4}Results}{48}
+\contentsline {subsection}{\numberline {4.1}Visualization of the results}{48}
+\contentsline {subsection}{\numberline {4.2}Numerical results}{48}
+\contentsline {section}{\numberline {5}Conclusion}{49}

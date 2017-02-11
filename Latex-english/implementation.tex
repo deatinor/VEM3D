@@ -1,7 +1,7 @@
 \newpage
 \section{Implementation}
 
-This part will explain our implementation of VEM for the resolution of Laplace problem with Dirichlet boundary conditions in $2$D and $2$D, on respectively polygonal or polyhedral meshes. C++ has been used, making the most of the fact that it is an object oriented programming language. Moreover, a Makefile has been written to automate compilation, and a Doxygen full documentation of the implementation can also be automatically generated. To visualize the results, we have however preferred to create some Python scripts, taking advantage of Mayavi library for $3$D plots. We have tried to adopt a coding style as coherent and easily readable as possible, to make the comprehension easier. 
+This part will explain our implementation of VEM for the resolution of Laplace problem with Dirichlet boundary conditions in $2$D and $3$D, on respectively polygonal or polyhedral meshes. C++ has been used, making the most of the fact that it is an object oriented programming language. Moreover, a Makefile has been written to automate compilation, and a Doxygen full documentation of the implementation can also be automatically generated. To visualize the results, we have however preferred to create some Python scripts, taking advantage of Mayavi library for $3$D plots. We have tried to adopt a coding style as coherent and easily readable as possible, to make the comprehension easier. 
 
 \subsection{Global view on the code}
 The code is based on $18$ classes and a main file. Making the most of \textit{template programming} techniques, declaration and implementation of each class are both in a header file. Memory layout has been done with the most recent C++ techniques in order to avoid memory leaks. In particular, where pointers are necessary, they have been implemented as smart (shared or weak) pointers. While writing the code, our aim has always been to create a code as general and reusable as possible. The code is essentially and ideally divided into two main parts:
@@ -24,7 +24,7 @@ A mesh in $2$D has been implemented in a similar way, but avoiding the presence 
 Two template parameters, \textit{embedded} and \textit{real} are present in every class. They guarantee some flexibility with respect to the chosen space ($2$D or $3$D) and to the precision of the data (double or long double types can be used). 
 
 \subsubsection{Point and MeshPoint} \label{pts}
-The classes \verb|Point| and \verb|MeshPoint| both represent a point in the $2$D or $3$D space. However, as their names suggest, \verb|Point| represents a generic point while \verb|MeshPoint| represent a point belonging to a mesh. In each instance of \verb|MeshPoint| is also stored the polygons and polyhedrons that have this point as vertex. No copy constructor is implemented in \verb|MeshPoint|, copying any such instance is forbidden. \verb|MeshPoint| also keeps into memory the ID of the point corresponding to the given mesh, and the information about whether a point is on the boundary of the considered geometry or not. 
+The classes \verb|Point| and \verb|MeshPoint| both represent a point in the $2$D or $3$D space. However, as their names suggest, \verb|Point| represents a generic point while \verb|MeshPoint| represent a point belonging to a mesh. In each instance of \verb|MeshPoint| the polygons and polyhedrons that have this point as vertex are also stored. No copy constructor is implemented in \verb|MeshPoint|, copying any such instance is forbidden. \verb|MeshPoint| also keeps into memory the ID of the point corresponding to the given mesh, and the information about whether a point is on the boundary of the considered geometry or not. 
 
 Class \verb|Point| is also used to represent a (geometrical) vector. Indeed, a point is only represented by an array of numbers corresponding to its coordinates. This is also sufficient to represent a vector. This is why class Point also contains methods to compute the norm of a vector or a cross product. 
 
@@ -32,10 +32,9 @@ The presence or the absence of the copy constructor is however the main differen
 
 Here is reported the implementation of class \verb|Point| and its main methods: \\
 
-\textbf{TODO: CHANGE THE DISPLAY OF CODE...?}
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Point.h}]
 template <long embedded,typename real=double>
 class Point {
 
@@ -54,35 +53,31 @@ public:
 
   // STANDARD METHODS
   long maxIndex() const;	//!< Maximum index of the point
-  long maxAbsIndex() const;	//!< Maximum index of the point 
-with absolute value
+  long maxAbsIndex() const;	//!< Maximum index of the point with absolute value
   real norm() const;  //!< L2 norm of the vector
   real normL1() const; //!< L1 norm of the vector
 
-  real& operator[](long index);	//!< Get an element by 
-reference
+  real& operator[](long index);	//!< Get an element by reference
 
   template <long embedded2,typename real2>
   friend Point<embedded2,real2> cross(const Point<embedded2,
 real2>& point1, const Point<embedded2,real2>& point2);
 };
-\end{verbatim}
+\end{lstlisting}
 
 \noindent\rule{12.7cm}{1pt}\\
 
 Here is reported the implementation of class \verb|MeshPoint| and its main methods:\\
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{MeshPoint.h}]
 template <long embedded,typename real=double>
 class MeshPoint: public Point<embedded,real> {
 protected:
   // PROPERTIES
   long pointID;	//!< ID of the MeshPoint
-  real value;		//!< Value in the point after the resolution of 
-the problem
-  bool isBoundary;	//<! Tells if the MeshPoint is on the 
-boundary
+  real value;		//!< Value in the point after the resolution of the problem
+  bool isBoundary;	//<! Tells if the MeshPoint is on the boundary
 
   vector<weak_ptr<Polygon<embedded, real>>> polygonVector;
   vector<weak_ptr<Polyhedron<embedded,real>>> polyhedronVector;
@@ -96,9 +91,8 @@ boundary
   void addPolygon(weak_ptr<Polygon<embedded,real>> 
 inputPolygon); //!< It inserts in polygon vector a new Polygon
   void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> 
-inputPolyhedron); //!< It insert in polyhedron vector a new 
-Polyhedron
-\end{verbatim}
+inputPolyhedron); //!< It insert in polyhedron vector a new Polyhedron
+\end{lstlisting}
 
 \noindent\rule{12.7cm}{1pt}\\
 
@@ -106,12 +100,12 @@ Polyhedron
 The two classes \verb|Polygon| and \verb|Polyhedron| represent a generic polygon or polyhedron, not necessarily convex. Both classes are to be understood as mesh components; but we have not implemented two different classes of both as for Point since it has not been necessary. The absence of copy constructor is then required as for \verb|MeshPoint|, for the same reasons (see paragraph \ref{pts}). For both classes \verb|Polygon| and \verb|Polyhedron|, the only way to create a new instance is by using methods \verb|make_shared_Polygon| or \verb|make_shared_Polyhedron|, that return a shared pointer to the new instance and that take care of handling connexions between them (since they are components of a given mesh). 
 The use of \textit{variadic template} techniques guarantee some flexibility and readability of the code. For example, a \verb|Polygon| can be initialized either from an \verb|std::vector| of \verb|MeshPoint|s, or from an arbitrary number of \verb|MeshPoint|s. 
 
-\verb|Polygon| is modelled as an ordered set of \verb|Point|s, in $2$D or $3$D. The order is necessary in order to be able to determine the sense of a normal vector, and in order to know if a polygon is convex or not (see paragraph \ref{polygons}). During the instantiation, the area, the normal vector and the barycentre of the polygon are computed. \verb|Polyhedron| instead, is a non ordered set of \verb|Polygon|s (see paragraph \ref{polyhedron}). During the instantiation are computed the volume, the external normal and the barycentre, and the normal vectors of the faces are coherently oriented (see paragraph \ref{polyhedron} for the algorithms used). \\
+\verb|Polygon| is modelled as an ordered set of \verb|Point|s, in $2$D or $3$D. The order is necessary in order to be able to determine the sense of a normal vector, and in order to know if a polygon is convex or not (see paragraph \ref{polygons}). During the instantiation, the area, the normal vector and the barycenter of the polygon are computed. \verb|Polyhedron| instead, is a non ordered set of \verb|Polygon|s (see paragraph \ref{polyhedron}). During the instantiation are computed the volume, the external normal and the barycenter, and the normal vectors of the faces are coherently oriented (see paragraph \ref{polyhedron} for the algorithms used). \\
 
 Here is reported the implementation of class \verb|Polygon| and its main methods:\\
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Polygon.h}]
 template <long embedded, typename real=double>
 class Polygon: public std::enable_shared_from_this<Polygon<
 embedded,real>> {
@@ -149,8 +143,7 @@ polyhedron);
   Vector<embedded,real> computeCentroid();
   real computeArea();
   real getDiameter();
-  real hTriangle(); // Compute the maximum distance 
-between 2 vertexes.
+  real hTriangle(); // Compute the maximum distance between 2 vertexes.
 
   shared_ptr<MeshPoint<embedded,real>> isPointAVertex(Point
 <embedded,real>& point);	
@@ -159,16 +152,15 @@ between 2 vertexes.
 isPointOnBoundary(Point<embedded,real>& point);
 
   Vector<3,real> computeNormal();
-  void switchPointsOrder(); // Invert the orientation of the 
-Polygon
-\end{verbatim}
+  void switchPointsOrder(); // Invert the orientation of the Polygon
+\end{lstlisting}
 
 \noindent\rule{12.7cm}{1pt}\\
 
 Here is reported the implementation of class \verb|Polyhedron| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Polyhedron.h}]
 template <long embedded, typename real=double>
 class Polyhedron: public enable_shared_from_this<Polyhedron
 <embedded,real>> {
@@ -180,8 +172,7 @@ protected:
 	
   bool isBoundary;	// Tells if the Polygon is on the boundary
   real volume;	// volume of the Polyhedron
-  Point<embedded,real> centroid;	// Not the real centroid, 
-only the mean of the vertexes.
+  Point<embedded,real> centroid;	// Not the real centroid, only the mean of the vertexes.
 
   // Stores the vertexes of the Polyhedron
   vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;	
@@ -207,25 +198,20 @@ inputPolygon);
 inputPoint);
   Point<embedded,real> computeCentroid();	// return the centroid
   real computeVolume();	// return the volume of the Polyhedron
-  real getDiameter();		// return the maximum distance between 2 
-Points
-  // Makes the normal to each face pointing towards the external
-of the Polyhedron
+  real getDiameter();		// return the maximum distance between 2 Points
+  // Makes the normal to each face pointing towards the external of the Polyhedron
   void fixExternalNormal();	
-  // Makes the normal of each face pointing in the same 
-direction (or inward or outward)
+  // Makes the normal of each face pointing in the same direction (or inward or outward)
   void fixFacesOrientation();	
   // Maximum distance between vertexes. Necessary for the mesh.
   real hTriangle();	
   void linkPoints();	// Makes all vertexes pointing to this
   void linkPolygons();  // Makes all Polygons pointing to this
 
-  void switchFacesOrientation();	// Invert the orientation of
-all faces
-  // If a new face is added, also his vertexes are added to the
-pointVector
+  void switchFacesOrientation();	// Invert the orientation of all faces
+  // If a new face is added, also his vertexes are added to the pointVector
   void updatePointVector();
-\end{verbatim}
+\end{lstlisting}
 \noindent\rule{12.7cm}{1pt}\\
 
 \subsubsection{Mesh, Mesh2D, Mesh3D}
@@ -238,7 +224,7 @@ pointVector
 Here is reported the implementation of class \verb|Mesh| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Mesh.h}]
 template <long embedded,typename baseElement,OpenEnum isOpen=
 OPEN, typename real=double>
 class Mesh {
@@ -279,16 +265,15 @@ elements
     virtual void setFileType1Mesh(string connection);
     virtual void setFileType2Mesh(string connection);
 
-    virtual void sort(); //!< Sort the pointVector based on 
-pointID
-\end{verbatim}
+    virtual void sort(); //!< Sort the pointVector based on pointID
+\end{lstlisting}
 
 \noindent\rule{12.7cm}{1pt}\\
 
 Here is reported the implementation of class \verb|Mesh2D| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Mesh2D.h}]
 template <typename real=double>
 class Mesh2D: public Mesh<2,Polygon<2,real>,OPEN,real> {
 private:
@@ -310,13 +295,13 @@ meshType=ANYTHING2D);
 
     virtual void setBoundaryElements();
     virtual void setRemainingThings();
-\end{verbatim}
+\end{lstlisting}
 \noindent\rule{12.7cm}{1pt}\\
 
 Here is reported the implementation of class \verb|Mesh3D| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Mesh3D.h}]
 template <typename real=double>
 class Mesh3D : public Mesh<3, Polyhedron<3,real>, OPEN, real> {
 protected:
@@ -343,27 +328,26 @@ meshType=ANYTHING3D);
     virtual void setTetrahedronMesh(string connection);
     // Mesh of ANYTHING3D type
     virtual void setAnything3DMesh(string connection);
-\end{verbatim}
+\end{lstlisting}
 \noindent\rule{12.7cm}{1pt}\\
 
 \subsection{Laplace equation and VEM solver}
-For the part of the code that solves a numerical problem, we have tried to write a code as modular as possible, to be able to change solver easily or to consider different boundary conditions (even if in this project, only VEM and Dirichlet boundary conditions have been implemented). We have deeply use \textit{template programming} techniques to guarantee this modularity. Indeed, classes that model the numerical problem are all template classes, for which two parameters are needed: one for the type of solver, \verb|SolverType|, and one for the boundary conditions, \verb|BoundaryConditionType|. A last class has been implemented to compute the error. To manage matrices, vectors and linear systems, the open-source Eigen has been used. 
+For the part of the code that solves a numerical problem, we have tried to write a code as modular as possible, to be able to change solver easily or to consider different boundary conditions (even if in this project, only VEM and Dirichlet boundary conditions have been implemented). We have deeply use \textit{template programming} techniques to guarantee this modularity. Indeed, classes that model the numerical problem are all template classes, for which two parameters are needed: one for the type of solver, \verb|SolverType|, and one for the boundary conditions, \verb|BoundaryConditionType|. A last class has been implemented to compute the error. To manage matrices, vectors and linear systems, the open-source Eigen library has been used. 
 
 \subsubsection{Problem and Laplace classes}
-The abstract class \verb|Problem| models a very generic numerical problem, that can be solve through a linear system made of a stiffness matrix and of a forcing term. The aim of class \verb|Problem| is to define an common interface for all types of problems, containing the definition of all the necessary methods and the implementation of the most generic ones. In particular, the creating of the stiffness matrix and of the forcing term are left to the derived classes while a default linear system solver is implemented in the parent class (BiCGSTAB) that can be overwritten. In \verb|Problem| are also implemented methods to compute the error and to write the output on a file, since this is common to all the solvers. 
+The abstract class \verb|Problem| models a very generic numerical problem, that can be solved through a linear system made of a stiffness matrix and of a forcing term. The aim of class \verb|Problem| is to define a common interface for all types of problems, containing the definition of all the necessary methods and the implementation of the most generic ones. In particular, the creating {\color{red} creation?} of the stiffness matrix and of the forcing term are left to the derived classes while a default linear system solver is implemented in the parent class (BiCGSTAB) that can be overwritten. In \verb|Problem| are also implemented methods to compute the error and to write the output on a file, since this is common to all the solvers. 
 
-\verb|Laplace| is a class that inherits from \verb|Problem| in order to model Laplace problem, leaving the full choice of a type of solver and of appropriate boundary conditions, as discussed earlier. In this class are implemented the methods to assemble the linear system and the global stiffness matrix, even if it leaves the computation of the local stiffness matrix to the classes dedicated to the solver and to the boundary conditions. \\
+\verb|Laplace| is a class that inherits from \verb|Problem| in order to model Laplace problems, leaving the full choice of the type of solver and of appropriate boundary conditions, as discussed earlier. In this class are implemented the methods to assemble the linear system and the global stiffness matrix, even if it leaves the computation of the local stiffness matrix to the classes dedicated to the solver and to the boundary conditions. \\
 
 Here is reported the implementation of class \verb|Problem| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Problem.h}]
 template <long embedded,typename MeshType,typename real=double>
 class Problem {
 	
 protected:
-    const MeshType& mesh;	//!< Mesh on which the problem is
-based
+    const MeshType& mesh;	//!< Mesh on which the problem is based
 
 public:
     SparseMatrix<real> stiffnessMatrix;
@@ -394,14 +378,14 @@ string outputSolution);
     // Output to file of the solution
     virtual void writeSolution(string outputSolution="solution.
 sol");
-\end{verbatim}
+\end{lstlisting}
 \noindent\rule{12.7cm}{1pt}\\
 
 Here is reported the implementation of class \verb|Laplace| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
 
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Laplace.h}]
 template <long embedded,typename MeshType,typename SolverType,
 typename BoundaryConditionType,typename real=double>
 class Laplace: public Problem<embedded,MeshType,real> {
@@ -421,10 +405,9 @@ inputBoundaryFunction,real inputDiffusionCoeff=1)
 
     // General method. It invokes the methods of the Solver.
     void computeStiffnessMatrix();
-    // General method. It invokes the methods of the Solver and 
-BoundaryCondition 
+    // General method. It invokes the methods of the Solver and BoundaryCondition 
     void computeKnownTerm();
-\end{verbatim}
+\end{lstlisting}
 \noindent\rule{12.7cm}{1pt}\\
 
 \subsubsection{Monomials and MonomialsPolygon}
@@ -432,8 +415,8 @@ First, we recall some VEM theory for a better comprehension. Given a mesh elemen
 $$
 m_\alpha:=\bigg( \frac{\mathbf{x}-\mathbf{x_k}}{h_k} \bigg) ^\alpha,
 $$
-where $\mathbf{x_k}$ is the barycentre of the element, and $h_k$ its diameter. For VEM solver of degree $1$, it is necessary to evaluate the monomials at the vertices of the elements, and to compute their gradients on the elements. 
-We note that for VEM of order $1$, neither $\mathbf{x_k}$ nor $h_k$ have to be exactly computed as far as the same values are used to compute all the monomials of a same element. Consequently, it has not been necessary to implement the computation of the exact barycentre of an element, operation computationally very expensive. 
+where $\mathbf{x_k}$ is the barycenter of the element, and $h_k$ its diameter. For VEM solver of degree $1$, it is necessary to evaluate the monomials at the vertices of the elements, and to compute their gradients on the elements. 
+We note that for VEM of order $1$, neither $\mathbf{x_k}$ nor $h_k$ have to be exactly computed as far as the same values are used to compute all the monomials of a same element. Consequently, it has not been necessary to implement the computation of the exact barycenter of an element, operation computationally very expensive. 
 All of this has been implemented in class \verb|Monomials| for the case in which a $2$D (resp. $3$D) element is embedded in a $2$D (resp. $3$D) space.
 
 Class \verb|MonomialsPolygon|, that inherits from  \verb|Monomials|, however, is used to compute the same quantities but in the case where a $2$D element (a polygon) is embedded in a $3$D space. The main difference comes from the fact that in the case of a $2$D (resp. $3$D) element in a $2$D (resp. $3$D) space, the gradient is a vector whose components are all equal, while for a $2$D element in a $3$D space the gradient has to be projected on the plane of the polygon we are considering.\\
@@ -441,16 +424,14 @@ Class \verb|MonomialsPolygon|, that inherits from  \verb|Monomials|, however, is
 Here is reported the implementation of class \verb|Monomials| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Monomials.h}]
 template <long embedded,typename baseElement,typename real=
 double>
 class Monomials {
 public:
-    const shared_ptr<baseElement>& element;	//!< Element can be 
-Polygon or Polyhedron
+    const shared_ptr<baseElement>& element;	//!< Element can be Polygon or Polyhedron
     real diameter;  //!< Diameter of the element
-    Point<embedded,real> centroid;  //!< Centroid of the 
-element
+    Point<embedded,real> centroid;  //!< Centroid of the element
     // It's the gradient of the monomial. It's 1/diameter
     real gradient;
 
@@ -460,19 +441,18 @@ element
     // Function to evaluate the monomial in a point
     real evaluate (const Point<embedded,real>& p, long i);
 }
-\end{verbatim}
+\end{lstlisting}
 \noindent\rule{12.7cm}{1pt}\\
 
 Here is reported the implementation of class \verb|MonomialsPolygon| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{MonomialsPolygon.h}]
 template <typename real>
 class MonomialsPolygon: public Monomials<3, Polygon<3,real>,
 real> {
 public:
-    // these are virtual indexes used to project the Polygon on
-an appropriate plane
+    // these are virtual indexes used to project the Polygon on an appropriate plane
     long indexX;
     long indexY;
     long indexZ;
@@ -483,7 +463,7 @@ an appropriate plane
     
     // Function to evaluate the monomial in a point
     real evaluate (const Point<3,real>& p, long i);
-\end{verbatim}
+\end{lstlisting}
 
 \noindent\rule{12.7cm}{1pt}\\
 
@@ -504,7 +484,7 @@ An important matrix property of VEM is the identity $G = BD$, which is very usef
 Here is reported the implementation of class \verb|Solver| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Solver.h}]
 template <long embedded,typename baseElement,typename 
 MatrixType,typename real>
 class Solver {
@@ -519,24 +499,27 @@ inputForceTerm);
     virtual MatrixType computeLocalK(const shared_ptr
 <baseElement>& element)=0;
 };
-\end{verbatim}
+\end{lstlisting}
 
 \noindent\rule{12.7cm}{1pt}\\
 
 Here is reported the implementation of class \verb|SolverVEM| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{SolverVEM.h}]
 template <long embedded,long elementDimension,typename 
 baseElement, typename MonomialType,typename real=double>
 class SolverVEM: public Solver<embedded,baseElement,
 Matrix<real,Dynamic,Dynamic>,real> {
+
 protected:
     virtual Matrix<real,elementDimension+1,elementDimension
 +1> computeG(MonomialType& monomial);
+
     virtual Matrix<real,elementDimension+1,Dynamic> 
 computeB(const shared_ptr<baseElement>& polyhedron,
 MonomialType& monomial)=0;
+
     virtual Matrix<real,Dynamic,elementDimension+1> 
 computeD(MonomialType& monomial);
 	
@@ -544,13 +527,13 @@ computeD(MonomialType& monomial);
 computePIStar(
 Matrix<real,elementDimension+1,elementDimension+1>&G,
 Matrix<real,elementDimension+1,Dynamic>&B);
+
     virtual Matrix<real,Dynamic,Dynamic> computePI(
 Matrix<real,elementDimension+1,Dynamic>&PIStar,
 Matrix<real,Dynamic,elementDimension+1>&D);
 	
 public:
-    //Basic constructor. A lot of paramethers are given as 
-template.
+    //Basic constructor. A lot of paramethers are given as template.
     SolverVEM(std::function<real(const Point<embedded,real>&)>
 inputForceTerm);
 	
@@ -561,14 +544,14 @@ shared_ptr<baseElement>& element);
     virtual real computeKnownTerm(const shared_ptr<baseElement>& 
 element, const shared_ptr<MeshPoint<embedded,real>>& point)=0; 
 };
-\end{verbatim}
+\end{lstlisting}
 
 \noindent\rule{12.7cm}{1pt}\\
 
 Here is reported the implementation of class \verb|SolverVEM2D| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{SolverVEM2D.h}]
 template <typename real=double>
 class SolverVEM2D: public SolverVEM<2,2,Polygon<2,real>,
 Monomial2D<real>,real> {
@@ -584,14 +567,14 @@ inputForceTerm);
 real>>& element,
 const shared_ptr<MeshPoint<2,real>>& point);
 };
-\end{verbatim}
+\end{lstlisting}
 
 \noindent\rule{12.7cm}{1pt}\\
 
 Here is reported the implementation of class \verb|SolverVEM3D| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{SolverVEM3D.h}]
 template <typename real=double>
 class SolverVEM3D: public SolverVEM<3,3,Polyhedron<3,real>,
 Monomial3D<real>,real> {
@@ -601,9 +584,11 @@ public:
     virtual Matrix<real,4,Dynamic> computeB(const shared_ptr
 <Polyhedron<3,real>>& 
 polyhedron,Monomial3D<real>& monomial);
+
     virtual Matrix<real,3,Dynamic> computeBPolygon(const 
 shared_ptr<Polygon<3,real>>& 
 polyhedron,MonomialsPolygon<real>& monomial);
+
     virtual Matrix<real,Dynamic,3> computeDPolygon(
 MonomialsPolygon<real>& monomial);
 		
@@ -619,7 +604,7 @@ inputForceTerm);
 point);	
 };
 
-\end{verbatim}
+\end{lstlisting}
 \noindent\rule{12.7cm}{1pt}\\
 
 \subsubsection{BoundaryCondition, Dirichlet}
@@ -635,7 +620,7 @@ Those two classes are based on the three following main methods:
 Here is reported the implementation of class \verb|BoundaryCondition| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{BoundaryCondition.h}]
 template <long embedded,typename MeshType,typename MeshElement,
 typename real=double>
 class BoundaryCondition {
@@ -648,31 +633,28 @@ inputMesh,std::function<real(Point<embedded,real>&)>
 inputBoundaryFunction);
 
 public:
-    // This is to decide if to add the Kloc computed to the 
-matrix
+    // This is to decide if to add the Kloc computed to the matrix
     virtual void addToTripletList(Matrix<real,Dynamic,
 Dynamic>& Kloc, MeshElement& element,vector<Triplet<real>>& 
 tripletList)=0;
 	
-    // Changes the stiffnessMatrix to keep into account the 
-boundary condition.
+    // Changes the stiffnessMatrix to keep into account the boundary condition.
     virtual void assignBoundaryConditionOnStiffnessMatrix
 (vector<Triplet<real>>& tripletList)=0;
 	
-    // Changes the known term to keep into account the boundary
-condition
+    // Changes the known term to keep into account the boundary condition
     virtual void assignBoundaryConditionOnKnownTerm
 (VectorX<real>& knownTerm)=0; 		
 };
 
-\end{verbatim}
+\end{lstlisting}
 
 \noindent\rule{12.7cm}{1pt}\\
 
 Here is reported the implementation of class \verb|Dirichlet| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Dirichlet.h}]
 template <long embedded,typename MeshType,typename MeshElement,
 typename real>
 class Dirichlet: public BoundaryCondition<embedded,MeshType,
@@ -685,18 +667,15 @@ public:
     Dirichlet(const MeshType& mesh,std::function<real(Point
 <embedded,real>&)> boundaryFunction);
 	
-    // This is to decide if to add the Kloc computed to the 
-matrix.
+    // This is to decide if to add the Kloc computed to the matrix.
     virtual void addToTripletList(Matrix<real,Dynamic,Dynamic>& 
 Kloc, MeshElement& element,vector<Triplet<real>>& tripletList);
 	
-    // Changes the stiffnessMatrix to keep into account the 
-boundary condition.
+    // Changes the stiffnessMatrix to keep into account the boundary condition.
     virtual void assignBoundaryConditionOnStiffnessMatrix
 (vector<Triplet<real>>& tripletList);
 	
-    // Changes the known term to keep into account the 
-boundary condition
+    // Changes the known term to keep into account the boundary condition
     virtual void assignBoundaryConditionOnKnownTerm(VectorX
 <real>& knownTerm);	
 };
@@ -708,7 +687,7 @@ real>;
 template <typename real=double>
 using Dirichlet2D=Dirichlet<2,Mesh2D<real>,Polygon<2,real>,
 real>;
-\end{verbatim}
+\end{lstlisting}
 \noindent\rule{12.7cm}{1pt}\\
 
 \subsubsection{Error}
@@ -721,7 +700,7 @@ real>;
 Here is reported the implementation of class \verb|Error| and its main methods:
 
 \noindent\rule{12.7cm}{1pt}
-\begin{verbatim}
+\begin{lstlisting}[caption=File \texttt{Error.h}]
 template <long embedded,typename real=double>
 class Error {
 protected:
@@ -735,8 +714,7 @@ realSolutionFunction;
 	
     SparseMatrix<real>& stiffnessMatrix;
 	
-    // This computes the exact solution, from 
-realSolutionFunction
+    // This computes the exact solution, from realSolutionFunction
     void computeRealSolution(); 
 	
 public:
@@ -755,17 +733,17 @@ SparseMatrix<real>& inputStiffnessMatrix);
 	
     void displayError();   //!< Print the computer error	
 };
-\end{verbatim}
+\end{lstlisting}
 \noindent\rule{12.7cm}{1pt}\\
 
 \newpage
 \section{Results}
 
 \subsection{Visualization of the results}
-For the visualization of the results, we have decided to use Python programming language instead of C++ thanks to a great choice of libraries. This part is divided into two parts, depending on the used libraries:
+For the visualization of the results, we have decided to use the Python programming language instead of C++ thanks to a great choice of libraries. This part is divided into two parts, depending on the used libraries:
 \begin{itemize}
-\item With Matplotlib library, we have created $2$ scripts for the $3$D visualization of either a polyhedron or an entire mesh. The main goal of this script is mainly to test the code; it has not been optimized and thus it might be very slow for large meshes. It is however efficient for smaller mesh and allows us to have a quick visual feedback on the results and their coherence. 
-\item With Mayavi library, we have create $3$ scripts to visualize the solution. \verb|plotPoints3D| only shows the vertices of the polyhedrons that are part of the mesh, together with the solution at these points. \verb|plot2D| and \verb|plot3D|, instead, shows the solution on the whole mesh. In the $3$D case, Mayavi visualization tools can be used to see the solution in different part of the mesh, such as on a section of the mesh for instance. 
+\item With {\color{red} the} Matplotlib library, we have created $2$ scripts for the $3$D visualization of either a polyhedron or an entire mesh. The main goal of this script is mainly to test the code; it has not been optimized and thus it might be very slow for large meshes. It is however efficient for smaller mesh and allows us to have a quick visual feedback on the results and their coherence. 
+\item With {\color{red} the} Mayavi library, we have create $3$ scripts to visualize the solution. \verb|plotPoints3D| only shows the vertices of the polyhedrons that are part of the mesh, together with the solution at these points. \verb|plot2D| and \verb|plot3D|, instead, show the solution on the whole mesh. In the $3$D case, Mayavi visualization tools can be used to see the solution in different part of the mesh, such as on a section of the mesh for instance. 
 \end{itemize}
 
 In the following Figures $1$ to $5$, we show some of the visual results that have been obtained:
@@ -795,14 +773,14 @@ In the following Figures $1$ to $5$, we show some of the visual results that hav
 \label{img:matplotlibMesh}
 \centering
 \includegraphics[scale=0.35]{images/mayavi3D.png}
-\caption{Plot with Mayavi. Mesh of tetrahedron on a $3$D sphere with the solution on a section of the sphere. The section can be dynamically chosen.}
+\caption{Plot with Mayavi. Mesh of a tetrahedron on a $3$D sphere with the solution on a section of the sphere. The section can be dynamically chosen.}
 \end{figure}
 
 \begin{figure}[!h]
 \label{img:matplotlibMesh}
 \centering
 \includegraphics[scale=0.4]{images/mayavi3DPoints.png}
-\caption{Plot with Mayavi. Mesh of tetrahedron on a $3$D mesh with the solution on every vertex.}
+\caption{Plot with Mayavi. Mesh of a tetrahedron on a $3$D mesh with the solution on every vertex.}
 \end{figure}
 
 \subsection{Numerical results}
