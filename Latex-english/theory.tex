@@ -282,7 +282,7 @@ The dimension of the local space $V^{K,k}$ correspond to the number of degrees o
 \begin{itemize}
 \item the values of $v_h$ at each vertex of $K$. Let $\mathcal{V}^{K,k}$ be the set of such values;
 \item if $d>1$, the values of $v_h$ at $k-1$ intermediate points on each edge of $K$. Let $\mathcal{E}^{K,k}$ be the set of such values;
-\item if $d=3$, the moments up to order $k-2$ of $v_h$ on each face $f_K\in F_K$, that is $\frac{1}{|f_K|}\int_{f_K}m(\mathbf{x})v_h(\mathbf{x})\, \mathrm{d}\mathbf{x}$, for all $m\in \mathcal{M}_{k-2}(f_K)$, where $$\mathcal{M}_{k-2}(D) = \left\{\left(\frac{\mathbf{x}-\mathbf{x}_D}{h_D}\right)^\mathbf{s} : |\mathbf{s}|\leq k-2\right\},$$ with $\mathbf{x}_D$ being the barycentre of the geometrical element $D$, $h_D$ its diameter, $|\mathbf{s}| = \sum_{i=1}^d s_i$ with $s_i\in \N_0$, and $\mathbf{x}^\mathbf{s}=\prod_{i=1}^d x_i^{s_i},$ $x_i$ being the $i$-th coordinate of $\mathbf{x}$. Let $\mathcal{F}^{K,k}$ be the set of such values.
+\item if $d=3$, the moments up to order $k-2$ of $v_h$ on each face $f_K\in F_K$, that is $\frac{1}{|f_K|}\int_{f_K}m(\mathbf{x})v_h(\mathbf{x})\, \mathrm{d}\mathbf{x}$, for all $m\in \mathcal{M}_{k-2}(f_K)$, where $$\mathcal{M}_{k-2}(D) = \left\{\left(\frac{\mathbf{x}-\mathbf{x}_D}{h_D}\right)^\mathbf{s} : |\mathbf{s}|\leq k-2\right\},$$ with $\mathbf{x}_D$ being the barycenter of the geometrical element $D$, $h_D$ its diameter, $|\mathbf{s}| = \sum_{i=1}^d s_i$ with $s_i\in \N_0$, and $\mathbf{x}^\mathbf{s}=\prod_{i=1}^d x_i^{s_i},$ $x_i$ being the $i$-th coordinate of $\mathbf{x}$. Let $\mathcal{F}^{K,k}$ be the set of such values.
 \item the moments up to order $k-2$ of $v_h$ in $K$, that is $\frac{1}{|K|}\int_Km(\mathbf{x})v_h(\mathbf{x})\, \mathrm{d}\mathbf{x}$, for all $m\in \mathcal{M}_{k-2}(K)$, where $\mathcal{M}_{k-2}(K)$ is defined in the previous point. Let $\mathcal{P}^{K,k}$ be the set of such values.
 \end{itemize}
 
@@ -292,7 +292,7 @@ We easily verify the following proposition:
 The total number of chosen degrees of freedom is equal to $N^{K,k}$. 
 \end{proposition}
 \begin{proof}
-Indeed, we first see straightforward that $\mathcal{V}^{K,k}$ contains $n_v^K$ degrees of freedom, and $\mathcal{E}^{K,k}$ contains $n_e^K(k-1)$ degrees of freedom. Then, we have to distinguish the cases $d=1$, $d=2$ and $d=3$. \\
+Indeed, we first see straightforward {\color{red} si può dire see straightforward?} that $\mathcal{V}^{K,k}$ contains $n_v^K$ degrees of freedom, and $\mathcal{E}^{K,k}$ contains $n_e^K(k-1)$ degrees of freedom. Then, we have to distinguish the cases $d=1$, $d=2$ and $d=3$. \\
 
 \noindent \underline{Case 1:} $d=1$. \\
 \noindent The cardinality of $\mathcal{P}^{K,k}$ is equal to the cardinality of $\mathcal{M}_{k-2}(K)$, which is the number of multi-indices $\mathbf{s}$ such that $|\mathbf{s}|\leq k-2$ is equal to the dimension of $\mathbb{P}_{k-2}(K)$, that is $k-1$. Consequently, 
@@ -375,7 +375,8 @@ We emphasis the fact that the Laplace operator present in the definition of $V^{
 \end{remark}
 
 \subsubsection{Construction of the discretized space $V_h$}
-Now, we have all the tools to build the discretized space $V_h$ on the whole space $\Omega$, that verifies all conditions of Theorem \ref{conditions}, as desired. So given a space decomposition $T_h$ into simple polygons, and for every integer $k\geq 1$, $V_h:=\prod_{K\in T_h} V^{K,k}$, with the right homogeneous Dirichlet boundary conditions imposed. More precisely, we define $V_h$ independently for the case $1$/$2$D or $3$D:\\
+Now, we have all the tools to build the discretized space $V_h$ on the whole space $\Omega$, that verifies all conditions of Theorem \ref{conditions}, as desired. So given a space decomposition $T_h$ into simple polygons, and for every integer $k\geq 1$, {\color{red} we define (?) }$V_h:=\prod_{K\in T_h} V^{K,k}$ 
+{\color{red} come mai il simbolo della produttoria? non l'unione?}, with the right homogeneous Dirichlet boundary conditions imposed. More precisely, we define $V_h$ independently for the case $1$/$2$D or $3$D:\\
 
 \noindent \underline{Case 1:} $d=1$ or $2$.
 $$
@@ -405,7 +406,7 @@ Then, the global degrees of freedom in $V_h$ are chosen in the same way as the l
 \begin{itemize}
 \item the values of $v_h$ at each internal vertex of $T_h$. Let $\mathcal{V}$ be the set of such values;
 \item if $d>1$, the values of $v_h$ at $k-1$ intermediate points on each internal edge of $T_h$. Let $\mathcal{E}$ be the set of such values;
-\item if $d=3$, the moments up to order $k-2$ of $v_h$ on each internal face $f$ of $T_h$, that is $\frac{1}{|f|}\int_{f}m(\mathbf{x})v_h(\mathbf{x})\, \mathrm{d}\mathbf{x}$, for all $m\in \mathcal{M}_{k-2}(f)$, where as before, $$\mathcal{M}_{k-2}(D) = \left\{\left(\frac{\mathbf{x}-\mathbf{x}_D}{h_D}\right)^\mathbf{s} : |\mathbf{s}|\leq k-2\right\},$$ with $\mathbf{x}_D$ being the barycentre of the geometrical element $D$, $h_D$ its diameter, $|\mathbf{s}| = \sum_{i=1}^d s_i$ with $s_i\in \N_0$, and $\mathbf{x}^\mathbf{s}=\prod_{i=1}^d x_i^{s_i},$ $x_i$ being the $i$-th coordinate of $\mathbf{x}$. Let $\mathcal{F}$ be the set of such values.
+\item if $d=3$, the moments up to order $k-2$ of $v_h$ on each internal face $f$ of $T_h$, that is $\frac{1}{|f|}\int_{f}m(\mathbf{x})v_h(\mathbf{x})\, \mathrm{d}\mathbf{x}$, for all $m\in \mathcal{M}_{k-2}(f)$, where as before, $$\mathcal{M}_{k-2}(D) = \left\{\left(\frac{\mathbf{x}-\mathbf{x}_D}{h_D}\right)^\mathbf{s} : |\mathbf{s}|\leq k-2\right\},$$ with $\mathbf{x}_D$ being the barycenter of the geometrical element $D$, $h_D$ its diameter, $|\mathbf{s}| = \sum_{i=1}^d s_i$ with $s_i\in \N_0$, and $\mathbf{x}^\mathbf{s}=\prod_{i=1}^d x_i^{s_i},$ $x_i$ being the $i$-th coordinate of $\mathbf{x}$. Let $\mathcal{F}$ be the set of such values.
 \item the moments up to order $k-2$ of $v_h$ in every element $K\in T_h$, that is $\frac{1}{|K|}\int_Km(\mathbf{x})v_h(\mathbf{x})\, \mathrm{d}\mathbf{x}$, for all $m\in \mathcal{M}_{k-2}(K)$, where $\mathcal{M}_{k-2}(K)$ is defined in the previous point. Let $\mathcal{P}$ be the set of such values.
 \end{itemize}
 Finally, the homogeneous Dirichlet boundary conditions impose $v_h=0$ on the vertices, edges and faces belonging to $\partial \Omega$. In the exact same way as for Proposition \ref{chosenlocaldofnb}, it is straightforward to verify that the total number of chosen degrees of freedom (that is $\#\mathcal{P}+\#\mathcal{V}+\#\mathcal{E}+\#\mathcal{F}$) is indeed equal to the dimension $N^\text{tot}$ of $V_h$. Moreover, Proposition \ref{localunisolvent} implies that the degrees of freedom $\mathcal{P}\cup\mathcal{V}\cup\mathcal{E}\cup\mathcal{F}$ are unisolvent for $V_h$. \\
@@ -452,11 +453,11 @@ Finally, if $d=3$, $\partial K$ is composed of faces. Unlike the case $d=1$ or $
 V^{f_K,k} := &\Bigg\{v\in H^1(f_K) : v|_{\partial f_K} \in \mathbb{B}_k(\partial f_K), \Delta v\in \mathbb{P}_{k}(f_K), \\
 &\left. \int_{f_K} v(\mathbf{x}) m(\mathbf{x}) \, \mathrm{d}\mathbf{x} = \int_{f_K} \Pi^\nabla v(\mathbf{x}) m(\mathbf{x})\mathrm{d}\mathbf{x}, \forall m\in\mathcal{M}_{k-1,k}(f_K) \right\},
 \end{align*}
-where we recall again that $$\mathcal{M}_{k-1,k}(f_K) = \left\{\left(\frac{\mathbf{x}- \mathbf{x}_{f_K}}{h_{f_K}}\right)^\mathbf{s} : |\mathbf{s}|= k-1, k\right\},$$ with $\mathbf{x}_{f_K}$ being the barycentre of the face $f_K$, $h_{f_K}$ its diameter, $|\mathbf{s}| = \sum_{i=1}^d s_i$ with $s_i\in \N_0$, and $\mathbf{x}^\mathbf{s}=\prod_{i=1}^d x_i^{s_i},$ $x_i$ being the $i$-th coordinate of $\mathbf{x}$. Note that here, the projection operator $\Pi^\nabla$ projects functions belonging to $V^{f_K,k}$ into $\mathbb{P}_k(f_K)$, for any $f_K\in F_K$. 
+where we recall again that $$\mathcal{M}_{k-1,k}(f_K) = \left\{\left(\frac{\mathbf{x}- \mathbf{x}_{f_K}}{h_{f_K}}\right)^\mathbf{s} : |\mathbf{s}|= k-1, k\right\},$$ with $\mathbf{x}_{f_K}$ being the barycenter of the face $f_K$, $h_{f_K}$ its diameter, $|\mathbf{s}| = \sum_{i=1}^d s_i$ with $s_i\in \N_0$, and $\mathbf{x}^\mathbf{s}=\prod_{i=1}^d x_i^{s_i},$ $x_i$ being the $i$-th coordinate of $\mathbf{x}$. Note that here, the projection operator $\Pi^\nabla$ projects functions belonging to $V^{f_K,k}$ into $\mathbb{P}_k(f_K)$, for any $f_K\in F_K$. 
 Unlike the previous definition, the Laplacian is not required to be in $\mathbb{P}_{k-2}$ but in $\mathbb{P}_k$, and extra conditions on the moments of the function are required.
 
 Now we have to check that the dimension of $V^{f_K,k}$ is still the same as before. 
-To know the dimension of $V^{f_K,k}$, we first look more specifically into the last two conditions. $\Delta v\in\mathbb{P}_k(f_K)$ gives us $\dim\big(\mathbb{P}_k(f_K)\big)$ conditions. Moreover, we know that the moments on $f_K$ up to some order $\tilde{k}$ form a basis of $\mathbb{P}_{\tilde{k}}(f_K)$. Consequently, imposing the last condition of the definition of $V^{f_K,k}$ for all $m\in\mathcal{M}_{k-1,k}(f_K)$ and imposing $\Delta v\in\mathbb{P}_k(f_K)$ is equivalent to remaining with $\dim\big(\mathbb{P}_{k-2}(f_K)\big)$ degrees of freedom. Therefore, 
+To know the dimension of $V^{f_K,k}$, we first look more specifically into the last two conditions. $\Delta v\in\mathbb{P}_k(f_K)$ gives us $\dim\big(\mathbb{P}_k(f_K)\big)$ conditions. Moreover, we know that the moments on $f_K$ up to some order $\tilde{k}$ form a basis of $\mathbb{P}_{\tilde{k}}(f_K)$. Consequently, imposing the last condition of the definition of $V^{f_K,k}$ for all $m\in\mathcal{M}_{k-1,k}(f_K)$ and imposing $\Delta v\in\mathbb{P}_k(f_K)$ is equivalent to remaining {\color{red} non remain?} with $\dim\big(\mathbb{P}_{k-2}(f_K)\big)$ degrees of freedom. Therefore, 
 $$\dim\left(V^{f_K,k}\right) = \dim\big(\mathbb{B}_k\left(\partial f_K\right)\big)+\dim\big(\mathbb{P}_{k-2}(f_K)\big)= n_v^{f_K} + n_e^{f_K}(k-1) + \frac{k(k-1)}{2}.$$
 For a more rigorous proof of this, and to prove the existence of functions in $V^{f_K,k}$, please refer to \cite{existenceW}. Note moreover that $V^{K,k}$ built from $V^{f_K,k}$ can still be described with the same degrees of freedom as previously, and it still contains all the polynomials of degree $k$. 
 
@@ -505,7 +506,7 @@ a_h^K(v,v)&\leq a^K(\Pi^\nabla v, \Pi^\nabla v) + c_0a^K(v-\Pi^\nabla v, v-\Pi^\
 Consequently, $a_h^K$ also verifies the stability property.
 \end{proof}
 
-It remains to find a suitable symmetric positive definite bilinear form $S^K$. In order to verify relation (\ref{condSK}), we need $S^K$ to scale like $a^K$ on $\Ker(\Pi^\nabla)$. We recall that $N^{K,k} = \dim(V^{K,k})$. Let $\{\phi_i\}_{i=1}^{N^{K,k}}$ be the Lagrangian basis of $V^{K,k}$, that is dof$_i(\phi_i)=\delta_{ij}, \forall i,j=1,\ldots,N^{K,k}$, where dof$_i:V^{K,k}\rightarrow \R$ maps each function of $V^{K,k}$ to its $i$-th degree of freedom. Before defining $S^K$, we need two lemmas.
+It remains to find a suitable symmetric positive definite bilinear form $S^K$. In order to verify relation (\ref{condSK}), we need $S^K$ to scale like {\color{red} cosa vuol dire scale like? (scusa ignoranza mia immagino ahah)} $a^K$ on $\Ker(\Pi^\nabla)$. We recall that $N^{K,k} = \dim(V^{K,k})$. Let $\{\phi_i\}_{i=1}^{N^{K,k}}$ be the Lagrangian basis of $V^{K,k}$, that is dof$_i(\phi_i)=\delta_{ij}, \forall i,j=1,\ldots,N^{K,k}$, where dof$_i:V^{K,k}\rightarrow \R$ maps each function of $V^{K,k}$ to its $i$-th degree of freedom. Before defining $S^K$, we need two lemmas.
 
 \begin{lemma}\label{lemma1}
 All the degrees of freedom scale as $1$, that is they are invariant under rescaling of the elements of the mesh. 
@@ -523,7 +524,7 @@ Let $\hat{K}$ be an element of $T_h$ and consider the change of variable $\mathb
 Given $h>0$ the size of a mesh decomposition $T_h$, $K$ an element of $T_h$ and $k\geq 1$ an integer, then $h^{2-d}a^K(\phi_i,\phi_i)$ scales like $1$ for all $i=1,\ldots,N^{K,k}$. That is, $h^{2-d}a^K(\phi_i,\phi_i)$ is independent from $K$ and $h$, or equivalently, it is invariant under rescaling the elements of the mesh. 
 \end{lemma}
 \begin{proof}
-Let $\hat{K}$ be an element of $T_{\hat{H}}$ and consider the change of variables $\mathbf{x}=h\hat{\mathbf{x}}$ that maps the element $\hat{K}$ onto an element $K$. More generally, this change of variables maps any element of the mesh $T_{\hat{H}}$ onto an element of the mesh $T_H$, where $H=h\hat{H}$. As the in the previous lemma, for each basis function $\hat{\phi}_i$, $i=1,\ldots,N^{\hat{K},k}$, we define $\phi_i$ on $K$ as $\phi_i(\mathbf{x}) = \phi_i(h\mathbf{\hat{x}}) := \hat{\phi}_i(\hat{\mathbf{x}}) = \hat{\phi}_i\left(\frac{\mathbf{x}}{h}\right)$, and $N^{K,k}=N^{\hat{K},k}$. Then for all $i=1,\ldots,N^{K,k}$, 
+Let $\hat{K}$ be an element of $T_{\hat{H}}$ and consider the change of variables $\mathbf{x}=h\hat{\mathbf{x}}$ that maps the element $\hat{K}$ onto an element $K$. More generally, this change of variables maps any element of the mesh $T_{\hat{H}}$ onto an element of the mesh $T_H$, where $H=h\hat{H}$. As the {\color{red} manca qualcosa credo} in the previous lemma, for each basis function $\hat{\phi}_i$, $i=1,\ldots,N^{\hat{K},k}$, we define $\phi_i$ on $K$ as $\phi_i(\mathbf{x}) = \phi_i(h\mathbf{\hat{x}}) := \hat{\phi}_i(\hat{\mathbf{x}}) = \hat{\phi}_i\left(\frac{\mathbf{x}}{h}\right)$, and $N^{K,k}=N^{\hat{K},k}$. Then for all $i=1,\ldots,N^{K,k}$, 
 \begin{align*}
 \hat{H}^{2-d}a^{\hat{K}}(\hat{\phi_i,\phi_i}) &= \hat{H}^{2-d}\int_{\hat{K}} |\nabla \hat{\phi_i}|^2 \, \mathrm{d}\hat{K} \\
 &= \frac{H^{2-d}}{h^{2-d}} \int_K |\nabla \phi_i h|^2 \frac{1}{h^d} \, \mathrm{d}K\\
@@ -556,7 +557,7 @@ To sum up, we have been able to define $a_h^K$ by $$a_h^K(u,v):=a^K(\Pi^\nabla u
 for all $u,v\in V^{K,k}$, so that it verifies all the conditions of Theorem \ref{conditions}. The last remaining part to apply this theorem is to build the right-hand side element $f_h$.
 
 \subsubsection{Construction of the right-hand side $f_h$}
-In this part is presented the choice made to approximate $F$ present in the weak formulation of the differential problem (\ref{weak}). Since $F$ is a functional on the Hilbert space $V=H_0^1(\Omega)$ (the considered norm in $V$ is the semi-norm of $H^1(\Omega)$), we know by Riesz representation theorem that there is a unique element $x_f\in V$ such that for all $v\in V$, $F(v) = \int_\Omega \nabla v\cdot\nabla x_f\, \mathrm{d}\Omega$. We separate the case $k=1$ to the case $k\geq 2$ for technical reasons that will become obvious in the following.\\
+In this part is presented the choice made to approximate $F$ present {\color{red} forse se si riesce a riscrivere senza present è più carino} in the weak formulation of the differential problem (\ref{weak}). Since $F$ is a functional on the Hilbert space $V=H_0^1(\Omega)$ (the considered norm in $V$ is the semi-norm of $H^1(\Omega)$), we know by Riesz representation theorem that there is a unique element $x_f\in V$ such that for all $v\in V$, $F(v) = \int_\Omega \nabla v\cdot\nabla x_f\, \mathrm{d}\Omega$. We separate the case $k=1$ to the case $k\geq 2$ for technical reasons that will become obvious in the following.\\
 
 \noindent \underline{Case 1:} $k\geq 2$. \\
 $f_h$ is defined as the $L^2(K)$-projection of $x_f$ onto the space $\mathbb{P}_{k-2}(K)$, on each $K\in T_h$. Let us write it $f_h := P_{k-2}^Kx_f$, for all $K\in T_h$. In this way, we have: for all $v_h\in V_h$, 
