@@ -9,8 +9,8 @@
 //inputConnection=../../Mesh/Cube/CubeWithoutPart/conn-16.txt;
 
 // SPHERIC MESH
-inputPoint=../../Mesh/Sphere3D/p_sphere_0_15.txt;
-inputConnection=../../Mesh/Sphere3D/t_sphere_0_15.txt;
+inputPoint=../../Mesh/Ondine/point-16.txt;
+inputConnection=../../Mesh/Ondine/conn-16.txt;
 
 // 2D MESH
 //inputPoint=../../Mesh/Mesh2DSquare/point-16.txt
@@ -25,7 +25,7 @@ inputConnection=../../Mesh/Sphere3D/t_sphere_0_15.txt;
 // meshType can be only Mesh2D or Mesh3D
 meshType=Mesh3D;
 // fileType can be ANYTHING3D, TETRAHEDRON or ANYTHING 2D
-fileType=TETRAHEDRON;
+fileType=ANYTHING3D
 
 
 // forceTermFunction
