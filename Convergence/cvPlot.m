@@ -51,18 +51,18 @@ legend('Error VEM', 'h^2', 'Location', 'northwest');
 % Compute analytically the error convergence slope
 dh1=err3d(4:end-1,2)./err3d(5:end,2);
 dli=err3d(4:end-1,1)./err3d(5:end,1);
-dh=h(4:end-2)./h(5:end-1);
+dh=h(4:end-1)./h(5:end);
 
 convH=log(dh1)./log(dh)'
 convL=log(dli)./log(dh)'
 
 % Visualization of the error convergence
-exact = h(4:end-1).^2;
-exact = exact*10^3;
+exact = h(5:end).^2;
+exact = exact*10^4;
 figure;
-loglog(h(1:end-1),err3d(:,2),'+-b');
+loglog(h(1:end),err3d(:,2),'+-b');
 hold on;
-loglog(h(4:end-1),exact,'--k');
+loglog(h(5:end),exact,'--k');
 grid on;
 xlabel('Size of the elements h');
 ylabel('H^1-error');
