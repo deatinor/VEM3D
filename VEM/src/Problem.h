@@ -83,6 +83,7 @@ void Problem<embedded,MeshType,real>::computeSolution() {
 	
 	BiCGSTAB<SparseMatrix<real>> solver;
 	solution=solver.compute(stiffnessMatrix).solve(knownTerm);
+	cout << solution << endl<<endl;
 	
 }
 
