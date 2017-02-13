@@ -3,6 +3,8 @@
 // CUBIC MESH
 //inputPoint=../Mesh/Cube/Cubic/point-2.txt;
 //inputConnection=../Mesh/Cube/Cubic/conn-2.txt;
+inputPoint=../Convergence/Mesh3D/point-128.txt;
+inputConnection=../Convergence/Mesh3D/conn-128.txt;
 
 // CUBE WITHOUT PART
 //inputPoint=../Mesh/Cube/CubeWithoutPart/point-16.txt;
@@ -13,10 +15,10 @@
 //inputConnection=../Mesh/Sphere3D/conn-2.txt;
 
 // 2D MESH SQUARE
-inputPoint=../Convergence/Mesh2D/point-128.txt;
 //../Mesh/Mesh2DSquare/point-16.txt;
-inputConnection=../Convergence/Mesh2D/conn-128.txt;
 //../Mesh/Mesh2DSquare/conn-16.txt;
+//inputPoint=../Convergence/Mesh2D/point-128.txt;
+//inputConnection=../Convergence/Mesh2D/conn-128.txt;
 
 // TEST
 //inputPoint=../Mesh/Test/point3.txt;
@@ -25,9 +27,9 @@ inputConnection=../Convergence/Mesh2D/conn-128.txt;
 
 // mesh type
 // meshType can be only Mesh2D or Mesh3D
-meshType=Mesh2D;
+meshType=Mesh3D;
 // fileType can be ANYTHING3D, TETRAHEDRON or ANYTHING2D
-fileType=ANYTHING2D;
+fileType=ANYTHING3D;
 
 
 // forceTermFunction
@@ -40,10 +42,10 @@ solutionFunction=solutionConvergence;
 
 
 // file output name
-outputPoint=../Convergence/Output/point2D-ne128.txt;
-outputConnection=../Convergence/Output/conn2D-ne128.txt;
-outputSolution=../Convergence/Output/solution2D-ne128.txt;
-outputError=../Convergence/Output/error2D.txt;
+outputPoint=../Convergence/Output/point3D-ne128.txt;
+outputConnection=../Convergence/Output/conn3D-ne128.txt;
+outputSolution=../Convergence/Output/solution3D-ne128.txt;
+outputError=../Convergence/Output/error3D.txt;
 //outputPoint=Output/point2D.txt;
 //outputConnection=Output/conn2D.txt;
 //outputSolution=Output/solution2D.txt;

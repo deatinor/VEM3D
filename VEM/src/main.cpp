@@ -64,19 +64,9 @@ real forceTermConvergence(const Point<embedded,real>& inputPoint) {
  		auto y=inputPoint[1];
  		auto z=inputPoint[2];
  		
- 		return 0; //TODOOOOOOOO !!!!
+ 		return 147*M_PI*M_PI*sin(7*M_PI*x)*sin(7*M_PI*y)*sin(7*M_PI*z);
 	}
 }
-
-/* template <long embedded,typename real=double>
-real boundaryFunction(const Point<embedded,real>& inputPoint) {
-	auto x=inputPoint[0];
-	auto y=inputPoint[1];
-	auto z=inputPoint[2];
-	
-	
-	return 0;
-} */
 
 template <long embedded,typename real=double>
 real solutionSphere(const Point<embedded,real>& inputPoint) {
@@ -119,7 +109,7 @@ real solutionConvergence(const Point<embedded,real>& inputPoint) {
  		auto y=inputPoint[1];
  		auto z=inputPoint[2];
  	
- 		return 0; //TODOOOOOOOOOOOOOOOOOOOOO
+ 		return sin(7*M_PI*x)*sin(7*M_PI*y)*sin(7*M_PI*z);
   	}
 }
 
@@ -250,22 +240,26 @@ int main(int argc, const char * argv[]) {
 	auto forceTermSphere2D=forceTermSphere<2,double>;
 	auto forceTermSquare3D=forceTermSquare<3,double>;
 	auto forceTermSquare2D=forceTermSquare<2,double>;
+	auto forceTermConvergence3D=forceTermConvergence<3,double>;
 	auto forceTermConvergence2D=forceTermConvergence<2,double>;
 	auto solutionSphere3D=solutionSphere<3,double>;
 	auto solutionSphere2D=solutionSphere<2,double>;
 	auto solutionSquare3D=solutionSquare<3,double>;
 	auto solutionSquare2D=solutionSquare<2,double>;
+	auto solutionConvergence3D=solutionConvergence<3,double>;
 	auto solutionConvergence2D=solutionConvergence<2,double>;
 
     auto forceTermSphere3DLong=forceTermSphere<3,long double>;
     auto forceTermSphere2DLong=forceTermSphere<2,long double>;
     auto forceTermSquare3DLong=forceTermSquare<3,long double>;
     auto forceTermSquare2DLong=forceTermSquare<2,long double>;
+    auto forceTermConvergence3DLong=forceTermConvergence<3,long double>;
     auto forceTermConvergence2DLong=forceTermConvergence<2,long double>;
     auto solutionSphere3DLong=solutionSphere<3,long double>;
     auto solutionSphere2DLong=solutionSphere<2,long double>;
     auto solutionSquare3DLong=solutionSquare<3,long double>;
     auto solutionSquare2DLong=solutionSquare<2,long double>;
+    auto solutionConvergence3DLong=solutionConvergence<3,long double>;
     auto solutionConvergence2DLong=solutionConvergence<2,long double>;
     
     
@@ -296,6 +290,20 @@ int main(int argc, const char * argv[]) {
                 Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSquare3D,solutionSquare3D,1);
                 problem3();
                 problem3.displayError(solutionSquare3D,outputError,errorAction);
+                
+                if (outputPoint!="") {
+                    problem3.write(outputPoint,outputConnection,outputSolution);
+                }
+                
+                cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
+            } else if (forceTermFunction=="forceTermConvergence" && solutionFunction=="solutionConvergence") {
+                Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
+                
+                cout<<"Mesh created"<<endl;
+                
+                Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermConvergence3D,solutionConvergence3D,1);
+                problem3();
+                problem3.displayError(solutionConvergence3D,outputError,errorAction);
                 
                 if (outputPoint!="") {
                     problem3.write(outputPoint,outputConnection,outputSolution);
@@ -366,6 +374,20 @@ int main(int argc, const char * argv[]) {
                 Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double>  problem3(newMesh,forceTermSquare3DLong,solutionSquare3DLong,1);
                 problem3();
                 problem3.displayError(solutionSquare3DLong,outputError,errorAction);
+                
+                if (outputPoint!="") {
+                    problem3.write(outputPoint,outputConnection,outputSolution);
+                }
+                
+                cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
+            } else if (forceTermFunction=="forceTermConvergence" && solutionFunction=="solutionConvergence") {
+                Mesh3D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
+                
+                cout<<"Mesh created"<<endl;
+                
+                Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double>  problem3(newMesh,forceTermConvergence3DLong,solutionConvergence3DLong,1);
+                problem3();
+                problem3.displayError(solutionConvergence3DLong,outputError,errorAction);
                 
                 if (outputPoint!="") {
                     problem3.write(outputPoint,outputConnection,outputSolution);

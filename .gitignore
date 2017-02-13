@@ -15,6 +15,13 @@ VEM/VEM.xcodeproj/
 /Images
 *Old/
 
+# Ignore too big files
+Convergence/Mesh3D/point-128.txt
+Convergence/Mesh3D/conn-128.txt
+Convergence/Output/conn3D-ne128.txt
+Convergence/Output/point3D-ne128.txt
+Convergence/Output/solution3D-ne128.txt
+
 # Do not ignore Makefiles
 !Makefile
 
