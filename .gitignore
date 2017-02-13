@@ -54,6 +54,9 @@ Latex/.#project.tex
 # Ignore some Python files
 Python/Old/
 
+# Ignore VIM
+*.swp
+
 # Don't ignore README
 !READMEvem.txt 
 !READMEvisualization.txt
