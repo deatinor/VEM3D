@@ -20,13 +20,13 @@ $$ A=\frac{1}{2} \bigg | \sum_{i=1}^n (x_iy_{i+1}-x_{i+1}y_i) \bigg
 where the following convention is used: $x_{n+1}=x_1,y_{n+1}=y_1$.
 
 \subsubsection{Area in $3$D}\label{area3d}
-For the $3$D case, we have used a similar algorithm. Let $(O;\mathbf{e_x}, \mathbf{e_y}, \mathbf{e_z})$ be an orthonormal Cartesian coordinate system of the space, and let $V=\lbrace V_i : 1\leq i\leq n\rbrace$ be the set of vertices of a given $n$-vertex polygon. For $i=1,\ldots,n$, let $(v_{1i},v_{2i},v_{3i})$ be the the coordinates of $V_i$. We also write {\color{red}consider?} $\mathbf{n}$ a normal vector to the polygon, with coordinates $(n_1,n_2,n_3)$. The algorithm is as follows:
+For the $3$D case, we have used a similar algorithm. Let $(O;\mathbf{e_x}, \mathbf{e_y}, \mathbf{e_z})$ be an orthonormal Cartesian coordinate system of the space, and let $V=\lbrace V_i : 1\leq i\leq n\rbrace$ be the set of vertices of a given $n$-vertex polygon. For $i=1,\ldots,n$, let $(v_{1i},v_{2i},v_{3i})$ be the the coordinates of $V_i$. We also consider $\mathbf{n}$ a normal vector to the polygon, with coordinates $(n_1,n_2,n_3)$. The algorithm is as follows:
 \begin{enumerate}
 \item \label{pt1area3d} Project the polygon on one of the three principal plane $(O;\mathbf{e_x},\mathbf{e_y})$, $(O;\mathbf{e_x},\mathbf{e_z})$ or $(O;\mathbf{e_y},\mathbf{e_z})$ in the following way: set to $0$ the component $v_{ji}$ of each vertex $i$ such that $j=\text{arg} \max_{1\leq k \leq 3} \|n_k\|$. In this way, the polygon is equivalent to a polygon embedded in a $2$D space instead of a $3$D one, and setting to $0$ such component of all the vertices avoids the case of a polygon that is already parallel to one of the three principal planes. That is, we avoid the case of a degenerated polygon by choosing in a reasonable way on which plane we project it.  
 \item Compute the area of the projected polygon with Gauss-Green formula (see paragraph \ref{area2d}). 
 \item Divide the area of the projected polygon by the following scale factor: 
 $$ \frac{\max_{1\leq i \leq 3}(n_i)}{\|n\|}. $$
-The results gives the area of the original polygon embedded in a $3$D space (see \textbf{REFERENCE} {\color{red} no reference}).
+The results gives the area of the original polygon embedded in a $3$D space.
 \end{enumerate}
 
 \subsubsection{Oriented normal vector}\label{onv}
