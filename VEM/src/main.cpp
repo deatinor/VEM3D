@@ -98,7 +98,7 @@ real solutionSquare(const Point<embedded,real>& inputPoint) {
 
 int main(int argc, const char * argv[]) {
 	
-	////////////  PARAMETHERS TO BE READ  /////////////
+	////////////  PARAMETERS TO BE READ  /////////////
 	
 	long embedded=3;
 	string inputPoint;
@@ -110,6 +110,8 @@ int main(int argc, const char * argv[]) {
 	string outputPoint;
 	string outputConnection;
 	string outputSolution;
+	string outputError;
+	string errorAction;
 	string forceTermFunction;
 	string solutionFunction;
 	string real;
@@ -134,7 +136,7 @@ int main(int argc, const char * argv[]) {
 			continue;
 		}
 		
-		// obtain input paramethers and their values
+		// obtain input parameters and their values
 		stringstream iss(linea);
 		getline(iss, parametroInput, '=');
 		getline(iss, valore, ';');
@@ -171,6 +173,12 @@ int main(int argc, const char * argv[]) {
 		}
 		if (parametroInput=="outputSolution") {
 			outputSolution=valore;
+		}
+		if (parametroInput=="outputError") {
+			outputError=valore;
+		}
+		if (parametroInput=="errorAction") {
+			errorAction=valore;
 		}
 		if (parametroInput=="forceTermFunction") {
 			forceTermFunction=valore;
@@ -237,7 +245,7 @@ int main(int argc, const char * argv[]) {
                 
                 Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSphere3D,solutionSphere3D,1);
                 problem3();
-                problem3.displayError(solutionSphere3D);
+                problem3.displayError(solutionSphere3D,outputError,errorAction);
                 
                 if (outputPoint!="") {
                     problem3.write(outputPoint,outputConnection,outputSolution);
@@ -251,7 +259,7 @@ int main(int argc, const char * argv[]) {
                 
                 Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSquare3D,solutionSquare3D,1);
                 problem3();
-                problem3.displayError(solutionSquare3D);
+                problem3.displayError(solutionSquare3D,outputError,errorAction);
                 
                 if (outputPoint!="") {
                     problem3.write(outputPoint,outputConnection,outputSolution);
@@ -268,7 +276,7 @@ int main(int argc, const char * argv[]) {
 			
 			Laplace<2, Mesh2D<>, SolverVEM2D<>, Dirichlet2D<>> problem3(newMesh,forceTermSquare2D,boundaryFunction<2>,1);
 			problem3();
-			problem3.displayError(solutionSquare2D);
+			problem3.displayError(solutionSquare2D,outputError,errorAction);
 			
 			if (outputPoint!="") {
 				problem3.write(outputPoint,outputConnection,outputSolution);
@@ -291,7 +299,7 @@ int main(int argc, const char * argv[]) {
                 
                 Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double> problem3(newMesh,forceTermSphere3DLong,solutionSphere3DLong,1);
                 problem3();
-                problem3.displayError(solutionSphere3DLong);
+                problem3.displayError(solutionSphere3DLong,outputError,errorAction);
                 
                 if (outputPoint!="") {
                     problem3.write(outputPoint,outputConnection,outputSolution);
@@ -305,7 +313,7 @@ int main(int argc, const char * argv[]) {
                 
                 Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double>  problem3(newMesh,forceTermSquare3DLong,solutionSquare3DLong,1);
                 problem3();
-                problem3.displayError(solutionSquare3DLong);
+                problem3.displayError(solutionSquare3DLong,outputError,errorAction);
                 
                 if (outputPoint!="") {
                     problem3.write(outputPoint,outputConnection,outputSolution);
@@ -322,7 +330,7 @@ int main(int argc, const char * argv[]) {
             
             Laplace<2, Mesh2D<long double>, SolverVEM2D<long double>, Dirichlet2D<long double>,long double> problem3(newMesh,forceTermSquare2DLong,boundaryFunction<2,long double>,1);
             problem3();
-            problem3.displayError(solutionSquare2DLong);
+            problem3.displayError(solutionSquare2DLong,outputError,errorAction);
             
             if (outputPoint!="") {
                 problem3.write(outputPoint,outputConnection,outputSolution);

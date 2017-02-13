@@ -60,6 +60,13 @@ public:
 	
 	void displayError();	//!< Print the computer error
 	
+	/** Print the error to a file
+ 	 * 
+ 	 * \param outputError output file
+ 	 * \param errorAction string that can be either "append" or "override", if we want to append the file or override it with the new computed errors
+ 	 */
+ 	void writeError(string outputError,string errorAction);
+	
 };
 
 
@@ -106,10 +113,25 @@ real Error<embedded,real>::H1Discrete() {
 template <long embedded,typename real>
 void Error<embedded,real>::displayError() {
 	cout<<endl<<"LInfinity norm: "<<LInfinity();
-	cout<<endl<<endl<<"H1 discete norm: "<<H1Discrete()<<endl<<endl;
+	cout<<endl<<endl<<"H1 discrete norm: "<<H1Discrete()<<endl<<endl;
 }
 
-
+template <long embedded,typename real>
+void Error<embedded,real>::writeError(string outputError,string errorAction) {
+	std::ofstream outfile;
+ 
+ 	if (errorAction == "override")
+ 		outfile.open(outputError);
+ 	else {
+ 		if (errorAction != "append") {
+ 			std::cout << "The error is written is the file " << outputError << " (append, no override)." << std::endl;
+ 		}
+ 		outfile.open(outputError, std::ios_base::app);
+ 	}
+  		  
+	outfile << LInfinity() << "," << H1Discrete() << endl; 
+	outfile.close(); 
+}
 
 
 
