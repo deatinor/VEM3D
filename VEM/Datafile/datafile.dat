@@ -13,8 +13,10 @@
 //inputConnection=../Mesh/Sphere3D/conn-2.txt;
 
 // 2D MESH SQUARE
-inputPoint=../Mesh/Mesh2DSquare/point-16.txt
-inputConnection=../Mesh/Mesh2DSquare/conn-16.txt;
+inputPoint=../Convergence/Mesh2D/point-128.txt;
+//../Mesh/Mesh2DSquare/point-16.txt;
+inputConnection=../Convergence/Mesh2D/conn-128.txt;
+//../Mesh/Mesh2DSquare/conn-16.txt;
 
 // TEST
 //inputPoint=../Mesh/Test/point3.txt;
@@ -25,7 +27,7 @@ inputConnection=../Mesh/Mesh2DSquare/conn-16.txt;
 // meshType can be only Mesh2D or Mesh3D
 meshType=Mesh2D;
 // fileType can be ANYTHING3D, TETRAHEDRON or ANYTHING2D
-fileType=ANYTHING2D
+fileType=ANYTHING2D;
 
 
 // forceTermFunction
@@ -38,14 +40,18 @@ solutionFunction=solutionConvergence;
 
 
 // file output name
-outputPoint=Output/point2D.txt;
-outputConnection=Output/conn2D.txt;
-outputSolution=Output/solution2D.txt;
-outputError=Output/error2D.txt;
+outputPoint=../Convergence/Output/point2D-ne128.txt;
+outputConnection=../Convergence/Output/conn2D-ne128.txt;
+outputSolution=../Convergence/Output/solution2D-ne128.txt;
+outputError=../Convergence/Output/error2D.txt;
+//outputPoint=Output/point2D.txt;
+//outputConnection=Output/conn2D.txt;
+//outputSolution=Output/solution2D.txt;
+//outputError=Output/error2D.txt;
 
 // override or append error to error file
 // errorAction can only be override or append
-errorAction=override
+errorAction=append;
 
 // typename real (double or long double)
 real=long double;
