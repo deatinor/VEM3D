@@ -1,4 +1,6 @@
 \newpage
 \section{Conclusion}
 
-TODO
+To sum up, the Virtual Element Method has been introduced together with convergence theorems that proves its good behaviour. A big advantage of this method with respect to the classical Finite Element Method is that VEM does not only have polynomial basis functions, and it requires to compute the values of those non-polynomial functions only on well-chosen degrees of freedom. Moreover, we came up with an implementation of VEM for linear basis polynomials, in $2$D and $3$D, that can be easily reused to be generalized to different dimensions or for a higher degree of polynomials thanks to the use of the full power of \verb!C++! such as template metaprogramming and class inheritance. Finally, we have verified the well behaviour of the method and its implementation on different problems in $2$D and in $3$D. And we have performed a numerical convergence analysis of the absolute a priori error under $h$-refinement: the error is an $O(h^2)$ under mesh refinement. 
+
+As a future work, this project could be even more generalized. In particular, the implementation could be done for boundary conditions other than Dirichlet ones, for an operator more general than Laplace, and for some underlying polynomial degree $k$ higher than one. If this last point is done, it would then be interesting to study the behaviour of the error under what is generally called $p$-refinement, that is when the degree of the underlying polynomials is increased. 

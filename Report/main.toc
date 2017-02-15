@@ -35,5 +35,5 @@
 \contentsline {subsubsection}{\numberline {3.3.5}Error}{45}
 \contentsline {section}{\numberline {4}Results}{46}
 \contentsline {subsection}{\numberline {4.1}Visualization of the results}{46}
-\contentsline {subsection}{\numberline {4.2}Numerical results}{46}
-\contentsline {section}{\numberline {5}Conclusion}{47}
+\contentsline {subsection}{\numberline {4.2}Numerical results}{48}
+\contentsline {section}{\numberline {5}Conclusion}{51}

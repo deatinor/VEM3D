@@ -1,7 +1,7 @@
 \newpage
 \section{Implementation}
 
-This part will explain our implementation of VEM for the resolution of Laplace problem with Dirichlet boundary conditions in $2$D and $3$D, on respectively polygonal or polyhedral meshes. \verb!C++! has been used, making the most of the fact that it is an object oriented programming language. Moreover, a Makefile has been written to automate compilation, and a Doxygen full documentation of the implementation can also be automatically generated. To visualize the results, we have however preferred to create some Python scripts, taking advantage of Mayavi library for $3$D plots. We have tried to adopt a coding style as coherent and easily readable as possible, to make the comprehension easier. 
+This part will explain our implementation of linear VEM (i.e. $k=1$) for the resolution of Laplace problem with Dirichlet boundary conditions in $2$D and $3$D, on respectively polygonal or polyhedral meshes. \verb!C++! has been used, making the most of the fact that it is an object oriented programming language. Moreover, a Makefile has been written to automate compilation, and a Doxygen full documentation of the implementation can also be automatically generated. To visualize the results, we have however preferred to create some Python scripts, taking advantage of Mayavi library for $3$D plots. We have tried to adopt a coding style as coherent and easily readable as possible, to make the comprehension easier. 
 
 \subsection{Global view on the code}
 The code is based on $18$ classes and a main file. Making the most of \textit{template programming} techniques, declaration and implementation of each class are both in a header file. Memory layout has been done with the most recent \verb!C++! techniques in order to avoid memory leaks. In particular, where pointers are necessary, they have been implemented as smart (shared or weak) pointers. While writing the code, our aim has always been to create a code as general and reusable as possible. The code is essentially and ideally divided into two main parts:
@@ -33,7 +33,7 @@ The presence or the absence of the copy constructor is however the main differen
 Here is reported the implementation of class \verb|Point| and its main methods: \\
 
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Point.h}]
 template <long embedded,typename real=double>
 class Point {
@@ -65,11 +65,11 @@ real2>& point1, const Point<embedded2,real2>& point2);
 };
 \end{lstlisting}
 
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 Here is reported the implementation of class \verb|MeshPoint| and its main methods:\\
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{MeshPoint.h}]
 template <long embedded,typename real=double>
 class MeshPoint: public Point<embedded,real> {
@@ -94,7 +94,7 @@ inputPolygon); //!< It inserts in polygon vector a new Polygon
 inputPolyhedron); //!< It insert in polyhedron vector a new Polyhedron
 \end{lstlisting}
 
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 \subsubsection{Polygon and Polyhedron}
 The two classes \verb|Polygon| and \verb|Polyhedron| represent a generic polygon or polyhedron, not necessarily convex. Both classes are to be understood as mesh components; but we have not implemented two different classes of both as for Point since it has not been necessary. The absence of copy constructor is then required as for \verb|MeshPoint|, for the same reasons (see paragraph \ref{pts}). For both classes \verb|Polygon| and \verb|Polyhedron|, the only way to create a new instance is by using methods \verb|make_shared_Polygon| or \verb|make_shared_Polyhedron|, that return a shared pointer to the new instance and that take care of handling connexions between them (since they are components of a given mesh). 
@@ -104,7 +104,7 @@ The use of \textit{variadic template} techniques guarantee some flexibility and 
 
 Here is reported the implementation of class \verb|Polygon| and its main methods:\\
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Polygon.h}]
 template <long embedded, typename real=double>
 class Polygon: public std::enable_shared_from_this<Polygon<
@@ -155,11 +155,11 @@ isPointOnBoundary(Point<embedded,real>& point);
   void switchPointsOrder(); // Invert the orientation of the Polygon
 \end{lstlisting}
 
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 Here is reported the implementation of class \verb|Polyhedron| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Polyhedron.h}]
 template <long embedded, typename real=double>
 class Polyhedron: public enable_shared_from_this<Polyhedron
@@ -212,7 +212,7 @@ inputPoint);
   // If a new face is added, also his vertexes are added to the pointVector
   void updatePointVector();
 \end{lstlisting}
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 \subsubsection{Mesh, Mesh2D, Mesh3D}
 \verb|Mesh| is an abstract class that represents a very general mesh (a solid in a $3$D space, a surface in a $2$D or in a $3$D space, etc.). In each instance of this class are memorized two vectors: one vector of \verb|Point|s and one of \verb|Polygon|s or \verb|Polyhedron|s depending on the chosen space. Basic methods are declared to read different types of files and build the mesh from them; they will suitably be implemented on the derived classes. Two other dedicated virtual methods are also declared in this class to keep track of the boundary elements and to eventually set other mesh properties. A constructor has also been defined and will be automatically called from the constructors of the derived classes. 
@@ -223,7 +223,7 @@ inputPoint);
 
 Here is reported the implementation of class \verb|Mesh| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Mesh.h}]
 template <long embedded,typename baseElement,OpenEnum isOpen=
 OPEN, typename real=double>
@@ -268,11 +268,11 @@ elements
     virtual void sort(); //!< Sort the pointVector based on pointID
 \end{lstlisting}
 
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 Here is reported the implementation of class \verb|Mesh2D| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Mesh2D.h}]
 template <typename real=double>
 class Mesh2D: public Mesh<2,Polygon<2,real>,OPEN,real> {
@@ -296,11 +296,11 @@ meshType=ANYTHING2D);
     virtual void setBoundaryElements();
     virtual void setRemainingThings();
 \end{lstlisting}
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 Here is reported the implementation of class \verb|Mesh3D| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Mesh3D.h}]
 template <typename real=double>
 class Mesh3D : public Mesh<3, Polyhedron<3,real>, OPEN, real> {
@@ -329,7 +329,7 @@ meshType=ANYTHING3D);
     // Mesh of ANYTHING3D type
     virtual void setAnything3DMesh(string connection);
 \end{lstlisting}
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 \subsection{Laplace equation and VEM solver}
 For the part of the code that solves a numerical problem, we have tried to write a code as modular as possible, to be able to change solver easily or to consider different boundary conditions (even if in this project, only VEM and Dirichlet boundary conditions have been implemented). We have deeply use \textit{template programming} techniques to guarantee this modularity. Indeed, classes that model the numerical problem are all template classes, for which two parameters are needed: one for the type of solver, \verb|SolverType|, and one for the boundary conditions, \verb|BoundaryConditionType|. A last class has been implemented to compute the error. To manage matrices, vectors and linear systems, the open-source Eigen library has been used. 
@@ -341,7 +341,7 @@ The abstract class \verb|Problem| models a very generic numerical problem, that 
 
 Here is reported the implementation of class \verb|Problem| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Problem.h}]
 template <long embedded,typename MeshType,typename real=double>
 class Problem {
@@ -379,11 +379,11 @@ string outputSolution);
     virtual void writeSolution(string outputSolution="solution.
 sol");
 \end{lstlisting}
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 Here is reported the implementation of class \verb|Laplace| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 
 \begin{lstlisting}[caption=File \texttt{Laplace.h}]
 template <long embedded,typename MeshType,typename SolverType,
@@ -408,7 +408,7 @@ inputBoundaryFunction,real inputDiffusionCoeff=1)
     // General method. It invokes the methods of the Solver and BoundaryCondition 
     void computeKnownTerm();
 \end{lstlisting}
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 \subsubsection{Monomials and MonomialsPolygon}
 First, we recall some VEM theory for a better comprehension. Given a mesh element, we call monomial $m_\alpha$ of degree $|\alpha|$ the following quantity:
@@ -423,7 +423,7 @@ Class \verb|MonomialsPolygon|, that inherits from  \verb|Monomials|, however, is
 
 Here is reported the implementation of class \verb|Monomials| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Monomials.h}]
 template <long embedded,typename baseElement,typename real=
 double>
@@ -442,11 +442,11 @@ public:
     real evaluate (const Point<embedded,real>& p, long i);
 }
 \end{lstlisting}
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 Here is reported the implementation of class \verb|MonomialsPolygon| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{MonomialsPolygon.h}]
 template <typename real>
 class MonomialsPolygon: public Monomials<3, Polygon<3,real>,
@@ -465,7 +465,7 @@ public:
     real evaluate (const Point<3,real>& p, long i);
 \end{lstlisting}
 
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 \subsubsection{Solver, SolverVEM, SolverVEM2D and SolverVEM3D}
 Class \verb|Solver| and its inherited classes contain the implementation of the numerical solvers. Concerning the VEM solver, we refer to chapter \ref{theory} for the description of the method, but we will give in this paragraph a description of its implementation. 
@@ -483,7 +483,7 @@ An important matrix property of VEM is the identity $G = BD$, which is very usef
 
 Here is reported the implementation of class \verb|Solver| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Solver.h}]
 template <long embedded,typename baseElement,typename 
 MatrixType,typename real>
@@ -501,11 +501,11 @@ inputForceTerm);
 };
 \end{lstlisting}
 
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 Here is reported the implementation of class \verb|SolverVEM| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{SolverVEM.h}]
 template <long embedded,long elementDimension,typename 
 baseElement, typename MonomialType,typename real=double>
@@ -546,11 +546,11 @@ element, const shared_ptr<MeshPoint<embedded,real>>& point)=0;
 };
 \end{lstlisting}
 
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 Here is reported the implementation of class \verb|SolverVEM2D| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{SolverVEM2D.h}]
 template <typename real=double>
 class SolverVEM2D: public SolverVEM<2,2,Polygon<2,real>,
@@ -569,11 +569,11 @@ const shared_ptr<MeshPoint<2,real>>& point);
 };
 \end{lstlisting}
 
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 Here is reported the implementation of class \verb|SolverVEM3D| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{SolverVEM3D.h}]
 template <typename real=double>
 class SolverVEM3D: public SolverVEM<3,3,Polyhedron<3,real>,
@@ -605,7 +605,7 @@ point);
 };
 
 \end{lstlisting}
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 \subsubsection{BoundaryCondition, Dirichlet}
 Class \verb|BoundaryCondition| is an abstract class that represents any type of boundary conditions and handle them. Class \verb|Dirichlet| inherits from \verb|BoundaryCondition| and takes only care of Dirichlet boundary conditions, as its name suggests. To impose this type of condition, the upper-left block of the stiffness matrix (whose rows correspond to boundary elements) needs to be diagonal. Moreover, the same rows corresponding to the boundary elements in the forcing term need to be correctly set. 
@@ -619,7 +619,7 @@ Those two classes are based on the three following main methods:
 
 Here is reported the implementation of class \verb|BoundaryCondition| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{BoundaryCondition.h}]
 template <long embedded,typename MeshType,typename MeshElement,
 typename real=double>
@@ -649,11 +649,11 @@ tripletList)=0;
 
 \end{lstlisting}
 
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 Here is reported the implementation of class \verb|Dirichlet| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Dirichlet.h}]
 template <long embedded,typename MeshType,typename MeshElement,
 typename real>
@@ -688,7 +688,7 @@ template <typename real=double>
 using Dirichlet2D=Dirichlet<2,Mesh2D<real>,Polygon<2,real>,
 real>;
 \end{lstlisting}
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 
 \subsubsection{Error}
 \verb|Error| is a class reserved for error computation. The error is computed in two different ways:
@@ -699,7 +699,7 @@ real>;
 
 Here is reported the implementation of class \verb|Error| and its main methods:
 
-\noindent\rule{12.7cm}{1pt}
+\noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Error.h}]
 template <long embedded,typename real=double>
 class Error {
@@ -734,10 +734,10 @@ SparseMatrix<real>& inputStiffnessMatrix);
     void displayError();   //!< Print the computer error	
 };
 \end{lstlisting}
-\noindent\rule{12.7cm}{1pt}\\
+\noindent\rule{16cm}{1pt}\\
 
 \newpage
-\section{Results}
+\section{Results}\label{results}
 
 \subsection{Visualization of the results}
 For the visualization of the results, we have decided to use the Python programming language instead of \verb!C++! thanks to a great choice of libraries. This part is divided into two parts, depending on the used libraries:
@@ -746,41 +746,145 @@ For the visualization of the results, we have decided to use the Python programm
 \item With the Mayavi library, we have create $3$ scripts to visualize the solution. \verb|plotPoints3D| only shows the vertices of the polyhedrons that are part of the mesh, together with the solution at these points. \verb|plot2D| and \verb|plot3D|, instead, show the solution on the whole mesh. In the $3$D case, Mayavi visualization tools can be used to see the solution in different part of the mesh, such as on a section of the mesh for instance. 
 \end{itemize}
 
-In the following Figures $1$ to $5$, we show some of the visual results that have been obtained:
+In the following Figures \ref{img:geom} to \ref{img:mayavi3D}, we show some of the visual results that have been obtained. Figure \ref{img:geom} shows a particular case of polyhedron (in $3$D) that our implementation can handle, and its visualization with Matplotlib. The script used to generate such image is \verb|plotSinglePolyhedron|. 
 
 \begin{figure}[!h]
-\label{img:matplotlibPolyhedron}
 \centering
-\includegraphics[scale=0.4]{images/matplotlibTest5.png}\label{geom}
-\caption{Plot with Matplotlib. A specific mesh element that VEM can handle.}
+\includegraphics[scale=0.4]{images/matplotlibTest5.png}
+\caption{Plot with Matplotlib. A specific mesh element that VEM can handle.}\label{img:geom}
 \end{figure}
 
+Then Figure \ref{img:matplotlibMesh} shows a particular case of a cubic mesh in $3$D. This image has been generated using the script \verb|plotMesh|. 
+
+In Figure \ref{img:mayavi2D}, we can see the solution using linear VEM of the following differential problem:
+\begin{equation*}
+\begin{cases}
+-\Delta u = \frac{\pi^2}{2}\cos\left(\frac{\pi x}{2}\right)\cos\left(\frac{\pi y}{2}\right) \text{ in } \Omega=(-1,1)^2;\\
+u = 0 \text{ on } \partial \Omega,
+\end{cases}
+\end{equation*}
+whose exact solution is $u(x,y)=\cos\left(\frac{\pi x}{2}\right)\cos\left(\frac{\pi y}{2}\right)$, for all $(x,y)\in \Omega=(-1,1)^2$. A rectangular mesh has been used to obtain this result. 
+
 \begin{figure}[!h]
-\label{img:matplotlibMesh}
 \centering
 \includegraphics[scale=0.4]{images/matplotlibPlotMesh.png}
 \caption{Plot with Matplotlib. Cubic mesh.}
+\label{img:matplotlibMesh}
 \end{figure}
 
 \begin{figure}[!h]
-\label{img:mayavi2D}
 \centering
 \includegraphics[scale=0.35]{images/mayavi2D.png}
-\caption{Plot with Mayavi. $2$D grid mesh with solution.}
+\caption{Plot with Mayavi. VEM solution on a $2$D grid mesh.}
+\label{img:mayavi2D}
 \end{figure}
 
+Figures \ref{img:mayaviCoupe} and \ref{img:mayavi3D} show the solution using linear VEM of the following differential problem:
+\begin{equation*}
+\begin{cases}
+-\Delta u = 6 \text{ in } \Omega=(0,1)\times (0,2\pi) \times (0,\pi).\\
+u = 0 \text{ on } \partial \Omega,
+\end{cases}
+\end{equation*}
+where everything is expressed in spherical coordinates $(r,\phi,\theta)$, including Laplace operator. The exact solution is $u(r,\phi,\theta)=1-r^2$, for all $(r,\phi,\theta)\in (0,1)\times (0,2\pi) \times (0,\pi)$. Figure \ref{img:mayaviCoupe} shows only the solution on a section of the sphere while in Figure \ref{img:mayavi3D}, we can see the results on each vertex of the mesh. The size of the vertices and their color both correspond to the value of the solution on them. 
+
 \begin{figure}[!h]
-\label{img:matplotlibMesh}
 \centering
 \includegraphics[scale=0.35]{images/mayavi3D.png}
-\caption{Plot with Mayavi. Mesh of a tetrahedron on a $3$D sphere with the solution on a section of the sphere. The section can be dynamically chosen.}
+\caption{Plot with Mayavi. VEM solution on a section of a $3$D sphere, with a mesh made of tetrahedra. The section can be dynamically chosen.}
+\label{img:mayaviCoupe}
 \end{figure}
 
 \begin{figure}[!h]
-\label{img:matplotlibMesh}
 \centering
-\includegraphics[scale=0.4]{images/mayavi3DPoints.png}
-\caption{Plot with Mayavi. Mesh of a tetrahedron on a $3$D mesh with the solution on every vertex.}
+\includegraphics[scale=0.35]{images/mayavi3DPoints.png}
+\caption{Plot with Mayavi. VEM solution on every vertex of a $3$D sphere, with a mesh made of tetrahedra.}
+\label{img:mayavi3D}
 \end{figure}
 
 \subsection{Numerical results}
+
+In this section, we will analyse numerically the convergence under $h$-refinement (that is when the mesh is refined) of the absolute a priori $H^1$-error of the solution, i.e. $\|u_h-u_{\text{ex}}\|_{H^1(\Omega)}$. $u_h$ is the solution found with the linear Virtual Element Method while $u_{\text{ex}}$ is the exact solution. Some particular differential problem will be analysed and presented behind.\\
+
+In the following, we will only consider a decomposition of the space into identical elements, so
+that we can define $h$ as the size of the elements. More precisely, we only consider squared or cubic elements, respectively for a $2$D or a $3$D problem, so that $h$ is the length of each side of each element.
+Moreover, we will consider the geometry $\Omega=(0,1)^d$, where $d=2$ in the $2$D case, and $d=3$ in the $3$D case. Then $h=\frac{1}{n_e}$, where $n_e$ is the number of elements used on each direction. We have chosen to consider $n_e=1, 2, 4, 8, 16, 32, 64$ and $128$ elements, that is $h$ ranges from $1$ to $\frac{1}{128}$. $n_e$ is chosen as a sequence of powers of $2$ in order to have embedded spaces when the number of elements is increased.\\
+
+First, we will analyse the $2$D behaviour of the error when we solve the following problem: find $u$ such that
+\begin{equation*}
+\begin{cases}
+-\Delta u = 98\pi^2\sin(7\pi x)\sin(7\pi y) \text{ in } \Omega = (0,1)^2;\\
+u = 0 \text{ on } \partial \Omega.
+\end{cases}
+\end{equation*}
+The exact solution of this problem is $u(x,y)=\sin(7\pi x)\sin(7\pi y)$, for all $(x,y)\in \Omega$. This problem has been chosen so that the error between the numerical and the exact solution is large, since the solution oscillates a lot. In this way, the behaviour of the error can more easily be observed, since there is no risk to attain the machine epsilon too early. 
+
+In Figure \ref{img:conv2d} is plotted the absolute a priori error in $H^1(\Omega)$-norm. We can clearly see that asymptotically, the error behaves as $h^2$, which is what one could expect after reading Theorem \ref{conditions} and section \ref{errors}. 
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.8]{images/convergencePlot2D.eps}
+\caption{Convergence of the $H^1$-error under $h$-refinement for Laplace 2D problem on $(0,1)^2$ with homogeneous Dirichlet boundary conditions.}
+\label{img:conv2d}
+\end{figure}
+
+\noindent This behaviour is confirmed when computing the slope of the log-log scale line. Indeed, we suppose that err $:=\|u_h-u_\text{ex}\|_{H^1(\Omega)} = Ch^p$, where $C$ is a constant depending only on the solution and on $k$, the degree of the underlying polynomials, which is here $1$. Our aim is to find $p$, so that we compute 
+\begin{equation}\label{ploglog}
+\frac{\log\left(\frac{\text{err}(h_2)}{\text{err}(h_1)}\right)}{\log\left(\frac{h_2}{h_1}\right)}=p,
+\end{equation}
+where err$(h_1)$ and err$(h_2)$ are the absolute a priori errors using a mesh size equal to $h_1$ and $h_2$, respectively. The values of the $p$ found thanks to the last $4$ points of Figure \ref{img:conv2d} are reported in the following table and confirm our hypothesis:
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+$h_1$ & $h_2$ & $p$ \\
+\hline
+$16^{-1}$ & $32^{-1}$ & $1.9884$\\
+\hline
+$32^{-1}$ & $64^{-1}$ & $1.9612$\\
+\hline
+$64^{-1}$ & $128^{-1}$ & $1.9651$\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Sum up of the convergence rates under h-refinement, on Laplace $2$D problem.}
+\end{table}
+
+\noindent Finally, the non asymptotic behaviour is more chaotic since the approximation is very raw with very few elements. \\
+
+Now, we analyse the $3$D behaviour of the error when we solve the following problem: find $u$ such that
+\begin{equation*}
+\begin{cases}
+-\Delta u = 127\pi^2\sin(7\pi x)\sin(7\pi y)\sin(7\pi z) \text{ in } \Omega = (0,1)^3;\\
+u = 0 \text{ on } \partial \Omega.
+\end{cases}
+\end{equation*}
+The exact solution of this problem is $u(x,y,z)=\sin(7\pi x)\sin(7\pi y)\sin(7\pi z)$, $\forall (x,y,z)\in \Omega$. Again and for the same reason as before, this problem has been chosen so that the error between the numerical and the exact solution is large, since the solution oscillates a lot. \\
+
+In Figure \ref{img:conv3d} is plotted the absolute a priori error in $H^1(\Omega)$-norm. We can see again that asymptotically, the error behaves as $h^2$, which is again what one could expect after reading Theorem \ref{conditions} and section \ref{errors}. To see it in a clearer way, we should refine the mesh even more, but a lot of RAM is needed to solve the problem ($>32$GB). Indeed, with $h=128$, we already take into account $128^3>2$ million degrees of freedom. 
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.8]{images/convergencePlot3D.eps}
+\caption{Convergence of the $H^1$-error under $h$-refinement for Laplace 3D problem on $(0,1)^3$ with homogeneous Dirichlet boundary conditions.}
+\label{img:conv3d}
+\end{figure}
+
+Similarly as in the $2$D case, we can algebraically compute the slope of the log-log scale line to confirm our hypothesis, thanks to the same formula (\ref{ploglog}). The values of $p$ found thanks to the last $3$ points of Figure \ref{img:conv3d} are reported in the following table and indeed confirm the behaviour:
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+$h_1$ & $h_2$ & $p$ \\
+\hline
+$32^{-1}$ & $64^{-1}$ & $1.7497$\\
+\hline
+$64^{-1}$ & $128^{-1}$ & $1.9293$\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Sum up of the convergence rates under h-refinement, on Laplace $3$D problem.}
+\end{table}
+
+Note that this $h^2$-component of the error is a typical characteristic of all finite element-type methods: the classical finite element methods \cite{quarteroni}, the spectral element methods \cite{chqz1}, the isogeometric analysis \cite{igaconv} and here the virtual element method.
