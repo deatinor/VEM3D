@@ -4,13 +4,9 @@
 
 #include <Eigen/Dense>
 #include <Eigen/IterativeLinearSolvers>
-#include "Laplace.h"
-#include "Monomials.h"
 
 using namespace Eigen;
 
-template <typename real=double>
-using Monomial3D=Monomials<3,Polyhedron<3,real>,real>;
 
 /** Generic Solver
  *

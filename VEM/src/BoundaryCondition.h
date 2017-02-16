@@ -9,12 +9,6 @@
 #ifndef Mesh3_BoundaryCondition_h
 #define Mesh3_BoundaryCondition_h
 
-#include "Mesh.h"
-#include "Mesh3D.h"
-#include "Mesh2D.h"
-#include "Laplace.h"
-
-
 using namespace Eigen;
 
 template <typename real>

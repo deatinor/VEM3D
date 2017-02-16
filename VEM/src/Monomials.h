@@ -3,7 +3,6 @@
 #ifndef Monomials_Laplace_h
 #define Monomials_Laplace_h
 
-#include "Polyhedron.h"
 #include <memory>
 
 using namespace std;
@@ -54,7 +53,11 @@ real Monomials<embedded,baseElement,real>::evaluate(const Point<embedded,real>& 
 
 
 
+template <typename real>
+using Monomial3D=Monomials<3,Polyhedron<3,real>,real>;
 
+template <typename real=double>
+using Monomial2D=Monomials<2,Polygon<2,real>,real>;
 
 
 

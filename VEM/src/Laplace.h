@@ -7,25 +7,14 @@
 #include <Eigen/Sparse>
 #include <Eigen/IterativeLinearSolvers>
 #include <memory>
-#include "Mesh.h"
-#include "Monomials.h"
-#include "Solver.h"
-#include "BoundaryCondition.h"
-#include "Error.h"
-#include "Problem.h"
 
 
 
 using namespace Eigen;
 
-template <typename real>
-using VectorX=Matrix<real, Dynamic, 1>;
-
 template <long embedded,typename MeshType,typename real>
 class Problem;
 
-template <typename real>
-using Monomial3D=Monomials<3,Polyhedron<3,real>,real>;
 
 //////////////////////////////////////////////////////////////////////////////////////////
 /////////////					       Laplace							//////////////

@@ -2,8 +2,6 @@
 #ifndef Mesh3_Mesh2D_h
 #define Mesh3_Mesh2D_h
 
-#include "Mesh.h"
-#include "Polygon.h"
 
 
 static bool lessPair(const pair<long,long>& pair1,const pair<long,long>& pair2) {

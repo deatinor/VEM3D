@@ -7,10 +7,6 @@
 #include <Eigen/Sparse>
 #include <Eigen/IterativeLinearSolvers>
 #include <memory>
-#include "Mesh.h"
-#include "Monomials.h"
-#include "Solver.h"
-#include "BoundaryCondition.h"
 #include "Error.h"
 
 

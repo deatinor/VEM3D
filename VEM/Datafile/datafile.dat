@@ -3,8 +3,8 @@
 // CUBIC MESH
 //inputPoint=../Mesh/Cube/Cubic/point-2.txt;
 //inputConnection=../Mesh/Cube/Cubic/conn-2.txt;
-inputPoint=../Convergence/Mesh3D/point-128.txt;
-inputConnection=../Convergence/Mesh3D/conn-128.txt;
+inputPoint=../Convergence/Mesh3D/point-32.txt;
+inputConnection=../Convergence/Mesh3D/conn-32.txt;
 
 // CUBE WITHOUT PART
 //inputPoint=../Mesh/Cube/CubeWithoutPart/point-16.txt;

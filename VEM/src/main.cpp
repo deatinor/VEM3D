@@ -15,11 +15,13 @@
 #include "Error.h"
 #include "Mesh3D.h"
 #include "Mesh2D.h"
+#include "SolverVEM.h"
 #include "SolverVEM3D.h"
 #include "SolverVEM2D.h"
 #include "Eigen/Dense"
 #include "SolverVEM.h"
 #include "Dirichlet.h"
+
 
 // FUNCTIONS
 template <long embedded,typename real=double>
