@@ -4,7 +4,6 @@
 
 #include <fstream>
 #include <sstream>
-#include "Point.h"
 #include <algorithm>
 
 using namespace std;

@@ -3,13 +3,6 @@
 #define Dirichlet_h
 
 
-#include "Mesh.h"
-#include "Mesh3D.h"
-#include "Mesh2D.h"
-#include "Laplace.h"
-#include "BoundaryCondition.h"
-
-
 using namespace Eigen;
 
 /** Class for Dirichlet boundary condition. Inherit from BoundaryCondition

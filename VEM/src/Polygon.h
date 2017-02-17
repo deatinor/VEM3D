@@ -7,13 +7,10 @@
 #include <math.h>
 #include <cmath>
 #include <algorithm>
-#include "Point.h"
 
 using namespace std;
 using std::shared_ptr;
 
-template <long embedded,typename real>
-class Polyhedron;
 
 ///////////////////////////////////////////////////////////////////////////////////
 //									POLYGON										 //

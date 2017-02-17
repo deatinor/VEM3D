@@ -2,7 +2,6 @@
 #ifndef MonomialsPolygon_h
 #define MonomialsPolygon_h
 
-#include "Polyhedron.h"
 #include <memory>
 
 using namespace std;

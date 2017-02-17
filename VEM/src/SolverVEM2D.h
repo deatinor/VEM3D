@@ -2,9 +2,6 @@
 #ifndef Mesh3_SolverVEM2D_h
 #define Mesh3_SolverVEM2D_h
 
-template <typename real=double>
-using Monomial2D=Monomials<2,Polygon<2,real>,real>;
-
 /** Specilized class to solve VEM in 2D
  *
  *	It only implements computeB and computeKnownTerm

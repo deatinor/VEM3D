@@ -4,9 +4,6 @@
 
 #include <Eigen/Dense>
 #include <Eigen/IterativeLinearSolvers>
-#include "Laplace.h"
-#include "Solver.h"
-#include "Monomials.h"
 
 using namespace Eigen;
 

@@ -2,10 +2,6 @@
 #ifndef Mesh3_SolverVEM3D_h
 #define Mesh3_SolverVEM3D_h
 
-#include "Solver.h"
-#include "SolverVEM.h"
-
-
 
 /** Specilized class to solve VEM in 3D
  *

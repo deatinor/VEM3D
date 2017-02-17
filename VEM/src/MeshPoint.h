@@ -7,26 +7,12 @@
 #include <math.h>
 #include <memory>
 #include <cmath>
-#include "Mesh.h"
-#include "Point.h"
 
 template <long embedded, typename real>
 class Polygon;
 
 template <long embedded, typename real>
 class Polyhedron;
-
-template <long embedded, typename real>
-class MeshPoint;
-
-template <long embedded2,typename baseElement,OpenEnum isOpen,typename real2>
-class Mesh;
-
-template <typename real>
-class Mesh3D;
-
-template <typename real>
-class Mesh2D;
 
 template <long embedded,typename real>
 class Point;
