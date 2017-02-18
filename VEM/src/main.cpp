@@ -137,6 +137,7 @@ int main(int argc, const char * argv[]) {
 	string outputError;
 	string errorAction;
 	string forceTermFunctionExpr;
+	string boundaryFunctionExpr;
 	string solutionFunctionExpr;
 	string real;
 	
@@ -204,6 +205,9 @@ int main(int argc, const char * argv[]) {
 		if (parametroInput=="forceTermFunction") {
 			forceTermFunctionExpr=valore;
 		}
+		if (parametroInput=="boundaryFunction") {
+			boundaryFunctionExpr=valore;
+		}
 		if (parametroInput=="solutionFunction") {
 			solutionFunctionExpr=valore;
 		}
@@ -235,101 +239,134 @@ int main(int argc, const char * argv[]) {
 		fileTypeMesh=FILETYPE2;
 	}
     
-	
-	// double case
-	if (real=="double") {
-		
-		if (meshType=="Mesh3D") {
-			muParserInterface<3,double> forceTerm;
-			muParserInterface<3,double> solution;
-			forceTerm.set_expression(forceTermFunctionExpr);
-			solution.set_expression(solutionFunctionExpr);
-		
-			Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
+	try{
+		// double case
+		if (real=="double") {
 			
-			cout<<"Mesh created"<<endl;
+			if (meshType=="Mesh3D") {
+				muParserInterface<3,double> forceTerm;
+				muParserInterface<3,double> boundaryFunc;
+				muParserInterface<3,double> solution;
+				forceTerm.set_expression(forceTermFunctionExpr);
+				boundaryFunc.set_expression(boundaryFunctionExpr);
+				if (solutionFunctionExpr == "boundaryFunction") {
+					solution.set_expression(boundaryFunctionExpr);
+				} else if (solutionFunctionExpr != "null") {
+					solution.set_expression(solutionFunctionExpr);
+				}
 			
-			Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTerm,solution,1);
-			problem3();
-			problem3.displayError(solution,outputError,errorAction);
+				Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
+				
+				cout<<"Mesh created"<<endl;
+				
+				Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTerm,boundaryFunc,1);
+				problem3();
+				if (solutionFunctionExpr != "null")
+					problem3.displayError(solution,outputError,errorAction);
+				
+				if (outputPoint!="") {
+					problem3.write(outputPoint,outputConnection,outputSolution);
+				}
+				
+				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
+			}
+			else if(meshType=="Mesh2D") {
+				muParserInterface<2,double> forceTerm;
+				muParserInterface<2,double> boundaryFunc;
+				muParserInterface<2,double> solution;
+				forceTerm.set_expression(forceTermFunctionExpr);
+				boundaryFunc.set_expression(boundaryFunctionExpr);
+				if (solutionFunctionExpr == "boundaryFunction") {
+					solution.set_expression(boundaryFunctionExpr);
+				} else if (solutionFunctionExpr != "null") {
+					solution.set_expression(solutionFunctionExpr);
+				}
 			
-			if (outputPoint!="") {
-				problem3.write(outputPoint,outputConnection,outputSolution);
+				Mesh2D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
+				
+				Laplace<2, Mesh2D<>, SolverVEM2D<>, Dirichlet2D<>> problem3(newMesh,forceTerm,boundaryFunc,1);
+				problem3();
+				if (solutionFunctionExpr != "null")
+					problem3.displayError(solution,outputError,errorAction);
+				
+				if (outputPoint!="") {
+					problem3.write(outputPoint,outputConnection,outputSolution);
+				}
+				
+				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
+			} else {
+				cout<<"No predefined behaviour with this Mesh type"<<endl<<endl;
 			}
 			
-			cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
 		}
-		else if(meshType=="Mesh2D") {
-			muParserInterface<2,double> forceTerm;
-			muParserInterface<2,double> solution;
-			forceTerm.set_expression(forceTermFunctionExpr);
-			solution.set_expression(solutionFunctionExpr);
-		
-			Mesh2D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
+		// long double case
+		else if (real=="longdouble") {
 			
-			Laplace<2, Mesh2D<>, SolverVEM2D<>, Dirichlet2D<>> problem3(newMesh,forceTerm,solution,1);
-			problem3();
-			problem3.displayError(solution,outputError,errorAction);
-			
-			if (outputPoint!="") {
-				problem3.write(outputPoint,outputConnection,outputSolution);
+			if (meshType=="Mesh3D") {
+				muParserInterface<3,long double> forceTerm;
+				muParserInterface<3,long double> boundaryFunc;
+				muParserInterface<3,long double> solution;
+				forceTerm.set_expression(forceTermFunctionExpr);
+				boundaryFunc.set_expression(boundaryFunctionExpr);
+				if (solutionFunctionExpr == "boundaryFunction") {
+					solution.set_expression(boundaryFunctionExpr);
+				} else if (solutionFunctionExpr != "null") {
+					solution.set_expression(solutionFunctionExpr);
+				}
+				
+				Mesh3D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
+				
+				cout<<"Mesh created"<<endl;
+				
+				Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double> problem3(newMesh,forceTerm,boundaryFunc,1);
+				problem3();
+				if (solutionFunctionExpr != "null")
+					problem3.displayError(solution,outputError,errorAction);
+				
+				if (outputPoint!="") {
+					problem3.write(outputPoint,outputConnection,outputSolution);
+				}
+				
+				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
 			}
-			
-			cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
-        } else {
-            cout<<"No predefined behaviour with this Mesh type"<<endl<<endl;
-        }
-		
-	}
-    // long double case
-	else if (real=="longdouble") {
-		
-        if (meshType=="Mesh3D") {
-			muParserInterface<3,long double> forceTerm;
-			muParserInterface<3,long double> solution;
-			forceTerm.set_expression(forceTermFunctionExpr);
-			solution.set_expression(solutionFunctionExpr);
-			
-			Mesh3D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
-			
-			cout<<"Mesh created"<<endl;
-			
-			Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double> problem3(newMesh,forceTerm,solution,1);
-			problem3();
-			problem3.displayError(solution,outputError,errorAction);
-			
-			if (outputPoint!="") {
-				problem3.write(outputPoint,outputConnection,outputSolution);
-			}
-			
-			cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
-        }
-        else if(meshType=="Mesh2D") {
-			muParserInterface<2,long double> forceTerm;
-			muParserInterface<2,long double> solution;
-			forceTerm.set_expression(forceTermFunctionExpr);
-			solution.set_expression(solutionFunctionExpr);
-			
-			Mesh2D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
-			
-			Laplace<2, Mesh2D<long double>, SolverVEM2D<long double>, Dirichlet2D<long double>,long double> problem3(newMesh,forceTerm,solution,1);
-			problem3();
-			problem3.displayError(solution,outputError,errorAction);
-			
-			if (outputPoint!="") {
-				problem3.write(outputPoint,outputConnection,outputSolution);
-			}
-			
-			cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
+			else if(meshType=="Mesh2D") {
+				muParserInterface<2,long double> forceTerm;
+				muParserInterface<2,long double> boundaryFunc;
+				muParserInterface<2,long double> solution;
+				forceTerm.set_expression(forceTermFunctionExpr);
+				boundaryFunc.set_expression(boundaryFunctionExpr);
+				if (solutionFunctionExpr == "boundaryFunction") {
+					solution.set_expression(boundaryFunctionExpr);
+				} else if (solutionFunctionExpr != "null") {
+					solution.set_expression(solutionFunctionExpr);
+				}				
+				
+				Mesh2D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
+				
+				Laplace<2, Mesh2D<long double>, SolverVEM2D<long double>, Dirichlet2D<long double>,long double> problem3(newMesh,forceTerm,boundaryFunc,1);
+				problem3();
+				if (solutionFunctionExpr != "null")
+					problem3.displayError(solution,outputError,errorAction);
+				
+				if (outputPoint!="") {
+					problem3.write(outputPoint,outputConnection,outputSolution);
+				}
+				
+				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
 
-        } else {
-            cout<<"No predefined behaviour with this Mesh type"<<endl<<endl;
-        }
-        
-    } else {
-        cout<<"Program can run only with type=double or long double. You selected type="<<real<<endl<<endl;
-    }
-	
+			} else {
+				cout<<"No predefined behaviour with this Mesh type"<<endl<<endl;
+			}
+			
+		} else {
+			cout<<"Program can run only with type=double or long double. You selected type="<<real<<endl<<endl;
+		}
+	}
+	catch (mu::Parser::exception_type &e) {
+		cerr<<"Error in evaluating an expression."<<std::endl;
+		printMuException(e);
+		cerr<<endl;
+	}
 
 	
 	return 0;

@@ -1,5 +1,8 @@
-// file input
+// ------------------------------------------------------------------ //
+// ------------------------ INPUT FILE ------------------------------ //
+// ------------------------------------------------------------------ //
 
+// --------------------------- MESH --------------------------------- //
 // CUBIC MESH
 inputPoint=../Mesh/Cube/Cubic/point-16.txt;
 inputConnection=../Mesh/Cube/Cubic/conn-16.txt;
@@ -24,25 +27,29 @@ inputConnection=../Mesh/Cube/Cubic/conn-16.txt;
 //inputPoint=../Mesh/Test/point3.txt;
 //inputConnection=../Mesh/Test/conn3.txt;
 
-
+// ------------------------- MESH TYPE ------------------------------ //
 // mesh type
 // meshType can be only Mesh2D or Mesh3D
 meshType=Mesh3D;
 // fileType can be ANYTHING3D, TETRAHEDRON or ANYTHING2D
 fileType=ANYTHING3D;
 
+// -------------------------- FUNCTIONS ----------------------------- //
+// force term function
+// Write an expression, note that _pi=3.1415... and _e=2.71828...
+forceTermFunction=147*_pi^2*sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
 
-// forceTermFunction
-// It can be forceTermSquare or forceTermSphere or forceTermConvergence
-forceTermFunction=147*_pi*_pi*sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
-//forceTermConvergence;
+// boundary function
+// Write an expression, note that _pi=3.1415... and _e=2.71828...
+boundaryFunction=sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
 
 // solution function
-// It can be solutionSquare or solutionSphere or solutionConvergence
-solutionFunction=sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
-//solutionConvergence;
+// Write either an expression (note that _pi=3.1415... and _e=2.71828...)
+// or write boundaryFunction if it is equal to the boundary function
+// or write null if it is unknown (the error will then not been displayed)
+solutionFunction=boundaryFunction;
 
-
+// -------------------------- OUTPUT FILES -------------------------- //
 // file output name
 //outputPoint=../Convergence/Output/point3D-ne128.txt;
 //outputConnection=../Convergence/Output/conn3D-ne128.txt;
@@ -57,5 +64,6 @@ outputError=Output/error2D.txt;
 // errorAction can only be override or append
 errorAction=append;
 
+// --------------------------- ACCURACY ----------------------------- //
 // typename real (double or long double)
 real=long double;
