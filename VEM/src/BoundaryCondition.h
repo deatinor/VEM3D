@@ -30,11 +30,11 @@ template <long embedded,typename MeshType,typename MeshElement,typename real=dou
 class BoundaryCondition {
 protected:
 	const MeshType& mesh;
-	std::function<real(Point<embedded,real>&)> boundaryFunction;
+	muParserInterface<embedded,real>& boundaryFunction;
 	
 	/** Standard constructor
 	 */
-	BoundaryCondition(const MeshType& inputMesh,std::function<real(Point<embedded,real>&)> inputBoundaryFunction):mesh(inputMesh),boundaryFunction(inputBoundaryFunction) {};
+	BoundaryCondition(const MeshType& inputMesh,muParserInterface<embedded,real>& inputBoundaryFunction):mesh(inputMesh),boundaryFunction(inputBoundaryFunction) {};
 public:
 	
 	/** This is to decide if to add the Kloc computed to the matrix. It depends on the boundary condition.

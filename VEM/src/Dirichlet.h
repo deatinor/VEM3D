@@ -27,7 +27,7 @@ class Dirichlet: public BoundaryCondition<embedded,MeshType,MeshElement,real> {
 public:
 	/** Standard constructor
 	 */
-	Dirichlet(const MeshType& mesh,std::function<real(Point<embedded,real>&)> boundaryFunction):BoundaryCondition<embedded,MeshType,MeshElement,real>::BoundaryCondition(mesh,boundaryFunction),numberOfPoints(mesh.numberOfPoints),numberOfBoundaryPoints(mesh.numberOfBoundaryPoints) {};
+	Dirichlet(const MeshType& mesh,muParserInterface<embedded,real>& boundaryFunction):BoundaryCondition<embedded,MeshType,MeshElement,real>::BoundaryCondition(mesh,boundaryFunction),numberOfPoints(mesh.numberOfPoints),numberOfBoundaryPoints(mesh.numberOfBoundaryPoints) {};
 	
 	/** This is to decide if to add the Kloc computed to the matrix.
 	 *

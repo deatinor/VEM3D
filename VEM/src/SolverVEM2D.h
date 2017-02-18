@@ -14,7 +14,7 @@ public:
 public:
 	/** Standard constructor
 	 */
-	SolverVEM2D(std::function<real(const Point<2,real>&)> inputForceTerm):SolverVEM<2,2,Polygon<2,real>,Monomial2D<real>,real>::SolverVEM(inputForceTerm) {};
+	SolverVEM2D(muParserInterface<2,real>& inputForceTerm):SolverVEM<2,2,Polygon<2,real>,Monomial2D<real>,real>::SolverVEM(inputForceTerm) {};
 	
 	/** Computes the known term of the element
 	 *

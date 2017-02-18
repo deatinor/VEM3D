@@ -32,9 +32,9 @@ protected:
 public:
 	/**	Basic constructor. A lot of paramethers are given as template.
 	 *
-	 *	\param inputForceTerm std::function as force term
+	 *	\param inputForceTerm muParserInterface containing the expression of the ForceTerm
 	 */
-	SolverVEM(std::function<real(const Point<embedded,real>&)> inputForceTerm):Solver<embedded,baseElement,Matrix<real, Dynamic, Dynamic>,real>::Solver(inputForceTerm) {};
+	SolverVEM(muParserInterface<embedded,real>& inputForceTerm):Solver<embedded,baseElement,Matrix<real, Dynamic, Dynamic>,real>::Solver(inputForceTerm) {};
 	
 	virtual Matrix<real,Dynamic,Dynamic> computeLocalK(const shared_ptr<baseElement>& element); //!< This is to compute the local stiffness matrix
 	virtual real computeKnownTerm(const shared_ptr<baseElement>& element,const shared_ptr<MeshPoint<embedded,real>>& point)=0; //!< Virtual method to compute the known term.

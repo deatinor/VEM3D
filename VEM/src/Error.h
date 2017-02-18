@@ -10,6 +10,7 @@
 #define Mesh3_Error_h
 
 #include <Eigen/Dense>
+#include "muParserInterface.h"
 
 using namespace Eigen;
 
@@ -30,7 +31,7 @@ protected:
 	VectorX<real> realSolution;
 	VectorX<real> difference;
 	const vector<shared_ptr<MeshPoint<embedded,real>>>& pointVector;
-	std::function<real(Point<embedded,real>&)> realSolutionFunction;
+	muParserInterface<embedded,real>& realSolutionFunction;
 	
 	SparseMatrix<real>& stiffnessMatrix;
 	
@@ -41,10 +42,10 @@ public:
 	 *
 	 *	\param inputSolution solution computed
 	 *	\param inputPointVector pointVector used before
-	 *	\param inputRealSolutionFunction function that expresses the real solution
+	 *	\param inputRealSolutionFunction muParserInterface that contains the expression of the real solution
 	 *	\param inputStiffnessMatrix used for H1 discrete norm
 	 */
-	Error(const VectorX<real>& inputSolution,const vector<shared_ptr<MeshPoint<embedded,real>>>& inputPointVector,std::function<real(Point<embedded,real>&)> inputRealSolutionFunction,SparseMatrix<real>& inputStiffnessMatrix);
+	Error(const VectorX<real>& inputSolution,const vector<shared_ptr<MeshPoint<embedded,real>>>& inputPointVector,muParserInterface<embedded,real>& inputRealSolutionFunction,SparseMatrix<real>& inputStiffnessMatrix);
 	
 	/** L infinite norm of the error
 	 *
@@ -72,9 +73,8 @@ public:
 
 // COSTRUTTORE
 template <long embedded,typename real>
-Error<embedded,real>::Error(const VectorX<real>& inputSolution,const vector<shared_ptr<MeshPoint<embedded,real>>>& inputPointVector,std::function<real(Point<embedded,real>&)> inputRealSolutionFunction,SparseMatrix<real>& inputStiffnessMatrix):solution(inputSolution),pointVector(inputPointVector),realSolutionFunction(inputRealSolutionFunction),stiffnessMatrix(inputStiffnessMatrix),realSolution(solution.size()),difference(solution.size()) {
+Error<embedded,real>::Error(const VectorX<real>& inputSolution,const vector<shared_ptr<MeshPoint<embedded,real>>>& inputPointVector,muParserInterface<embedded,real>& inputRealSolutionFunction,SparseMatrix<real>& inputStiffnessMatrix):solution(inputSolution),pointVector(inputPointVector),realSolutionFunction(inputRealSolutionFunction),stiffnessMatrix(inputStiffnessMatrix),realSolution(solution.size()),difference(solution.size()) {
 	computeRealSolution();
-	
 }
 
 

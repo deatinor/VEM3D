@@ -33,7 +33,7 @@ public:
 public:
 	/** Standard constructor
 	 */
-	SolverVEM3D(std::function<real(const Point<3,real>&)> inputForceTerm):SolverVEM<3,3,Polyhedron<3,real>,Monomial3D<real>,real>::SolverVEM(inputForceTerm) {};
+	SolverVEM3D(muParserInterface<3,real>& inputForceTerm):SolverVEM<3,3,Polyhedron<3,real>,Monomial3D<real>,real>::SolverVEM(inputForceTerm) {};
 	
 	/** 3D version of comuteKnownTerm
 	 *

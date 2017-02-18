@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <random>
 #include "Point.h"
@@ -21,8 +20,9 @@
 #include "Eigen/Dense"
 #include "SolverVEM.h"
 #include "Dirichlet.h"
+#include "muParserInterface.h"
 
-
+ /*
 // FUNCTIONS
 template <long embedded,typename real=double>
 real forceTermSphere(const Point<embedded,real>& inputPoint) {
@@ -114,7 +114,7 @@ real solutionConvergence(const Point<embedded,real>& inputPoint) {
  		return sin(7*M_PI*x)*sin(7*M_PI*y)*sin(7*M_PI*z);
   	}
 }
-
+*/
 
 ////////////////////////////////////////////////////
 ///////                 MAIN                 ///////
@@ -136,17 +136,14 @@ int main(int argc, const char * argv[]) {
 	string outputSolution;
 	string outputError;
 	string errorAction;
-	string forceTermFunction;
-	string solutionFunction;
+	string forceTermFunctionExpr;
+	string solutionFunctionExpr;
 	string real;
-	
 	
 	
 	////////////  READ THE FILE  ///////////////////
 	string parametroInput,valore,linea;
 	ifstream inputFile("Datafile/datafile.dat");
-	
-	
 	
 	while (getline(inputFile, linea)) {
 		// eliminate white spaces
@@ -205,19 +202,19 @@ int main(int argc, const char * argv[]) {
 			errorAction=valore;
 		}
 		if (parametroInput=="forceTermFunction") {
-			forceTermFunction=valore;
+			forceTermFunctionExpr=valore;
 		}
 		if (parametroInput=="solutionFunction") {
-			solutionFunction=valore;
+			solutionFunctionExpr=valore;
 		}
 		if (parametroInput=="real") {
 			real=valore;
 		}
 	}
 
-	//////////////  I CREATE THE APPROPRIATES CLASSES  ///////////////////
+	//////////////  CREATE THE APPROPRIATES CLASSES  ///////////////////
 	
-	// I obtaine the fileType
+	// Obtain the fileType
 	MeshType fileTypeMesh=TETRAHEDRON;
 	if (fileType=="TETRAHEDRON") {
 		fileTypeMesh=TETRAHEDRON;
@@ -237,114 +234,48 @@ int main(int argc, const char * argv[]) {
 	if (fileType=="FILETYPE1") {
 		fileTypeMesh=FILETYPE2;
 	}
-	
-	auto forceTermSphere3D=forceTermSphere<3,double>;
-	auto forceTermSphere2D=forceTermSphere<2,double>;
-	auto forceTermSquare3D=forceTermSquare<3,double>;
-	auto forceTermSquare2D=forceTermSquare<2,double>;
-	auto forceTermConvergence3D=forceTermConvergence<3,double>;
-	auto forceTermConvergence2D=forceTermConvergence<2,double>;
-	auto solutionSphere3D=solutionSphere<3,double>;
-	auto solutionSphere2D=solutionSphere<2,double>;
-	auto solutionSquare3D=solutionSquare<3,double>;
-	auto solutionSquare2D=solutionSquare<2,double>;
-	auto solutionConvergence3D=solutionConvergence<3,double>;
-	auto solutionConvergence2D=solutionConvergence<2,double>;
-
-    auto forceTermSphere3DLong=forceTermSphere<3,long double>;
-    auto forceTermSphere2DLong=forceTermSphere<2,long double>;
-    auto forceTermSquare3DLong=forceTermSquare<3,long double>;
-    auto forceTermSquare2DLong=forceTermSquare<2,long double>;
-    auto forceTermConvergence3DLong=forceTermConvergence<3,long double>;
-    auto forceTermConvergence2DLong=forceTermConvergence<2,long double>;
-    auto solutionSphere3DLong=solutionSphere<3,long double>;
-    auto solutionSphere2DLong=solutionSphere<2,long double>;
-    auto solutionSquare3DLong=solutionSquare<3,long double>;
-    auto solutionSquare2DLong=solutionSquare<2,long double>;
-    auto solutionConvergence3DLong=solutionConvergence<3,long double>;
-    auto solutionConvergence2DLong=solutionConvergence<2,long double>;
-    
     
 	
 	// double case
 	if (real=="double") {
+		
 		if (meshType=="Mesh3D") {
+			muParserInterface<3,double> forceTerm;
+			muParserInterface<3,double> solution;
+			forceTerm.set_expression(forceTermFunctionExpr);
+			solution.set_expression(solutionFunctionExpr);
+		
+			Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
 			
-            if (forceTermFunction=="forceTermSphere" && solutionFunction=="solutionSphere") {
-                Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
-                
-                cout<<"Mesh created"<<endl;
-                
-                Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSphere3D,solutionSphere3D,1);
-                problem3();
-                problem3.displayError(solutionSphere3D,outputError,errorAction);
-                
-                if (outputPoint!="") {
-                    problem3.write(outputPoint,outputConnection,outputSolution);
-                }
-                
-                cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
-            } else if (forceTermFunction=="forceTermSquare" && solutionFunction=="solutionSquare") {
-                Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
-                
-                cout<<"Mesh created"<<endl;
-                
-                Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermSquare3D,solutionSquare3D,1);
-                problem3();
-                problem3.displayError(solutionSquare3D,outputError,errorAction);
-                
-                if (outputPoint!="") {
-                    problem3.write(outputPoint,outputConnection,outputSolution);
-                }
-                
-                cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
-            } else if (forceTermFunction=="forceTermConvergence" && solutionFunction=="solutionConvergence") {
-                Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
-                
-                cout<<"Mesh created"<<endl;
-                
-                Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTermConvergence3D,solutionConvergence3D,1);
-                problem3();
-                problem3.displayError(solutionConvergence3D,outputError,errorAction);
-                
-                if (outputPoint!="") {
-                    problem3.write(outputPoint,outputConnection,outputSolution);
-                }
-                
-                cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
-            } else {
-                cout<<"No predefined behaviour with this couple of forceTermFunction and solutionFunction"<<endl<<endl;
-            }
+			cout<<"Mesh created"<<endl;
 			
+			Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTerm,solution,1);
+			problem3();
+			problem3.displayError(solution,outputError,errorAction);
+			
+			if (outputPoint!="") {
+				problem3.write(outputPoint,outputConnection,outputSolution);
+			}
+			
+			cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
 		}
 		else if(meshType=="Mesh2D") {
-			if (forceTermFunction=="forceTermSquare" && solutionFunction=="solutionSquare") {
-				Mesh2D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
-				
-				Laplace<2, Mesh2D<>, SolverVEM2D<>, Dirichlet2D<>> problem3(newMesh,forceTermSquare2D,solutionSquare2D,1);
-				problem3();
-				problem3.displayError(solutionSquare2D,outputError,errorAction);
-				
-				if (outputPoint!="") {
-					problem3.write(outputPoint,outputConnection,outputSolution);
-				}
-				
-				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
-			} else if (forceTermFunction=="forceTermConvergence" && solutionFunction=="solutionConvergence") {
- 				Mesh2D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
- 				
- 				Laplace<2, Mesh2D<>, SolverVEM2D<>, Dirichlet2D<>> problem3(newMesh,forceTermConvergence2D,solutionConvergence2D,1);
- 				problem3();
- 				problem3.displayError(solutionConvergence2D,outputError,errorAction);
- 				
- 				if (outputPoint!="") {
- 					problem3.write(outputPoint,outputConnection,outputSolution);
- 				}
- 				
- 				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
- 			} else {
-                cout<<"No predefined behaviour with this couple of forceTermFunction and solutionFunction"<<endl<<endl;
-            }
+			muParserInterface<2,double> forceTerm;
+			muParserInterface<2,double> solution;
+			forceTerm.set_expression(forceTermFunctionExpr);
+			solution.set_expression(solutionFunctionExpr);
+		
+			Mesh2D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
+			
+			Laplace<2, Mesh2D<>, SolverVEM2D<>, Dirichlet2D<>> problem3(newMesh,forceTerm,solution,1);
+			problem3();
+			problem3.displayError(solution,outputError,errorAction);
+			
+			if (outputPoint!="") {
+				problem3.write(outputPoint,outputConnection,outputSolution);
+			}
+			
+			cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
         } else {
             cout<<"No predefined behaviour with this Mesh type"<<endl<<endl;
         }
@@ -352,104 +283,54 @@ int main(int argc, const char * argv[]) {
 	}
     // long double case
 	else if (real=="longdouble") {
+		
         if (meshType=="Mesh3D") {
-            
-            if (forceTermFunction=="forceTermSphere" && solutionFunction=="solutionSphere") {
-                Mesh3D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
-                
-                cout<<"Mesh created"<<endl;
-                
-                Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double> problem3(newMesh,forceTermSphere3DLong,solutionSphere3DLong,1);
-                problem3();
-                problem3.displayError(solutionSphere3DLong,outputError,errorAction);
-                
-                if (outputPoint!="") {
-                    problem3.write(outputPoint,outputConnection,outputSolution);
-                }
-                
-                cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
-            } else if (forceTermFunction=="forceTermSquare" && solutionFunction=="solutionSquare") {
-                Mesh3D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
-                
-                cout<<"Mesh created"<<endl;
-                
-                Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double>  problem3(newMesh,forceTermSquare3DLong,solutionSquare3DLong,1);
-                problem3();
-                problem3.displayError(solutionSquare3DLong,outputError,errorAction);
-                
-                if (outputPoint!="") {
-                    problem3.write(outputPoint,outputConnection,outputSolution);
-                }
-                
-                cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
-            } else if (forceTermFunction=="forceTermConvergence" && solutionFunction=="solutionConvergence") {
-                Mesh3D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
-                
-                cout<<"Mesh created"<<endl;
-                
-                Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double>  problem3(newMesh,forceTermConvergence3DLong,solutionConvergence3DLong,1);
-                problem3();
-                problem3.displayError(solutionConvergence3DLong,outputError,errorAction);
-                
-                if (outputPoint!="") {
-                    problem3.write(outputPoint,outputConnection,outputSolution);
-                }
-                
-                cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
-            } else {
-                cout<<"No predefined behaviour with this couple of forceTermFunction and solutionFunction"<<endl<<endl;
-            }
-            
+			muParserInterface<3,long double> forceTerm;
+			muParserInterface<3,long double> solution;
+			forceTerm.set_expression(forceTermFunctionExpr);
+			solution.set_expression(solutionFunctionExpr);
+			
+			Mesh3D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
+			
+			cout<<"Mesh created"<<endl;
+			
+			Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double> problem3(newMesh,forceTerm,solution,1);
+			problem3();
+			problem3.displayError(solution,outputError,errorAction);
+			
+			if (outputPoint!="") {
+				problem3.write(outputPoint,outputConnection,outputSolution);
+			}
+			
+			cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
         }
         else if(meshType=="Mesh2D") {
-			if (forceTermFunction=="forceTermSquare" && solutionFunction=="solutionSquare") {
-				Mesh2D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
-				
-				Laplace<2, Mesh2D<long double>, SolverVEM2D<long double>, Dirichlet2D<long double>,long double> problem3(newMesh,forceTermSquare2DLong,solutionSquare2DLong,1);
-				problem3();
-				problem3.displayError(solutionSquare2DLong,outputError,errorAction);
-				
-				if (outputPoint!="") {
-					problem3.write(outputPoint,outputConnection,outputSolution);
-				}
-				
-				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
-			} else if (forceTermFunction=="forceTermConvergence" && solutionFunction=="solutionConvergence") {
- 				Mesh2D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
- 				
- 				Laplace<2, Mesh2D<long double>, SolverVEM2D<long double>, Dirichlet2D<long double>,long double> problem3(newMesh,forceTermConvergence2DLong,solutionConvergence2DLong,1);
- 				problem3();
- 				problem3.displayError(solutionConvergence2DLong,outputError,errorAction);
- 				
- 				if (outputPoint!="") {
- 					problem3.write(outputPoint,outputConnection,outputSolution);
- 				}
- 				
- 				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
- 			} else {
-                cout<<"No predefined behaviour with this couple of forceTermFunction and solutionFunction"<<endl<<endl;
-            }
+			muParserInterface<2,long double> forceTerm;
+			muParserInterface<2,long double> solution;
+			forceTerm.set_expression(forceTermFunctionExpr);
+			solution.set_expression(solutionFunctionExpr);
+			
+			Mesh2D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
+			
+			Laplace<2, Mesh2D<long double>, SolverVEM2D<long double>, Dirichlet2D<long double>,long double> problem3(newMesh,forceTerm,solution,1);
+			problem3();
+			problem3.displayError(solution,outputError,errorAction);
+			
+			if (outputPoint!="") {
+				problem3.write(outputPoint,outputConnection,outputSolution);
+			}
+			
+			cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
+
         } else {
             cout<<"No predefined behaviour with this Mesh type"<<endl<<endl;
         }
-    }
-    
-    else {
+        
+    } else {
         cout<<"Program can run only with type=double or long double. You selected type="<<real<<endl<<endl;
     }
 	
-	
-	
 
-	
-	
-	
-	
-	
-	
-
-	
-	
 	
 	return 0;
 }

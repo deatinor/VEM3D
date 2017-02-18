@@ -20,12 +20,12 @@ using namespace Eigen;
 template <long embedded,typename baseElement,typename MatrixType,typename real>
 class Solver {
 protected:
-	std::function<real(const Point<embedded,real>&)> forceTerm; //!< ForceTerm function to use
+	muParserInterface<embedded,real>& forceTerm; //!< ForceTerm function to use
 	
 public:
 	/** Very generic constructor
 	 */
-	Solver(std::function<real(const Point<embedded,real>&)> inputForceTerm):forceTerm(inputForceTerm) {};
+	Solver(muParserInterface<embedded,real>& inputForceTerm):forceTerm(inputForceTerm) {};
 	
 	/** Main virtual method. To be implemented in subclasses
 	 */

@@ -7,7 +7,7 @@
 #include <Eigen/Sparse>
 #include <Eigen/IterativeLinearSolvers>
 #include <memory>
-
+#include "muParserInterface.h"
 
 
 using namespace Eigen;
@@ -55,10 +55,10 @@ public:
 	/** Standard constructor
 	 *
 	 * \param inputMesh Mesh on which the problem is defined
-	 * \param inputForceTerm ForceTerm std::function
-	 * \param inputBoundaryFunction std::function that expresses the boundary conditions
+	 * \param inputForceTerm muParserInterface containing the expression of the ForceTerm
+	 * \param inputBoundaryFunction muParserInterface containing the expression of the boundary conditions
 	 */
-	Laplace(const MeshType& inputMesh,std::function<real(const Point<embedded,real>&)> inputForceTerm,std::function<real(const Point<embedded,real>&)> inputBoundaryFunction,real inputDiffusionCoeff=1):Problem<embedded,MeshType,real>(inputMesh),numberOfElements(inputMesh.numberOfElements),tripletList({}),boundaryCondition(inputMesh,inputBoundaryFunction),solver(inputForceTerm),diffusionCoeff(inputDiffusionCoeff) {}
+	Laplace(const MeshType& inputMesh,muParserInterface<embedded,real>& inputForceTerm,muParserInterface<embedded,real>& inputBoundaryFunction,real inputDiffusionCoeff=1):Problem<embedded,MeshType,real>(inputMesh),numberOfElements(inputMesh.numberOfElements),tripletList({}),boundaryCondition(inputMesh,inputBoundaryFunction),solver(inputForceTerm),diffusionCoeff(inputDiffusionCoeff) {}
 	
 	// STANDARD METHODS
 	void computeStiffnessMatrix(); //<! General method. It invokes the methods of the Solver.

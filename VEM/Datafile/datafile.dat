@@ -1,10 +1,10 @@
 // file input
 
 // CUBIC MESH
-//inputPoint=../Mesh/Cube/Cubic/point-2.txt;
-//inputConnection=../Mesh/Cube/Cubic/conn-2.txt;
-inputPoint=../Convergence/Mesh3D/point-32.txt;
-inputConnection=../Convergence/Mesh3D/conn-32.txt;
+inputPoint=../Mesh/Cube/Cubic/point-16.txt;
+inputConnection=../Mesh/Cube/Cubic/conn-16.txt;
+//inputPoint=../Convergence/Mesh3D/point-16.txt;
+//inputConnection=../Convergence/Mesh3D/conn-16.txt;
 
 // CUBE WITHOUT PART
 //inputPoint=../Mesh/Cube/CubeWithoutPart/point-16.txt;
@@ -34,22 +34,24 @@ fileType=ANYTHING3D;
 
 // forceTermFunction
 // It can be forceTermSquare or forceTermSphere or forceTermConvergence
-forceTermFunction=forceTermConvergence;
+forceTermFunction=147*_pi*_pi*sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
+//forceTermConvergence;
 
 // solution function
 // It can be solutionSquare or solutionSphere or solutionConvergence
-solutionFunction=solutionConvergence;
+solutionFunction=sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
+//solutionConvergence;
 
 
 // file output name
-outputPoint=../Convergence/Output/point3D-ne128.txt;
-outputConnection=../Convergence/Output/conn3D-ne128.txt;
-outputSolution=../Convergence/Output/solution3D-ne128.txt;
-outputError=../Convergence/Output/error3D.txt;
-//outputPoint=Output/point2D.txt;
-//outputConnection=Output/conn2D.txt;
-//outputSolution=Output/solution2D.txt;
-//outputError=Output/error2D.txt;
+//outputPoint=../Convergence/Output/point3D-ne128.txt;
+//outputConnection=../Convergence/Output/conn3D-ne128.txt;
+//outputSolution=../Convergence/Output/solution3D-ne128.txt;
+//outputError=../Convergence/Output/error3D.txt;
+outputPoint=Output/point2D.txt;
+outputConnection=Output/conn2D.txt;
+outputSolution=Output/solution2D.txt;
+outputError=Output/error2D.txt;
 
 // override or append error to error file
 // errorAction can only be override or append
