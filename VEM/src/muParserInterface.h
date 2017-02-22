@@ -10,32 +10,20 @@ template <long embedded,typename real=double>
 class muParserInterface {
 	public:
 		muParserInterface();
-		muParserInterface(const std::string & s);
 		~muParserInterface();
-		muParserInterface(muParserInterface const &);
-		muParserInterface & operator=(muParserInterface const &);
+		muParserInterface(muParserInterface<embedded,real> const &);
 		
 		void set_expression(const std::string & e);
-		real operator()(const Point<embedded,real>& inputPoint, real const & t=0);
-	private:
+		virtual real operator()(const Point<embedded,real>& inputPoint, real const & t=0) = 0;
+	protected:
 		mu::Parser M_parser;
-		double M_t, M_x, M_y, M_z;
+		double M_t;
 		std::string M_expr;
 };
 
 template <long embedded,typename real>
 muParserInterface<embedded,real>::muParserInterface() {
 	this->M_parser.DefineVar("t",&M_t);
-	this->M_parser.DefineVar("x",&M_x);
-	this->M_parser.DefineVar("y",&M_y);
-	this->M_parser.DefineVar("z",&M_z);
-}
-
-template <long embedded,typename real>
-muParserInterface<embedded,real>::muParserInterface(const std::string & e): 
-muParserInterface() { 
-	M_expr = e;
-	this->M_parser.SetExpr(e);
 }
 
 template <long embedded,typename real>
@@ -45,50 +33,16 @@ muParserInterface<embedded,real>::~muParserInterface()
 }
 
 template <long embedded,typename real>
-muParserInterface<embedded,real>::muParserInterface(muParserInterface const & mpi):
-M_parser(),M_t(mpi.M_t),M_x(mpi.M_x),M_y(mpi.M_y),M_z(mpi.M_z),M_expr(mpi.M_expr) {
+muParserInterface<embedded,real>::muParserInterface(muParserInterface<embedded,real> const & mpi):
+M_parser(),M_t(mpi.M_t),M_expr(mpi.M_expr) {
 	this->M_parser.SetExpr(M_expr);
 	this->M_parser.DefineVar("t",&M_t);
-	this->M_parser.DefineVar("x",&M_x);
-	this->M_parser.DefineVar("y",&M_y);  
-	this->M_parser.DefineVar("z",&M_z);  
-}
-
-template <long embedded,typename real>
-muParserInterface<embedded,real> & muParserInterface<embedded,real>::operator=(muParserInterface<embedded,real> const & mpi) {
-	if (this != &mpi) {
-		this->M_parser.ClearVar();
-		this->M_expr = mpi.M_expr;
-		this->M_t = mpi.M_t;
-		this->M_x = mpi.M_x;
-		this->M_y = mpi.M_y;
-		this->M_z = mpi.M_z;
-		this->M_parser.SetExpr(M_expr);
-		this->M_parser.DefineVar("t",&M_t);
-		this->M_parser.DefineVar("x",&M_x);
-		this->M_parser.DefineVar("y",&M_y);
-		this->M_parser.DefineVar("z",&M_z);
-	}
-	return *this;
 }
 
 template <long embedded,typename real>
 void  muParserInterface<embedded,real>::set_expression(const std::string & s) {
 	M_expr = s;
 	this->M_parser.SetExpr(s);
-}
-
-template <long embedded,typename real>
-real muParserInterface<embedded,real>::operator()(const Point<embedded,real>& inputPoint, real const & t) {
-	this->M_t = t;
-	this->M_x = inputPoint[0];
-	if (embedded > 1) {
-		this->M_y = inputPoint[1];
-		if (embedded > 2)
-			this->M_z = inputPoint[2];
-	}
-	
-	return this->M_parser.Eval();
 }
 
 //! prints message on the standard error

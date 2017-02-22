@@ -21,6 +21,8 @@
 #include "SolverVEM.h"
 #include "Dirichlet.h"
 #include "muParserInterface.h"
+#include "carthesianParserInterface.h"
+#include "sphericalParserInterface.h"
 
  /*
 // FUNCTIONS
@@ -136,6 +138,7 @@ int main(int argc, const char * argv[]) {
 	string outputSolution;
 	string outputError;
 	string errorAction;
+	string coordinateType;
 	string forceTermFunctionExpr;
 	string boundaryFunctionExpr;
 	string solutionFunctionExpr;
@@ -153,8 +156,7 @@ int main(int argc, const char * argv[]) {
 		
 		if (linea=="") {
 			continue;
-		}
-		if (linea.substr(0,2)=="//") {
+		} else if (linea.substr(0,2)=="//") {
 			continue;
 		}
 		
@@ -163,55 +165,43 @@ int main(int argc, const char * argv[]) {
 		getline(iss, parametroInput, '=');
 		getline(iss, valore, ';');
 		
-		// overwrite found input paramethers
+		// overwrite found input parameters
 		if (parametroInput=="inputPoint") {
 			inputPoint=valore;
-		}
-		if (parametroInput=="inputConnection") {
+		} else if (parametroInput=="inputConnection") {
 			inputConnection=valore;
-		}
-		if (parametroInput=="meshType") {
+		} else if (parametroInput=="meshType") {
 			meshType=valore;
 			if (meshType=="Mesh3D") {
 				embedded=3;
 			} else if (meshType=="Mesh2D"){
 				embedded=2;
 			}
-		}
-		if (parametroInput=="fileType") {
+		} else if (parametroInput=="fileType") {
 			fileType=valore;
-		}
-		if (parametroInput=="solverType") {
+		} else if (parametroInput=="solverType") {
 			solverType=valore;
-		}
-		if (parametroInput=="boundaryCondition") {
+		} else if (parametroInput=="boundaryCondition") {
 			boundaryCondition=valore;
-		}
-		if (parametroInput=="outputPoint") {
+		} else if (parametroInput=="outputPoint") {
 			outputPoint=valore;
-		}
-		if (parametroInput=="outputConnection") {
+		} else if (parametroInput=="outputConnection") {
 			outputConnection=valore;
-		}
-		if (parametroInput=="outputSolution") {
+		} else if (parametroInput=="outputSolution") {
 			outputSolution=valore;
-		}
-		if (parametroInput=="outputError") {
+		} else if (parametroInput=="outputError") {
 			outputError=valore;
-		}
-		if (parametroInput=="errorAction") {
+		} else if (parametroInput=="errorAction") {
 			errorAction=valore;
-		}
-		if (parametroInput=="forceTermFunction") {
+		} else if (parametroInput=="coordinateType") {
+			coordinateType=valore;
+		} else if (parametroInput=="forceTermFunction") {
 			forceTermFunctionExpr=valore;
-		}
-		if (parametroInput=="boundaryFunction") {
+		} else if (parametroInput=="boundaryFunction") {
 			boundaryFunctionExpr=valore;
-		}
-		if (parametroInput=="solutionFunction") {
+		} else if (parametroInput=="solutionFunction") {
 			solutionFunctionExpr=valore;
-		}
-		if (parametroInput=="real") {
+		} else if (parametroInput=="real") {
 			real=valore;
 		}
 	}
@@ -222,20 +212,15 @@ int main(int argc, const char * argv[]) {
 	MeshType fileTypeMesh=TETRAHEDRON;
 	if (fileType=="TETRAHEDRON") {
 		fileTypeMesh=TETRAHEDRON;
-	}
-	if (fileType=="TRIANGLE") {
+	} else if (fileType=="TRIANGLE") {
 		fileTypeMesh=TRIANGLE;
-	}
-	if (fileType=="ANYTHING3D") {
+	} else if (fileType=="ANYTHING3D") {
 		fileTypeMesh=ANYTHING3D;
-	}
-	if (fileType=="ANYTHING2D") {
+	} else if (fileType=="ANYTHING2D") {
 		fileTypeMesh=ANYTHING2D;
-	}
-	if (fileType=="FILETYPE1") {
+	} else if (fileType=="FILETYPE1") {
 		fileTypeMesh=FILETYPE1;
-	}
-	if (fileType=="FILETYPE1") {
+	} else if (fileType=="FILETYPE1") {
 		fileTypeMesh=FILETYPE2;
 	}
     
@@ -244,56 +229,88 @@ int main(int argc, const char * argv[]) {
 		if (real=="double") {
 			
 			if (meshType=="Mesh3D") {
-				muParserInterface<3,double> forceTerm;
-				muParserInterface<3,double> boundaryFunc;
-				muParserInterface<3,double> solution;
-				forceTerm.set_expression(forceTermFunctionExpr);
-				boundaryFunc.set_expression(boundaryFunctionExpr);
-				if (solutionFunctionExpr == "boundaryFunction") {
-					solution.set_expression(boundaryFunctionExpr);
-				} else if (solutionFunctionExpr != "null") {
-					solution.set_expression(solutionFunctionExpr);
+				muParserInterface<3,double>* forceTerm;
+				muParserInterface<3,double>* boundaryFunc;
+				muParserInterface<3,double>* solution;
+				if (coordinateType=="carthesian") {
+					forceTerm = new carthesianParserInterface<3,double>(forceTermFunctionExpr);
+					boundaryFunc = new carthesianParserInterface<3,double>(boundaryFunctionExpr);
+					if (solutionFunctionExpr == "boundaryFunction") {
+						solution = new carthesianParserInterface<3,double>(boundaryFunctionExpr);
+					} else if (solutionFunctionExpr != "null") {
+						solution = new carthesianParserInterface<3,double>(solutionFunctionExpr);
+					}
+				} else if (coordinateType=="spherical") {
+					forceTerm = new sphericalParserInterface<3,double>(forceTermFunctionExpr);
+					boundaryFunc = new sphericalParserInterface<3,double>(boundaryFunctionExpr);
+					if (solutionFunctionExpr == "boundaryFunction") {
+						solution = new sphericalParserInterface<3,double>(boundaryFunctionExpr);
+					} else if (solutionFunctionExpr != "null") {
+						solution = new sphericalParserInterface<3,double>(solutionFunctionExpr);
+					}
 				}
 			
 				Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
 				
 				cout<<"Mesh created"<<endl;
 				
-				Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,forceTerm,boundaryFunc,1);
+				Laplace<3, Mesh3D<>, SolverVEM3D<>, Dirichlet3D<>> problem3(newMesh,*forceTerm,*boundaryFunc,1);
 				problem3();
 				if (solutionFunctionExpr != "null")
-					problem3.displayError(solution,outputError,errorAction);
+					problem3.displayError(*solution,outputError,errorAction);
 				
 				if (outputPoint!="") {
 					problem3.write(outputPoint,outputConnection,outputSolution);
 				}
 				
 				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
+
+				// Clear memory
+				delete forceTerm;
+				delete boundaryFunc;
+				if (solutionFunctionExpr != "null")
+					delete solution;
 			}
 			else if(meshType=="Mesh2D") {
-				muParserInterface<2,double> forceTerm;
-				muParserInterface<2,double> boundaryFunc;
-				muParserInterface<2,double> solution;
-				forceTerm.set_expression(forceTermFunctionExpr);
-				boundaryFunc.set_expression(boundaryFunctionExpr);
-				if (solutionFunctionExpr == "boundaryFunction") {
-					solution.set_expression(boundaryFunctionExpr);
-				} else if (solutionFunctionExpr != "null") {
-					solution.set_expression(solutionFunctionExpr);
+				muParserInterface<2,double>* forceTerm;
+				muParserInterface<2,double>* boundaryFunc;
+				muParserInterface<2,double>* solution;
+				if (coordinateType=="carthesian") {
+					forceTerm = new carthesianParserInterface<2,double>(forceTermFunctionExpr);
+					boundaryFunc = new carthesianParserInterface<2,double>(boundaryFunctionExpr);
+					if (solutionFunctionExpr == "boundaryFunction") {
+						solution = new carthesianParserInterface<2,double>(boundaryFunctionExpr);
+					} else if (solutionFunctionExpr != "null") {
+						solution = new carthesianParserInterface<2,double>(solutionFunctionExpr);
+					}
+				} else if (coordinateType=="spherical") {
+					forceTerm = new sphericalParserInterface<2,double>(forceTermFunctionExpr);
+					boundaryFunc = new sphericalParserInterface<2,double>(boundaryFunctionExpr);
+					if (solutionFunctionExpr == "boundaryFunction") {
+						solution = new sphericalParserInterface<2,double>(boundaryFunctionExpr);
+					} else if (solutionFunctionExpr != "null") {
+						solution = new sphericalParserInterface<2,double>(solutionFunctionExpr);
+					}
 				}
 			
 				Mesh2D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
 				
-				Laplace<2, Mesh2D<>, SolverVEM2D<>, Dirichlet2D<>> problem3(newMesh,forceTerm,boundaryFunc,1);
+				Laplace<2, Mesh2D<>, SolverVEM2D<>, Dirichlet2D<>> problem3(newMesh,*forceTerm,*boundaryFunc,1);
 				problem3();
 				if (solutionFunctionExpr != "null")
-					problem3.displayError(solution,outputError,errorAction);
+					problem3.displayError(*solution,outputError,errorAction);
 				
 				if (outputPoint!="") {
 					problem3.write(outputPoint,outputConnection,outputSolution);
 				}
 				
 				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
+
+				// Clear memory
+				delete forceTerm;
+				delete boundaryFunc;
+				if (solutionFunctionExpr != "null")
+					delete solution;
 			} else {
 				cout<<"No predefined behaviour with this Mesh type"<<endl<<endl;
 			}
@@ -303,50 +320,35 @@ int main(int argc, const char * argv[]) {
 		else if (real=="longdouble") {
 			
 			if (meshType=="Mesh3D") {
-				muParserInterface<3,long double> forceTerm;
-				muParserInterface<3,long double> boundaryFunc;
-				muParserInterface<3,long double> solution;
-				forceTerm.set_expression(forceTermFunctionExpr);
-				boundaryFunc.set_expression(boundaryFunctionExpr);
-				if (solutionFunctionExpr == "boundaryFunction") {
-					solution.set_expression(boundaryFunctionExpr);
-				} else if (solutionFunctionExpr != "null") {
-					solution.set_expression(solutionFunctionExpr);
+				muParserInterface<3,long double>* forceTerm;
+				muParserInterface<3,long double>* boundaryFunc;
+				muParserInterface<3,long double>* solution;
+				if (coordinateType=="carthesian") {
+					forceTerm = new carthesianParserInterface<3,long double>(forceTermFunctionExpr);
+					boundaryFunc = new carthesianParserInterface<3,long double>(boundaryFunctionExpr);
+					if (solutionFunctionExpr == "boundaryFunction") {
+						solution = new carthesianParserInterface<3,long double>(boundaryFunctionExpr);
+					} else if (solutionFunctionExpr != "null") {
+						solution = new carthesianParserInterface<3,long double>(solutionFunctionExpr);
+					}
+				} else if (coordinateType=="spherical") {
+					forceTerm = new sphericalParserInterface<3,long double>(forceTermFunctionExpr);
+					boundaryFunc = new sphericalParserInterface<3,long double>(boundaryFunctionExpr);
+					if (solutionFunctionExpr == "boundaryFunction") {
+						solution = new sphericalParserInterface<3,long double>(boundaryFunctionExpr);
+					} else if (solutionFunctionExpr != "null") {
+						solution = new sphericalParserInterface<3,long double>(solutionFunctionExpr);
+					}
 				}
 				
 				Mesh3D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
 				
 				cout<<"Mesh created"<<endl;
 				
-				Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double> problem3(newMesh,forceTerm,boundaryFunc,1);
+				Laplace<3, Mesh3D<long double>, SolverVEM3D<long double>, Dirichlet3D<long double>,long double> problem3(newMesh,*forceTerm,*boundaryFunc,1);
 				problem3();
 				if (solutionFunctionExpr != "null")
-					problem3.displayError(solution,outputError,errorAction);
-				
-				if (outputPoint!="") {
-					problem3.write(outputPoint,outputConnection,outputSolution);
-				}
-				
-				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
-			}
-			else if(meshType=="Mesh2D") {
-				muParserInterface<2,long double> forceTerm;
-				muParserInterface<2,long double> boundaryFunc;
-				muParserInterface<2,long double> solution;
-				forceTerm.set_expression(forceTermFunctionExpr);
-				boundaryFunc.set_expression(boundaryFunctionExpr);
-				if (solutionFunctionExpr == "boundaryFunction") {
-					solution.set_expression(boundaryFunctionExpr);
-				} else if (solutionFunctionExpr != "null") {
-					solution.set_expression(solutionFunctionExpr);
-				}				
-				
-				Mesh2D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
-				
-				Laplace<2, Mesh2D<long double>, SolverVEM2D<long double>, Dirichlet2D<long double>,long double> problem3(newMesh,forceTerm,boundaryFunc,1);
-				problem3();
-				if (solutionFunctionExpr != "null")
-					problem3.displayError(solution,outputError,errorAction);
+					problem3.displayError(*solution,outputError,errorAction);
 				
 				if (outputPoint!="") {
 					problem3.write(outputPoint,outputConnection,outputSolution);
@@ -354,6 +356,53 @@ int main(int argc, const char * argv[]) {
 				
 				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
 
+				// Clear memory
+				delete forceTerm;
+				delete boundaryFunc;
+				if (solutionFunctionExpr != "null")
+					delete solution;
+			}
+			else if(meshType=="Mesh2D") {
+				muParserInterface<2,long double>* forceTerm;
+				muParserInterface<2,long double>* boundaryFunc;
+				muParserInterface<2,long double>* solution;
+				if (coordinateType=="carthesian") {
+					forceTerm = new carthesianParserInterface<2,long double>(forceTermFunctionExpr);
+					boundaryFunc = new carthesianParserInterface<2,long double>(boundaryFunctionExpr);
+					if (solutionFunctionExpr == "boundaryFunction") {
+						solution = new carthesianParserInterface<2,long double>(boundaryFunctionExpr);
+					} else if (solutionFunctionExpr != "null") {
+						solution = new carthesianParserInterface<2,long double>(solutionFunctionExpr);
+					}
+				} else if (coordinateType=="spherical") {
+					forceTerm = new sphericalParserInterface<2,long double>(forceTermFunctionExpr);
+					boundaryFunc = new sphericalParserInterface<2,long double>(boundaryFunctionExpr);
+					if (solutionFunctionExpr == "boundaryFunction") {
+						solution = new sphericalParserInterface<2,long double>(boundaryFunctionExpr);
+					} else if (solutionFunctionExpr != "null") {
+						solution = new sphericalParserInterface<2,long double>(solutionFunctionExpr);
+					}
+				}				
+				
+				Mesh2D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
+				
+				Laplace<2, Mesh2D<long double>, SolverVEM2D<long double>, Dirichlet2D<long double>,long double> problem3(newMesh,*forceTerm,*boundaryFunc,1);
+				problem3();
+				if (solutionFunctionExpr != "null")
+					problem3.displayError(*solution,outputError,errorAction);
+				
+				if (outputPoint!="") {
+					problem3.write(outputPoint,outputConnection,outputSolution);
+				}
+				
+				cout<<"hTriangle: "<<newMesh.hTriangle()<<endl<<endl;
+
+				// Clear memory
+				delete forceTerm;
+				delete boundaryFunc;
+				if (solutionFunctionExpr != "null")
+					delete solution;
+		
 			} else {
 				cout<<"No predefined behaviour with this Mesh type"<<endl<<endl;
 			}
