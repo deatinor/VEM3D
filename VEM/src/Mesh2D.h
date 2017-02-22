@@ -77,8 +77,11 @@ template <typename real>
 void Mesh2D<real>::setAnything2DMesh(string connection) {
 	ifstream file2;
 	file2.open(connection);
+	if (!file2.is_open()) {
+		throw std::runtime_error("Problem reading inputConnection file.");
+	}
+	
 	string fileRow2;
-
 	
 	while (getline(file2, fileRow2)) {
 		// it counts the number of points

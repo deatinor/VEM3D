@@ -128,7 +128,7 @@ void Error<embedded,real>::writeError(string outputError,string errorAction) {
  		}
  		outfile.open(outputError, std::ios_base::app);
  	}
-  		  
+
 	outfile << LInfinity() << "," << H1Discrete() << endl; 
 	outfile.close(); 
 }

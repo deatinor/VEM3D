@@ -152,8 +152,11 @@ template <long embedded,typename baseElement,OpenEnum isOpen,typename real>
 void Mesh<embedded,baseElement,isOpen,real>::setPointVector(string file) {
 	ifstream file1;
 	file1.open(file);
-	string rigaFile1;
+	if (!file1.is_open()) {
+		throw std::runtime_error("Problem reading inputPoint file.");
+	}
 	
+	string rigaFile1;
 	
 	while (getline(file1, rigaFile1)) {
 		istringstream rigaFileStream(rigaFile1);
@@ -167,7 +170,6 @@ void Mesh<embedded,baseElement,isOpen,real>::setPointVector(string file) {
 			stream2>>(*point)[i];
 			
 		}
-		
 		
 		this->pointVector.push_back(point);
 	}

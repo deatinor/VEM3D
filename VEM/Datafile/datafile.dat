@@ -14,8 +14,8 @@
 //inputConnection=../Mesh/Cube/CubeWithoutPart/conn-16.txt;
 
 // SPHERIC MESH 3D
-inputPoint=../Mesh/Sphere3D/point-2.txt;
-inputConnection=../Mesh/Sphere3D/conn-2.txt;
+inputPoint=../Mesh/Sphere3D/point-8.txt;
+inputConnection=../Mesh/Sphere3D/conn-8.txt;
 
 // 2D MESH SQUARE
 //../Mesh/Mesh2DSquare/point-16.txt;
@@ -53,11 +53,18 @@ forceTermFunction=6;
 //boundaryFunction=sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
 boundaryFunction=1-r^2;
 
+// type of boundary condition 
+// Only 'dirichlet' is available in this version of the code
+boundaryCondition=dirichlet;
+
 // solution function
 // Write either an expression (note that _pi=3.1415... and _e=2.71828...)
 // or write boundaryFunction if it is equal to the boundary function
 // or write null if it is unknown (the error will then not been displayed)
 solutionFunction=boundaryFunction;
+
+// ----------------------------- SOLVER ----------------------------- //
+solver=VEM;
 
 // -------------------------- OUTPUT FILES -------------------------- //
 // file output name

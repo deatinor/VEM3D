@@ -113,6 +113,10 @@ template <typename real>
 void Mesh3D<real>::setAnything3DMesh(string connection) {
 	ifstream file2;
 	file2.open(connection);
+	if (!file2.is_open()) {
+		throw std::runtime_error("Problem reading inputConnection file.");
+	}
+	
 	string rigaFile2;
 	
 	while (getline(file2, rigaFile2)) {
@@ -223,9 +227,12 @@ void Mesh3D<real>::setRemainingThings() {
 // setTetrahedronMesh
 template <typename real>
 void Mesh3D<real>::setTetrahedronMesh(string connection) {
-	
 	ifstream file2;
 	file2.open(connection);
+	if (!file2.is_open()) {
+		throw std::runtime_error("Problem reading inputConnection file.");
+	}
+	
 	string rigaFile2;
 	
 	int counter=0;
