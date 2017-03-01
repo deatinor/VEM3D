@@ -17,10 +17,10 @@ import numpy as np
 
 ## MODIFY ONLY THIS FILES
 
-folder="../../VEM/VEM/Output/"
+folder="../../VEM/Output/"
 
-point="point2D.txt"
-solution="solution2D.txt"
+point="point3D.txt"
+solution="solution3D.txt"
 
 ##################################################################
 ##################################################################
