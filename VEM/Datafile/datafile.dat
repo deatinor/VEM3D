@@ -6,16 +6,16 @@
 // CUBIC MESH
 //inputPoint=../Mesh/Cube/Cubic/point-16.txt;
 //inputConnection=../Mesh/Cube/Cubic/conn-16.txt;
-//inputPoint=../Convergence/MeshSquare3D/point-16.txt;
-//inputConnection=../Convergence/MeshSquare3D/conn-16.txt;
+inputPoint=../Convergence/MeshSquare3D/point-16.txt;
+inputConnection=../Convergence/MeshSquare3D/conn-16.txt;
 
 // CUBE WITHOUT PART
 //inputPoint=../Mesh/Cube/CubeWithoutPart/point-16.txt;
 //inputConnection=../Mesh/Cube/CubeWithoutPart/conn-16.txt;
 
 // SPHERIC MESH 3D
-inputPoint=../Mesh/Sphere3D/point-1.txt;
-inputConnection=../Mesh/Sphere3D/conn-1.txt;
+//inputPoint=../Mesh/Sphere3D/point-1.txt;
+//inputConnection=../Mesh/Sphere3D/conn-1.txt;
 
 // 2D MESH SQUARE
 //../Mesh/Mesh2DSquare/point-16.txt;
@@ -31,27 +31,30 @@ inputConnection=../Mesh/Sphere3D/conn-1.txt;
 // mesh type
 // meshType can be only Mesh2D or Mesh3D
 meshType=Mesh3D;
-// fileType can be ANYTHING3D, TETRAHEDRON or ANYTHING2D
+// fileType is the connection file type and can be ANYTHING3D, 
+TETRAHEDRON or ANYTHING2D
 fileType=ANYTHING3D;
 
 // -------------------------- FUNCTIONS ----------------------------- //
 // type of coordinates used
-// It can be either carthesian or spherical (spherical also stands for 
-// polar coordinates). If carthesian, x, y and z are reserved for the 
-// first, second and third dimension respectively. If spherical, r, phi 
-// and theta are reserved for (respectively) the radius, the angle 
-// between [0,2pi] and the angle in [0,pi].
-coordinateType=spherical;
+// It can be either cartesian, spherical or polar. If cartesian, x, y 
+// and z are reserved for the first, second and third dimension 
+// respectively. If spherical or polar, r, phi and theta are reserved 
+// for (respectively) the radius, the angle between [0,2pi] and the 
+// angle in [0,pi].
+coordinateType=cartesian;
 
 // force term function
 // Write an expression, note that _pi=3.1415... and _e=2.71828...
-//forceTermFunction=147*_pi^2*sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
-forceTermFunction=6;
+//forceTermFunction=-49*((y*z)^2+(x*z)^2+(x*y)^2)*exp(7*x*y*z);
+forceTermFunction=147*_pi^2*sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
+//forceTermFunction=6;
 
 // boundary function
 // Write an expression, note that _pi=3.1415... and _e=2.71828...
-//boundaryFunction=sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
-boundaryFunction=1-r^2;
+//boundaryFunction=exp(7*x*y*z)-1;
+boundaryFunction=sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
+//boundaryFunction=1-r^2;
 
 // type of boundary condition 
 // Only 'dirichlet' is available in this version of the code
@@ -72,10 +75,10 @@ solver=VEM;
 //outputConnection=../Convergence/OutputSphere/conn3D-1.txt;
 //outputSolution=../Convergence/OutputSphere/solution3D-1.txt;
 //outputError=../Convergence/OutputSphere/error3D.txt;
-outputPoint=Output/point2D.txt;
-outputConnection=Output/conn2D.txt;
-outputSolution=Output/solution2D.txt;
-outputError=Output/error2D.txt;
+outputPoint=Output/point3D.txt;
+outputConnection=Output/conn3D.txt;
+outputSolution=Output/solution3D.txt;
+outputError=Output/error3D.txt;
 
 // override or append error to error file
 // errorAction can only be override or append

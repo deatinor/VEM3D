@@ -50,7 +50,7 @@ points constituing an element);
 * mesh type: it can be `ANYTHING2D`, `ANYTHING3D` OR `TETRAHEDRON`;
 * the force term and solution functions, and the exact solution if available 
 (and if we want to compute the error). The type of coordinates (spherical 
-or carthesian) also has to be specified.
+or cartesian) also has to be specified.
 * the type of solver: in the actual version of the code, only VEM is available.
 * output files: it is advised to leave the output folder to Output/;
 * accuracy typename: we can either choose `double` or `long double`.

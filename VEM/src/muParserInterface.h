@@ -6,7 +6,7 @@
 #include "muParser.h"
 #include "Point.h"
 
-/** Generic muParserInterface that can take into account any type of coordinates (ex: spherical, carthesian, etc)
+/** Generic muParserInterface that can take into account any type of coordinates (ex: spherical, cartesian, etc)
  *
  *	It uses the library muParser (see README). It reads and evaluate any mathematical expression.
  *

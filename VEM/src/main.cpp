@@ -22,7 +22,7 @@
 #include "SolverVEM.h"
 #include "Dirichlet.h"
 #include "muParserInterface.h"
-#include "carthesianParserInterface.h"
+#include "cartesianParserInterface.h"
 #include "sphericalParserInterface.h"
 
 int main(int argc, const char * argv[]) {
@@ -143,13 +143,13 @@ int main(int argc, const char * argv[]) {
 				muParserInterface<3,double>* forceTerm;
 				muParserInterface<3,double>* boundaryFunc;
 				muParserInterface<3,double>* solution;
-				if (coordinateType=="carthesian") {
-					forceTerm = new carthesianParserInterface<3,double>(forceTermFunctionExpr);
-					boundaryFunc = new carthesianParserInterface<3,double>(boundaryFunctionExpr);
+				if (coordinateType=="cartesian") {
+					forceTerm = new cartesianParserInterface<3,double>(forceTermFunctionExpr);
+					boundaryFunc = new cartesianParserInterface<3,double>(boundaryFunctionExpr);
 					if (solutionFunctionExpr == "boundaryFunction") {
-						solution = new carthesianParserInterface<3,double>(boundaryFunctionExpr);
+						solution = new cartesianParserInterface<3,double>(boundaryFunctionExpr);
 					} else if (solutionFunctionExpr != "null") {
-						solution = new carthesianParserInterface<3,double>(solutionFunctionExpr);
+						solution = new cartesianParserInterface<3,double>(solutionFunctionExpr);
 					}
 				} else if (coordinateType=="spherical" || coordinateType=="polar") {
 					forceTerm = new sphericalParserInterface<3,double>(forceTermFunctionExpr);
@@ -160,7 +160,7 @@ int main(int argc, const char * argv[]) {
 						solution = new sphericalParserInterface<3,double>(solutionFunctionExpr);
 					}
 				} else {
-					throw std::runtime_error("Wrong coordinateType: choose between carthesian, spherical or polar.");
+					throw std::runtime_error("Wrong coordinateType: choose between cartesian, spherical or polar.");
 				}
 			
 				Mesh3D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
@@ -189,13 +189,13 @@ int main(int argc, const char * argv[]) {
 				muParserInterface<2,double>* forceTerm;
 				muParserInterface<2,double>* boundaryFunc;
 				muParserInterface<2,double>* solution;
-				if (coordinateType=="carthesian") {
-					forceTerm = new carthesianParserInterface<2,double>(forceTermFunctionExpr);
-					boundaryFunc = new carthesianParserInterface<2,double>(boundaryFunctionExpr);
+				if (coordinateType=="cartesian") {
+					forceTerm = new cartesianParserInterface<2,double>(forceTermFunctionExpr);
+					boundaryFunc = new cartesianParserInterface<2,double>(boundaryFunctionExpr);
 					if (solutionFunctionExpr == "boundaryFunction") {
-						solution = new carthesianParserInterface<2,double>(boundaryFunctionExpr);
+						solution = new cartesianParserInterface<2,double>(boundaryFunctionExpr);
 					} else if (solutionFunctionExpr != "null") {
-						solution = new carthesianParserInterface<2,double>(solutionFunctionExpr);
+						solution = new cartesianParserInterface<2,double>(solutionFunctionExpr);
 					}
 				} else if (coordinateType=="spherical" || coordinateType=="polar") {
 					forceTerm = new sphericalParserInterface<2,double>(forceTermFunctionExpr);
@@ -206,7 +206,7 @@ int main(int argc, const char * argv[]) {
 						solution = new sphericalParserInterface<2,double>(solutionFunctionExpr);
 					}
 				} else {
-					throw std::runtime_error("Wrong coordinateType: choose between carthesian, spherical or polar.");
+					throw std::runtime_error("Wrong coordinateType: choose between cartesian, spherical or polar.");
 				}
 			
 				Mesh2D<> newMesh(inputPoint,inputConnection,fileTypeMesh);
@@ -239,13 +239,13 @@ int main(int argc, const char * argv[]) {
 				muParserInterface<3,long double>* forceTerm;
 				muParserInterface<3,long double>* boundaryFunc;
 				muParserInterface<3,long double>* solution;
-				if (coordinateType=="carthesian") {
-					forceTerm = new carthesianParserInterface<3,long double>(forceTermFunctionExpr);
-					boundaryFunc = new carthesianParserInterface<3,long double>(boundaryFunctionExpr);
+				if (coordinateType=="cartesian") {
+					forceTerm = new cartesianParserInterface<3,long double>(forceTermFunctionExpr);
+					boundaryFunc = new cartesianParserInterface<3,long double>(boundaryFunctionExpr);
 					if (solutionFunctionExpr == "boundaryFunction") {
-						solution = new carthesianParserInterface<3,long double>(boundaryFunctionExpr);
+						solution = new cartesianParserInterface<3,long double>(boundaryFunctionExpr);
 					} else if (solutionFunctionExpr != "null") {
-						solution = new carthesianParserInterface<3,long double>(solutionFunctionExpr);
+						solution = new cartesianParserInterface<3,long double>(solutionFunctionExpr);
 					}
 				} else if (coordinateType=="spherical" || coordinateType=="polar") {
 					forceTerm = new sphericalParserInterface<3,long double>(forceTermFunctionExpr);
@@ -256,7 +256,7 @@ int main(int argc, const char * argv[]) {
 						solution = new sphericalParserInterface<3,long double>(solutionFunctionExpr);
 					}
 				} else {
-					throw std::runtime_error("Wrong coordinateType: choose between carthesian, spherical or polar.");
+					throw std::runtime_error("Wrong coordinateType: choose between cartesian, spherical or polar.");
 				}
 				
 				Mesh3D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);
@@ -285,13 +285,13 @@ int main(int argc, const char * argv[]) {
 				muParserInterface<2,long double>* forceTerm;
 				muParserInterface<2,long double>* boundaryFunc;
 				muParserInterface<2,long double>* solution;
-				if (coordinateType=="carthesian") {
-					forceTerm = new carthesianParserInterface<2,long double>(forceTermFunctionExpr);
-					boundaryFunc = new carthesianParserInterface<2,long double>(boundaryFunctionExpr);
+				if (coordinateType=="cartesian") {
+					forceTerm = new cartesianParserInterface<2,long double>(forceTermFunctionExpr);
+					boundaryFunc = new cartesianParserInterface<2,long double>(boundaryFunctionExpr);
 					if (solutionFunctionExpr == "boundaryFunction") {
-						solution = new carthesianParserInterface<2,long double>(boundaryFunctionExpr);
+						solution = new cartesianParserInterface<2,long double>(boundaryFunctionExpr);
 					} else if (solutionFunctionExpr != "null") {
-						solution = new carthesianParserInterface<2,long double>(solutionFunctionExpr);
+						solution = new cartesianParserInterface<2,long double>(solutionFunctionExpr);
 					}
 				} else if (coordinateType=="spherical" || coordinateType=="polar") {
 					forceTerm = new sphericalParserInterface<2,long double>(forceTermFunctionExpr);
@@ -302,7 +302,7 @@ int main(int argc, const char * argv[]) {
 						solution = new sphericalParserInterface<2,long double>(solutionFunctionExpr);
 					}
 				} else {
-					throw std::runtime_error("Wrong coordinateType: choose between carthesian, spherical or polar.");
+					throw std::runtime_error("Wrong coordinateType: choose between cartesian, spherical or polar.");
 				}			
 				
 				Mesh2D<long double> newMesh(inputPoint,inputConnection,fileTypeMesh);

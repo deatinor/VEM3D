@@ -4,13 +4,24 @@
 This part will explain our implementation of linear VEM (i.e. $k=1$) for the resolution of Laplace problem with Dirichlet boundary conditions in $2$D and $3$D, on respectively polygonal or polyhedral meshes. \verb!C++! has been used, making the most of the fact that it is an object oriented programming language. Moreover, a Makefile has been written to automate compilation, and a Doxygen full documentation of the implementation can also be automatically generated. To visualize the results, we have however preferred to create some Python scripts, taking advantage of Mayavi library for $3$D plots. We have tried to adopt a coding style as coherent and easily readable as possible, to make the comprehension easier. 
 
 \subsection{Global view on the code}
-The code is based on $18$ classes and a main file. Making the most of \textit{template programming} techniques, declaration and implementation of each class are both in a header file. Memory layout has been done with the most recent \verb!C++! techniques in order to avoid memory leaks. In particular, where pointers are necessary, they have been implemented as smart (shared or weak) pointers. While writing the code, our aim has always been to create a code as general and reusable as possible. The code is essentially and ideally divided into two main parts:
+The code is based on $21$ classes and a main file. Making the most of \textit{template programming} techniques, declaration and implementation of each class are both in a header file. Memory layout has been done with the most recent \verb!C++! techniques in order to avoid memory leaks. In particular, where pointers are necessary, they have been implemented as smart (shared or weak) pointers. While writing the code, our aim has always been to create a code as general and reusable as possible. The code is essentially and ideally divided into two main parts:
 \begin{itemize}
 \item \textbf{The mesh:} $7$ classes serve to its implementation, where any $2$D or $3$D mesh composed by non-necessarily convex elements are modelled. The flexibility brought by VEM with respect to the geometry makes this part quite complex and computationally not negligible. Computing some properties of the polygons/polyhedrons (as the elements volume, external normal, etc.) is significantly more complex than for standard grids or triangular meshes, but it is essential for the problem resolution. 
 \item \textbf{Problem solving using VEM:} in this part, we have first tried to create a code that solves Laplace problem on any mesh regardless of the type of solver and of the imposed boundary conditions. Based from this first working part, we have implemented the Virtual Element Method solver and Dirichlet boundary conditions, the only solver and boundary conditions considered in this project. The idea has been to implement a code that is as general as possible, so that we could modify the method (for example to use the Finite Element Mehod instead of VEM) by only writing a new class corresponding to a new solver, without touching the part corresponding to the problem or the boundary conditions. In the same way, we could easily add some classes to consider other equations or other boundary conditions. 
 \end{itemize}
 
-Apart from those two main parts, there is a \textit{main} file where the appropriate solver can be run. The parameters needed to solve the problem (type of geometry, type of mesh, force term, name of the output file, etc.) are specified in a \textit{datafile} so that we do not need to recompile the whole code for any small modification. 
+Apart from those two main parts, there is a \textit{main} file where the appropriate solver with the appropriate problem parameters are ran. The parameters needed to solve the problem are specified in a \textit{datafile} so that we do not need to recompile the whole code for any small modification. The datafile need the following informations: 
+\begin{itemize}
+\item the name of two files, one containing the coordinates of the vertices of the considered mesh (variable \verb!inputPoint!), the other one containing the connections between those vertices that represent the elements or the edges of the mesh (variable \verb!inputConnection!);
+\item the type of mesh to know if we consider a $2$D or a $3$D domain (variable \verb!meshType!);
+\item the connection file type to know if the faces of the elements are given in the connection file (variable \verb!fileType!);
+\item the expression of the force term function, of the boundary condition function and, if known, the expression of the exact solution to be able to compute the error. A specific parser has been implemented and used to be able to interpret those lines;
+\item the type of coordinates used in the functions expressions, it can be either cartesian if \verb!x,y,z! are used, or spherical if \verb!r,phi,theta! are used;
+\item the type of boundary condition of the problem and the type of solver. In this version of the code, only \verb!dirichlet! and \verb!VEM! can be specified, but the code can be easily extended;
+\item the name of the output files;
+\item the variable \verb!errorAction! that can be either \verb!append! or \verb!override! whether we want to create a new file to write the error in it, or we want to append this file;
+\item the variable \verb!real! that specifies the type used to solve the problem, and it can be either \verb!double! or \verb!long double!. 
+\end{itemize}
 
 As already said, we have also added a separate part written in Python in order to have a graphical visualization of the results. Python has been chosen thanks to its simplicity compared to \verb!C++! for the implementation of graphical interfaces, and thanks to the presence of the library \textit{Mayavi}, well adapted to $3$D visualization. This has been implemented to be complementary to the rest of the code, in order to furnish a fast way to graphically verify  the solutions. 
 
@@ -53,15 +64,16 @@ public:
 
   // STANDARD METHODS
   long maxIndex() const;	//!< Maximum index of the point
-  long maxAbsIndex() const;	//!< Maximum index of the point with absolute value
+  long maxAbsIndex() const;	//!< Maximum index of the point with absolute 
+// value
   real norm() const;  //!< L2 norm of the vector
   real normL1() const; //!< L1 norm of the vector
 
   real& operator[](long index);	//!< Get an element by reference
 
   template <long embedded2,typename real2>
-  friend Point<embedded2,real2> cross(const Point<embedded2,
-real2>& point1, const Point<embedded2,real2>& point2);
+  friend Point<embedded2,real2> cross(const Point<embedded2,real2>& point1, 
+const Point<embedded2,real2>& point2);
 };
 \end{lstlisting}
 
@@ -76,7 +88,8 @@ class MeshPoint: public Point<embedded,real> {
 protected:
   // PROPERTIES
   long pointID;	//!< ID of the MeshPoint
-  real value;		//!< Value in the point after the resolution of the problem
+  real value;		//!< Value in the point after the resolution of the 
+//problem
   bool isBoundary;	//<! Tells if the MeshPoint is on the boundary
 
   vector<weak_ptr<Polygon<embedded, real>>> polygonVector;
@@ -88,10 +101,10 @@ protected:
   MeshPoint(Args... arguments);
 
   // STANDARD METHODS
-  void addPolygon(weak_ptr<Polygon<embedded,real>> 
-inputPolygon); //!< It inserts in polygon vector a new Polygon
-  void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> 
-inputPolyhedron); //!< It insert in polyhedron vector a new Polyhedron
+  void addPolygon(weak_ptr<Polygon<embedded,real>> inputPolygon); 
+//!< It inserts in polygon vector a new Polygon
+  void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> inputPolyhedron); 
+//!< It insert in polyhedron vector a new Polyhedron
 \end{lstlisting}
 
 \noindent\rule{16cm}{1pt}\\
@@ -107,8 +120,7 @@ Here is reported the implementation of class \verb|Polygon| and its main methods
 \noindent\rule{16cm}{1pt}
 \begin{lstlisting}[caption=File \texttt{Polygon.h}]
 template <long embedded, typename real=double>
-class Polygon: public std::enable_shared_from_this<Polygon<
-embedded,real>> {
+class Polygon: public std::enable_shared_from_this<Polygon<embedded,real>> {
 protected:
   // PROPERTIES
   // Vector of ordered vertexes
@@ -172,7 +184,8 @@ protected:
 	
   bool isBoundary;	// Tells if the Polygon is on the boundary
   real volume;	// volume of the Polyhedron
-  Point<embedded,real> centroid;	// Not the real centroid, only the mean of the vertexes.
+  Point<embedded,real> centroid;	// Not the real centroid, only the mean
+// of the vertexes.
 
   // Stores the vertexes of the Polyhedron
   vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;	
@@ -201,7 +214,8 @@ inputPoint);
   real getDiameter();		// return the maximum distance between 2 Points
   // Makes the normal to each face pointing towards the external of the Polyhedron
   void fixExternalNormal();	
-  // Makes the normal of each face pointing in the same direction (or inward or outward)
+  // Makes the normal of each face pointing in the same direction (or inward or 
+// outward)
   void fixFacesOrientation();	
   // Maximum distance between vertexes. Necessary for the mesh.
   real hTriangle();	
@@ -252,7 +266,7 @@ MeshType meshType=ANYTHING3D);
 meshType);
     
     // Virtual method to keep into account the boundary 
-elements
+// elements
     virtual void setBoundaryElements()=0;
     //	Virtual method used to set other things, like pointIDs
     virtual void setRemainingThings()=0;
@@ -429,7 +443,7 @@ template <long embedded,typename baseElement,typename real=
 double>
 class Monomials {
 public:
-    const shared_ptr<baseElement>& element;	//!< Element can be Polygon or Polyhedron
+    const shared_ptr<baseElement>& element; //!< Polygon or Polyhedron
     real diameter;  //!< Diameter of the element
     Point<embedded,real> centroid;  //!< Centroid of the element
     // It's the gradient of the monomial. It's 1/diameter
@@ -452,7 +466,7 @@ template <typename real>
 class MonomialsPolygon: public Monomials<3, Polygon<3,real>,
 real> {
 public:
-    // these are virtual indexes used to project the Polygon on an appropriate plane
+// these are virtual indexes used to project the Polygon on an appropriate plane
     long indexX;
     long indexY;
     long indexZ;
@@ -806,6 +820,48 @@ where everything is expressed in spherical coordinates $(r,\phi,\theta)$, includ
 
 In this section, we will analyse numerically the convergence under $h$-refinement (that is when the mesh is refined) of the absolute a priori $H^1$-error of the solution, i.e. $\|u_h-u_{\text{ex}}\|_{H^1(\Omega)}$. $u_h$ is the solution found with the linear Virtual Element Method while $u_{\text{ex}}$ is the exact solution. Some particular differential problem will be analysed and presented behind.\\
 
+Let $\Omega$ be the full sphere centered in $(0,0,0)$ and of radius $1$. Consider a mesh decomposition and let $h$ be the maximum diameter of the elements of this mesh. The considered meshes can be found in the folder \verb!Mesh/Sphere3D/!. We will analyse the $3$D behaviour of the error when we solve the following problem, expressed in spherical coordinates: find $u$ such that 
+\begin{equation*}
+\begin{cases}
+-\Delta u = 6 \text{ in } \Omega = (0,1)^2;\\
+u = 0 \text{ on } \partial \Omega.
+\end{cases}
+\end{equation*}
+The exact solution of this problem is $u(r,\phi,\theta)=1-r^2$, for all $(r,\phi,\theta)\in\Omega$. \\
+
+In Figure \ref{img:convSphere} is plotted the absolute a priori error in $H^1(\Omega)$-norm. We can clearly see that asymptotically, the error behaves as $h$, which is what one could expect after reading Theorem \ref{conditions} and section \ref{errors}. 
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=0.8]{images/convergenceSpherePlot3D.eps}
+\caption{Convergence of the $H^1$-error under $h$-refinement for Laplace 3D problem on the sphere centered in $(0,0,0)$ and of radius $1$, with homogeneous Dirichlet boundary conditions.}
+\label{img:convSphere}
+\end{figure}
+
+This behaviour is again confirmed when computing the slope of the log-log scale line. Indeed, we suppose that err $:=\|u_h-u_\text{ex}\|_{H^1(\Omega)} = Ch^p$, where $C$ is a constant depending only on the solution and on $k$, the degree of the underlying polynomials, which is here $1$. Our aim is to find $p$, so that we compute 
+\begin{equation}\label{ploglog}
+\frac{\log\left(\frac{\text{err}(h_2)}{\text{err}(h_1)}\right)}{\log\left(\frac{h_2}{h_1}\right)}=p,
+\end{equation}
+where err$(h_1)$ and err$(h_2)$ are the absolute a priori errors using a mesh size equal to $h_1$ and $h_2$, respectively. The values of the $p$ found thanks to the last $4$ points of Figure \ref{img:convSphere} are reported in the following Table \ref{tableSphere} and confirm our hypothesis. \\
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+$h_1$ & $h_2$ & $p$ \\
+\hline
+$1.2502$ & $0.7646$ & $1.3371$\\
+\hline
+$0.7646$ & $0.4134$ & $1.1726$\\
+\hline
+$0.4134$ & $0.2160$ & $0.8667$\\
+\hline
+\end{tabular}
+\end{center}
+\caption{Sum up of the convergence rates under h-refinement, on Laplace $2$D problem.} \label{tableSphere}
+\end{table}
+
+Furthermore, we have remarked that in the case of a very regular mesh composed of always equal simple convex polygons, we obtain a quadratic convergence, both in $2$D and in $3$D. Here are presented two examples of such phenomenon, one in $2$D and one in $3$D. 
 In the following, we will only consider a decomposition of the space into identical elements, so
 that we can define $h$ as the size of the elements. More precisely, we only consider squared or cubic elements, respectively for a $2$D or a $3$D problem, so that $h$ is the length of each side of each element.
 Moreover, we will consider the geometry $\Omega=(0,1)^d$, where $d=2$ in the $2$D case, and $d=3$ in the $3$D case. Then $h=\frac{1}{n_e}$, where $n_e$ is the number of elements used on each direction. We have chosen to consider $n_e=1, 2, 4, 8, 16, 32, 64$ and $128$ elements, that is $h$ ranges from $1$ to $\frac{1}{128}$. $n_e$ is chosen as a sequence of powers of $2$ in order to have embedded spaces when the number of elements is increased.\\
@@ -817,9 +873,9 @@ First, we will analyse the $2$D behaviour of the error when we solve the followi
 u = 0 \text{ on } \partial \Omega.
 \end{cases}
 \end{equation*}
-The exact solution of this problem is $u(x,y)=\sin(7\pi x)\sin(7\pi y)$, for all $(x,y)\in \Omega$. This problem has been chosen so that the error between the numerical and the exact solution is large, since the solution oscillates a lot. In this way, the behaviour of the error can more easily be observed, since there is no risk to attain the machine epsilon too early. 
+The exact solution of this problem is $u(x,y)=\sin(7\pi x)\sin(7\pi y)$, for all $(x,y)\in \Omega$. This problem has been chosen so that the error between the numerical and the exact solution is large, since the solution oscillates a lot. In this way, the behaviour of the error can more easily be observed, since there is no risk to attain the machine epsilon too early. \\
 
-In Figure \ref{img:conv2d} is plotted the absolute a priori error in $H^1(\Omega)$-norm. We can clearly see that asymptotically, the error behaves as $h^2$, which is what one could expect after reading Theorem \ref{conditions} and section \ref{errors}. 
+In Figure \ref{img:conv2d} is plotted the absolute a priori error in $H^1(\Omega)$-norm. We can clearly see that asymptotically, the error behaves as $h^2$, which is one order of magnitude more than what one could expect from Theorem \ref{conditions}. It does not mean that the theorem is wrong, it just mean that the estimation is pessimistic is some cases such as this one, when the mesh is composed of regular and simple polygonal elements. 
 
 \begin{figure}[!h]
 \centering
@@ -827,13 +883,7 @@ In Figure \ref{img:conv2d} is plotted the absolute a priori error in $H^1(\Omega
 \caption{Convergence of the $H^1$-error under $h$-refinement for Laplace 2D problem on $(0,1)^2$ with homogeneous Dirichlet boundary conditions.}
 \label{img:conv2d}
 \end{figure}
-
-\noindent This behaviour is confirmed when computing the slope of the log-log scale line. Indeed, we suppose that err $:=\|u_h-u_\text{ex}\|_{H^1(\Omega)} = Ch^p$, where $C$ is a constant depending only on the solution and on $k$, the degree of the underlying polynomials, which is here $1$. Our aim is to find $p$, so that we compute 
-\begin{equation}\label{ploglog}
-\frac{\log\left(\frac{\text{err}(h_2)}{\text{err}(h_1)}\right)}{\log\left(\frac{h_2}{h_1}\right)}=p,
-\end{equation}
-where err$(h_1)$ and err$(h_2)$ are the absolute a priori errors using a mesh size equal to $h_1$ and $h_2$, respectively. The values of the $p$ found thanks to the last $4$ points of Figure \ref{img:conv2d} are reported in the following table and confirm our hypothesis:
-
+This behaviour is again confirmed when computing the slope of the log-log scale line. The values of the $p$ found thanks to the last $4$ points of Figure \ref{img:conv2d} are reported in the following Table \ref{tableRect} and confirm our hypothesis.
 \begin{table}[h!]
 \begin{center}
 \begin{tabular}{|c|c|c|}
@@ -848,10 +898,9 @@ $64^{-1}$ & $128^{-1}$ & $1.9651$\\
 \hline
 \end{tabular}
 \end{center}
-\caption{Sum up of the convergence rates under h-refinement, on Laplace $2$D problem.}
+\caption{Sum up of the convergence rates under h-refinement, on Laplace $2$D problem, with a very regular rectangular mesh.} \label{tableRect}
 \end{table}
-
-\noindent Finally, the non asymptotic behaviour is more chaotic since the approximation is very raw with very few elements. \\
+Finally, the non asymptotic behaviour is more chaotic since the approximation is very raw with very few elements. Let us add that the same behaviour has been observed when taking $u_\text{ex}(x,y)=\exp(7xy)$ on $(0,1)^2$, so that it is not solution-specific.\\
 
 Now, we analyse the $3$D behaviour of the error when we solve the following problem: find $u$ such that
 \begin{equation*}
@@ -862,7 +911,7 @@ u = 0 \text{ on } \partial \Omega.
 \end{equation*}
 The exact solution of this problem is $u(x,y,z)=\sin(7\pi x)\sin(7\pi y)\sin(7\pi z)$, $\forall (x,y,z)\in \Omega$. Again and for the same reason as before, this problem has been chosen so that the error between the numerical and the exact solution is large, since the solution oscillates a lot. \\
 
-In Figure \ref{img:conv3d} is plotted the absolute a priori error in $H^1(\Omega)$-norm. We can see again that asymptotically, the error behaves as $h^2$, which is again what one could expect after reading Theorem \ref{conditions} and section \ref{errors}. To see it in a clearer way, we should refine the mesh even more, but a lot of RAM is needed to solve the problem ($>32$GB). Indeed, with $h=128$, we already take into account $128^3>2$ million degrees of freedom. 
+In Figure \ref{img:conv3d} is plotted the absolute a priori error in $H^1(\Omega)$-norm. We can see again that asymptotically, the error behaves as $h^2$, which is again one order of convergence more than what one could expect from Theorem \ref{conditions}. To see it in a clearer way, we should refine the mesh even more, but a lot of RAM is needed to solve the problem ($>32$GB). Indeed, with $h=128$, we already take into account $128^3>2$ million degrees of freedom. 
 
 \begin{figure}[!h]
 \centering
@@ -871,7 +920,7 @@ In Figure \ref{img:conv3d} is plotted the absolute a priori error in $H^1(\Omega
 \label{img:conv3d}
 \end{figure}
 
-Similarly as in the $2$D case, we can algebraically compute the slope of the log-log scale line to confirm our hypothesis, thanks to the same formula (\ref{ploglog}). The values of $p$ found thanks to the last $3$ points of Figure \ref{img:conv3d} are reported in the following table and indeed confirm the behaviour:
+Similarly as in the $2$D case, we can algebraically compute the slope of the log-log scale line to confirm our hypothesis, thanks to the same formula (\ref{ploglog}). The values of $p$ found thanks to the last $3$ points of Figure \ref{img:conv3d} are reported in the following Table \ref{tableCube} and indeed confirm the behaviour.
 \begin{table}[h!]
 \begin{center}
 \begin{tabular}{|c|c|c|}
@@ -884,7 +933,8 @@ $64^{-1}$ & $128^{-1}$ & $1.9293$\\
 \hline
 \end{tabular}
 \end{center}
-\caption{Sum up of the convergence rates under h-refinement, on Laplace $3$D problem.}
+\caption{Sum up of the convergence rates under h-refinement, on Laplace $3$D problem.} \label{tableCube}
 \end{table}
 
-Note that this $h^2$-component of the error is a typical characteristic of all finite element-type methods: the classical finite element methods \cite{quarteroni}, the spectral element methods \cite{chqz1}, the isogeometric analysis \cite{igaconv} and here the virtual element method.
+Let us add that the same behaviour has been observed when taking $u_\text{ex}(x,y,z)=\exp(7xyz)$ on $(0,1)^3$, so that it is not solution-specific. 
+Note moreover that this $h^2$-component of the error is a typical characteristic of finite element-type methods: the classical finite element methods \cite{quarteroni}, the spectral element methods \cite{chqz1}, the isogeometric analysis \cite{igaconv}.
