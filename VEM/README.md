@@ -17,6 +17,7 @@ template classes, so that there are no .cpp files except for the `main`.
 * g++ version 4.8 or higher
 * Eigen library installed in `/usr/local/include/`. Version 3.2.7 and 
 3.2.9 tested.
+* muParser installed. Download it from [this Github page](https://github.com/beltoforion/muparser/).Follow the instructions in **Install.txt** and then add the folder **lib** to **LD\_LIBRARY\_PATH**.
   
 ### TO COMPILE AND RUN
 
