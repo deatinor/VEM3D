@@ -41,20 +41,22 @@ recompile it.
 We didn't use any library for it, but we implemented a simple parser in the main.cpp.
 We used the C++ syntax for comments "//".
 
-The Datafile `datafile.dat` is composed in 5 main sections:
+The Datafile `datafile.dat` is composed in 6 main sections:
 * input files, in which the user chooses the `inputPoint` file (containing 
 on each line the coordinates of every vertex point of the mesh) and the 
-inputConnection file (containing on each line the index numbers of all 
+`inputConnection` file (containing on each line the index numbers of all 
 points constituing an element);
 * mesh type: it can be `ANYTHING2D`, `ANYTHING3D` OR `TETRAHEDRON`;
-* the force term and solution functions;
+* the force term and solution functions, and the exact solution if available 
+(and if we want to compute the error). The type of coordinates (spherical 
+or carthesian) also has to be specified.
+* the type of solver: in the actual version of the code, only VEM is available.
 * output files: it is advised to leave the output folder to Output/;
-* typename: we can either choose `double` or `long double`.
+* accuracy typename: we can either choose `double` or `long double`.
 
 If changes are restricted to these properties there is *no need to recompile the code*.
 It is sufficient to change the datafile and then run again with `./vem`.
-If the user wants to change the force term or solution functions he has to change the 
-first lines of `main.cpp`, where there are all the functions, and then recompile.
+For more information about the datafile, see the information in the example file.
 
 ## `Doxygen/`
 

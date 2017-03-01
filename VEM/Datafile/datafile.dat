@@ -1,59 +1,86 @@
-// file input
+// ------------------------------------------------------------------ //
+// ------------------------ INPUT FILE ------------------------------ //
+// ------------------------------------------------------------------ //
 
+// --------------------------- MESH --------------------------------- //
 // CUBIC MESH
-//inputPoint=../Mesh/Cube/Cubic/point-2.txt;
-//inputConnection=../Mesh/Cube/Cubic/conn-2.txt;
-inputPoint=../Convergence/Mesh3D/point-32.txt;
-inputConnection=../Convergence/Mesh3D/conn-32.txt;
+//inputPoint=../Mesh/Cube/Cubic/point-16.txt;
+//inputConnection=../Mesh/Cube/Cubic/conn-16.txt;
+//inputPoint=../Convergence/MeshSquare3D/point-16.txt;
+//inputConnection=../Convergence/MeshSquare3D/conn-16.txt;
 
 // CUBE WITHOUT PART
 //inputPoint=../Mesh/Cube/CubeWithoutPart/point-16.txt;
 //inputConnection=../Mesh/Cube/CubeWithoutPart/conn-16.txt;
 
 // SPHERIC MESH 3D
-//inputPoint=../Mesh/Sphere3D/point-2.txt;
-//inputConnection=../Mesh/Sphere3D/conn-2.txt;
+inputPoint=../Mesh/Sphere3D/point-1.txt;
+inputConnection=../Mesh/Sphere3D/conn-1.txt;
 
 // 2D MESH SQUARE
 //../Mesh/Mesh2DSquare/point-16.txt;
 //../Mesh/Mesh2DSquare/conn-16.txt;
-//inputPoint=../Convergence/Mesh2D/point-128.txt;
-//inputConnection=../Convergence/Mesh2D/conn-128.txt;
+//inputPoint=../Convergence/MeshSquare2D/point-128.txt;
+//inputConnection=../Convergence/MeshSquare2D/conn-128.txt;
 
 // TEST
 //inputPoint=../Mesh/Test/point3.txt;
 //inputConnection=../Mesh/Test/conn3.txt;
 
-
+// ------------------------- MESH TYPE ------------------------------ //
 // mesh type
 // meshType can be only Mesh2D or Mesh3D
 meshType=Mesh3D;
 // fileType can be ANYTHING3D, TETRAHEDRON or ANYTHING2D
 fileType=ANYTHING3D;
 
+// -------------------------- FUNCTIONS ----------------------------- //
+// type of coordinates used
+// It can be either carthesian or spherical (spherical also stands for 
+// polar coordinates). If carthesian, x, y and z are reserved for the 
+// first, second and third dimension respectively. If spherical, r, phi 
+// and theta are reserved for (respectively) the radius, the angle 
+// between [0,2pi] and the angle in [0,pi].
+coordinateType=spherical;
 
-// forceTermFunction
-// It can be forceTermSquare or forceTermSphere or forceTermConvergence
-forceTermFunction=forceTermConvergence;
+// force term function
+// Write an expression, note that _pi=3.1415... and _e=2.71828...
+//forceTermFunction=147*_pi^2*sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
+forceTermFunction=6;
+
+// boundary function
+// Write an expression, note that _pi=3.1415... and _e=2.71828...
+//boundaryFunction=sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z);
+boundaryFunction=1-r^2;
+
+// type of boundary condition 
+// Only 'dirichlet' is available in this version of the code
+boundaryCondition=dirichlet;
 
 // solution function
-// It can be solutionSquare or solutionSphere or solutionConvergence
-solutionFunction=solutionConvergence;
+// Write either an expression (note that _pi=3.1415... and _e=2.71828...)
+// or write boundaryFunction if it is equal to the boundary function
+// or write null if it is unknown (the error will then not been displayed)
+solutionFunction=boundaryFunction;
 
+// ----------------------------- SOLVER ----------------------------- //
+solver=VEM;
 
+// -------------------------- OUTPUT FILES -------------------------- //
 // file output name
-outputPoint=../Convergence/Output/point3D-ne128.txt;
-outputConnection=../Convergence/Output/conn3D-ne128.txt;
-outputSolution=../Convergence/Output/solution3D-ne128.txt;
-outputError=../Convergence/Output/error3D.txt;
-//outputPoint=Output/point2D.txt;
-//outputConnection=Output/conn2D.txt;
-//outputSolution=Output/solution2D.txt;
-//outputError=Output/error2D.txt;
+//outputPoint=../Convergence/OutputSphere/point3D-1.txt;
+//outputConnection=../Convergence/OutputSphere/conn3D-1.txt;
+//outputSolution=../Convergence/OutputSphere/solution3D-1.txt;
+//outputError=../Convergence/OutputSphere/error3D.txt;
+outputPoint=Output/point2D.txt;
+outputConnection=Output/conn2D.txt;
+outputSolution=Output/solution2D.txt;
+outputError=Output/error2D.txt;
 
 // override or append error to error file
 // errorAction can only be override or append
 errorAction=append;
 
+// --------------------------- ACCURACY ----------------------------- //
 // typename real (double or long double)
 real=long double;

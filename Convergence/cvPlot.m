@@ -1,10 +1,13 @@
 % Analyse convergence of Laplace equation with Dirichlet boundary
 % conditions with the linear (k=1) virtual element method
 %
-% Geometry: 2D -> square \Omega = (0,1)x(0.1) divided into n square 
+% Geometry: 2D -> square \Omega = (0,1)x(0,1) divided into n^2 square 
+% elements, with n ranging from 2^0=1 to 2^7=128
+% 			3D -> cube \Omega = (0,1)x(0,1)x(0,1) divided into n^3 cube 
 % elements, with n ranging from 2^0=1 to 2^7=128
 %
-% Equation: -lap(u)=0 on \Omega; u=f on \partial\Omega
+% Equation: -lap(u)=147*_pi^2*sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z) on \Omega; 
+% and u=sin(7*_pi*x)*sin(7*_pi*y)*sin(7*_pi*z) on \partial\Omega
 %
 
 clear
@@ -20,9 +23,8 @@ h = 1./ne; % size of the elements
 % the first column is the error in the L^\inf-norm, the 2nd one is the 
 % error in the H^1-norm.
 
-% err1d = csvread(Output/error1D.csv');
-err2d = csvread('Output/error2D.txt');
-err3d = csvread('Output/error3D.txt');
+err2d = csvread('OutputSquare/error2D.txt');
+err3d = csvread('OutputSquare/error3D.txt');
 
 %% 2D analysis
 % Compute analytically the error convergence slope
