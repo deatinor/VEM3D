@@ -3,6 +3,13 @@
 
 #include "muParserInterface.h"
 
+/** Spherical or polar muParserInterface that inherits from muParserInterface.
+ *
+ *	It uses the library muParser. It reads and evaluate a mathematical expression with unknowns t,r,phi,theta.
+ *
+ *	\param embedded Dimension of the space
+ *	\param real double or long double
+ */
 template <long embedded,typename real=double>
 class sphericalParserInterface: public muParserInterface<embedded,real> {
 	public:
@@ -11,12 +18,15 @@ class sphericalParserInterface: public muParserInterface<embedded,real> {
 		sphericalParserInterface(sphericalParserInterface const &);
 		sphericalParserInterface & operator=(sphericalParserInterface const &);
 		
+		/** Evaluates an expression with unknown x,y,z,t in a given Point using the operator ().
+		 */
 		virtual real operator()(const Point<embedded,real>& inputPoint, real const & t=0);
+		
 	private:
-		double M_r, M_phi, M_theta;
+		double M_r, M_phi, M_theta; //!< Spherical variables
 };
 
-
+// Constructor
 template <long embedded,typename real>
 sphericalParserInterface<embedded,real>::sphericalParserInterface(): muParserInterface<embedded,real>() {
 	this->M_parser.DefineVar("r",&M_r);
@@ -24,12 +34,14 @@ sphericalParserInterface<embedded,real>::sphericalParserInterface(): muParserInt
 	this->M_parser.DefineVar("theta",&M_theta);
 }
 
+// Constructor given a string expression
 template <long embedded,typename real>
 sphericalParserInterface<embedded,real>::sphericalParserInterface(const std::string & e): 
 sphericalParserInterface() {
 	muParserInterface<embedded,real>::set_expression(e);
 }
 
+// Copy constructor
 template <long embedded,typename real>
 sphericalParserInterface<embedded,real>::sphericalParserInterface(sphericalParserInterface const & mpi):
 muParserInterface<embedded,real>(mpi),M_r(mpi.M_r),M_phi(mpi.M_phi),M_theta(mpi.M_theta) {
@@ -38,7 +50,7 @@ muParserInterface<embedded,real>(mpi),M_r(mpi.M_r),M_phi(mpi.M_phi),M_theta(mpi.
 	this->M_parser.DefineVar("theta",&M_theta);  
 }
 
-
+// = operator
 template <long embedded,typename real>
 sphericalParserInterface<embedded,real> & sphericalParserInterface<embedded,real>::operator=(sphericalParserInterface<embedded,real> const & mpi) {
 	if (this != &mpi) {
@@ -57,6 +69,7 @@ sphericalParserInterface<embedded,real> & sphericalParserInterface<embedded,real
 	return *this;
 }
 
+// Evaluation operator, returns the value of the expression at a given Point
 template <long embedded,typename real>
 real sphericalParserInterface<embedded,real>::operator()(const Point<embedded,real>& inputPoint, real const & t) {
 	this->M_t = t;
@@ -87,4 +100,4 @@ real sphericalParserInterface<embedded,real>::operator()(const Point<embedded,re
 	return this->M_parser.Eval();
 }
 
-#endif
+#endif /* HH_SPHERICALPARSERINTERFACE_HH */

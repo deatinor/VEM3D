@@ -1,4 +1,3 @@
-
 #ifndef SolverVEM_h
 #define SolverVEM_h
 
@@ -9,82 +8,66 @@ using namespace Eigen;
 
 /** Virtual basic class to solveVEM
  *
- *	The idea is to implement here all the methods common to 2D and 3D cases and then to specilize the remainings
+ *	The idea is to implement here all the methods common to 2D and 3D cases and then to specialize the remaining methods
  *
- *	The methods are mainly methods to compute the characteristics matrixes.
+ *	The methods here are mainly methods that compute the characteristic matrices.
  *
  *	\param embedded Dimension of the space
- *	\param elementDimension dimension of each element (2 or 3)
+ *	\param elementDimension Dimension of each element (2 or 3)
  *	\param baseElement Polygon or Polyhedron
- *	\param MonomialType Monomials or MonomialPolygon. The last can be used in case of VEM on surfaces
+ *	\param MonomialType Monomials or MonomialPolygon. The latter can be used in case of VEM on surfaces
  *	\param real double or long double
  */
 template <long embedded,long elementDimension,typename baseElement,typename MonomialType,typename real=double>
 class SolverVEM: public Solver<embedded,baseElement,Matrix<real,Dynamic,Dynamic>,real> {
-protected:
-	virtual Matrix<real,elementDimension+1,elementDimension+1> computeG(MonomialType& monomial);
-	virtual Matrix<real,elementDimension+1,Dynamic> computeB(const shared_ptr<baseElement>& polyhedron,MonomialType& monomial)=0;
-	virtual Matrix<real,Dynamic,elementDimension+1> computeD(MonomialType& monomial);
-	
-	virtual Matrix<real,elementDimension+1,Dynamic> computePIStar(Matrix<real,elementDimension+1,elementDimension+1>&G,Matrix<real,elementDimension+1,Dynamic>&B);
-	virtual Matrix<real,Dynamic,Dynamic> computePI(Matrix<real,elementDimension+1,Dynamic>&PIStar,Matrix<real,Dynamic,elementDimension+1>&D);
-	
-public:
-	/**	Basic constructor. A lot of paramethers are given as template.
-	 *
-	 *	\param inputForceTerm muParserInterface containing the expression of the ForceTerm
-	 */
-	SolverVEM(muParserInterface<embedded,real>& inputForceTerm):Solver<embedded,baseElement,Matrix<real, Dynamic, Dynamic>,real>::Solver(inputForceTerm) {};
-	
-	virtual Matrix<real,Dynamic,Dynamic> computeLocalK(const shared_ptr<baseElement>& element); //!< This is to compute the local stiffness matrix
-	virtual real computeKnownTerm(const shared_ptr<baseElement>& element,const shared_ptr<MeshPoint<embedded,real>>& point)=0; //!< Virtual method to compute the known term.
+	protected:
+		virtual Matrix<real,elementDimension+1,elementDimension+1> computeG(MonomialType& monomial);
+		virtual Matrix<real,elementDimension+1,Dynamic> computeB(const shared_ptr<baseElement>& polyhedron,MonomialType& monomial)=0;
+		virtual Matrix<real,Dynamic,elementDimension+1> computeD(MonomialType& monomial);
+		
+		virtual Matrix<real,elementDimension+1,Dynamic> computePIStar(Matrix<real,elementDimension+1,elementDimension+1>&G,Matrix<real,elementDimension+1,Dynamic>&B);
+		virtual Matrix<real,Dynamic,Dynamic> computePI(Matrix<real,elementDimension+1,Dynamic>&PIStar,Matrix<real,Dynamic,elementDimension+1>&D);
+		
+	public:
+		/**	Basic constructor. A lot of parameters are given as template.
+		 *
+		 *	\param inputForceTerm muParserInterface containing the expression of the ForceTerm
+		 */
+		SolverVEM(muParserInterface<embedded,real>& inputForceTerm):Solver<embedded,baseElement,Matrix<real, Dynamic, Dynamic>,real>::Solver(inputForceTerm) {};
+		
+		virtual Matrix<real,Dynamic,Dynamic> computeLocalK(const shared_ptr<baseElement>& element); //!< Compute the local stiffness matrix
+		virtual real computeKnownTerm(const shared_ptr<baseElement>& element,const shared_ptr<MeshPoint<embedded,real>>& point)=0; //!< Virtual method to compute the known term
 };
 
 // computeLocalK
 template <long embedded,long elementDimension,typename baseElement,typename MonomialType,typename real>
 Matrix<real,Dynamic,Dynamic> SolverVEM<embedded,elementDimension,baseElement,MonomialType,real>::computeLocalK(const shared_ptr<baseElement>& element) {
 	
-	
 	MonomialType monomial(element);
 	
-	// computing the necessary matrixes
-	
-	//	cout<<"diameter: "<<monomial.Element->diameter()<<endl;
-	//	cout<<"centroid: "<<monomial.Element->centroid<<endl;
+	// computing the needed matrices
 	auto G=computeG(monomial);
-	//		cout<<"G"<<endl<<G<<endl;
 	auto B=computeB(element,monomial);
-	//		cout<<"B"<<endl<<B<<endl;
 	auto D=computeD(monomial);
-	//		cout<<"D"<<endl<<D<<endl;
-	//		cout<<"test: "<<endl<<B*D<<endl;
 	
-	//	cout<<(G-B*D).norm()<<endl;
 	if ((G-B*D).norm()>1e-10) {
-		cout<<"failed"<<endl<<G<<endl<<endl<<B*D<<endl;
-		cout<<(G-B*D).norm()<<endl;
+		cerr << "failed" << endl << G << endl << endl << B*D << endl;
+		cout << (G-B*D).norm() << endl;
 		
-		cout<<*monomial.element<<endl;
-	} else {
+		cout << *monomial.element << endl;
 	}
 	
 	auto PIStar=computePIStar(G, B);
-	//	cout<<"PIStar"<<endl<<PIStar<<endl;
 	auto PI=computePI(PIStar,D);
-	//	cout<<"PI"<<endl<<PI<<endl;
 	
-	
-	// compute Kloc from the past matrixes
+	// compute Kloc from the past matrices
 	for(int i=0; i<elementDimension+1; i++)
 		G(0,i)=0;
 	
 	Matrix<real,Dynamic,Dynamic> I = Matrix<real,Dynamic,Dynamic>::Identity(PI.rows(),PI.cols());
-	//	cout<<"I: "<<endl<<I<<endl;
 	auto diameter=element->getDiameter();
-	//	cout<<"diameter: "<<diameter<<endl;
 	
 	Matrix<real,Dynamic,Dynamic> Kloc= PIStar.transpose() * G * PIStar + diameter * ( I - PI ).transpose() * ( I - PI );
-	//	cout<<"Kloc: "<<endl<<Kloc<<endl;
 	
 	return Kloc;
 }
@@ -154,8 +137,6 @@ Matrix<real,Dynamic,elementDimension+1> SolverVEM<embedded,elementDimension,base
 	return D;
 }
 
-
-
 // PIStar
 template <long embedded,long elementDimension,typename baseElement,typename MonomialType,typename real>
 Matrix<real,elementDimension+1,Dynamic> SolverVEM<embedded,elementDimension,baseElement,MonomialType,real>::computePIStar(Matrix<real, elementDimension + 1, elementDimension + 1> &G, Matrix<real, elementDimension + 1, Dynamic> &B) {
@@ -172,17 +153,5 @@ Matrix<real,Dynamic,Dynamic> SolverVEM<embedded,elementDimension,baseElement,Mon
 	auto PI = D * PIStar;
 	return PI;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 #endif /* SolverVEM_h */

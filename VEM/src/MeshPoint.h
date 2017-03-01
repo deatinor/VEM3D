@@ -1,4 +1,3 @@
-
 #ifndef MeshPoint_h
 #define MeshPoint_h
 
@@ -25,79 +24,66 @@ class Point;
  */
 template <long embedded,typename real=double>
 class MeshPoint: public Point<embedded,real> {
-	
-protected:
-	
-	// PROPERTIES
-	long pointID;	//!< ID of the MeshPoint
-	real value;		//!< Value in the point after the resolution of the problem
-	bool isBoundary;	//<! Tells if the MeshPoint is on the boundary
-	
-	/** Vector of Polygon with this MeshPoint as vertex
-	 *
-	 *	weak_ptr necessary to not create loop pointers
-	 */
-	vector<weak_ptr<Polygon<embedded, real>>> polygonVector;
-	
-	/** Vector of Polyhedron with this MeshPoint as vertex
-	 *
-	 *	weak_ptr necessary to not create loop pointers
-	 */
-	vector<weak_ptr<Polyhedron<embedded,real>>> polyhedronVector;
-	
-	
-public:
-	// CONSTRUCTORS
-	MeshPoint(const array<real,embedded>& inputArray); //!< Constructor from array of coordinates
-	MeshPoint():Point<embedded,real>(),pointID(0),value(0),isBoundary(0),polygonVector({}),polyhedronVector({}) {}; //!< Empty constructor
-	
-	/** Constructor with variadic template
-	 *
-	 *  Source:
-	 *  http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
-	 */
-	template <typename... Args>
-	MeshPoint(Args... arguments):Point<embedded,real>(arguments...),pointID(0),value(0),isBoundary(false),polygonVector({}),polyhedronVector({}) {
-	};
-	
-	// STANDARD METHODS
-	void addPolygon(weak_ptr<Polygon<embedded,real>> inputPolygon);	//!< It insert in polygon vector a new Polygon
-	void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> inputPolyhedron);	//!< It insert in polyhedron vector a new Polyhedron
-	
-	void shrink_to_fit();
-	
-	// GET-SET METHODS
-	long getPointID() const {return pointID;};
-	void setPointID(long inputPointID) {pointID=inputPointID;};
-	bool getIsBoundary() const {return isBoundary;};
-	void setIsBoundary(bool inputIsBoundary) {isBoundary=inputIsBoundary;};
-	long numberOfPolygons() const {return polygonVector.size();};	//!< Number of Polygons with this as vertex
-	long numberOfPolyhedrons() const {return polyhedronVector.size();};	//!< Number of Polyhedorns with this as vertex
-	const weak_ptr<Polygon<embedded,real>>& polygon(long index) const {return polygonVector[index%numberOfPolygons()];};	//!< Get a weak pointer to a Polygon in polygonVector
-	const weak_ptr<Polyhedron<embedded,real>>& polyhedron(long index) const {return polyhedronVector[index%numberOfPolyhedrons()];}; //!< Get a weak pointer to a Polyhedron in polyhedronVector
+	protected:
+		// PROPERTIES
+		long pointID;	//!< ID of the MeshPoint
+		real value;		//!< Value in the point after the resolution of the problem
+		bool isBoundary;	//!< Tells if the MeshPoint is on the boundary
+		
+		/** Vector of Polygon with this MeshPoint as vertex
+		 *
+		 *	weak_ptr necessary to avoid the creation of loop pointers
+		 */
+		vector<weak_ptr<Polygon<embedded, real>>> polygonVector;
+		
+		/** Vector of Polyhedron with this MeshPoint as vertex
+		 *
+		 *	weak_ptr necessary to avoid the creation of loop pointers
+		 */
+		vector<weak_ptr<Polyhedron<embedded,real>>> polyhedronVector;
+		
+	public:
+		// CONSTRUCTORS
+		MeshPoint(const array<real,embedded>& inputArray); //!< Constructor from array of coordinates
+		MeshPoint():Point<embedded,real>(),pointID(0),value(0),isBoundary(0),polygonVector({}),polyhedronVector({}) {}; //!< Empty constructor
+		
+		/** Constructor with variadic template
+		 *
+		 *  Source:
+		 *  http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
+		 */
+		template <typename... Args>
+		MeshPoint(Args... arguments):Point<embedded,real>(arguments...),pointID(0),value(0),isBoundary(false),polygonVector({}),polyhedronVector({}) {
+		};
+		
+		// STANDARD METHODS
+		void addPolygon(weak_ptr<Polygon<embedded,real>> inputPolygon);	//!< It inserts a new Polygon in polygon vector
+		void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> inputPolyhedron);	//!< It inserts a new Polyhedron in polyhedron vector
+		
+		void shrink_to_fit();
+		
+		// GET-SET METHODS
+		long getPointID() const {return pointID;};
+		void setPointID(long inputPointID) {pointID=inputPointID;};
+		bool getIsBoundary() const {return isBoundary;};
+		void setIsBoundary(bool inputIsBoundary) {isBoundary=inputIsBoundary;};
+		long numberOfPolygons() const {return polygonVector.size();};	//!< Number of Polygons with this as vertex
+		long numberOfPolyhedrons() const {return polyhedronVector.size();};	//!< Number of Polyhedorns with this as vertex
+		const weak_ptr<Polygon<embedded,real>>& polygon(long index) const {return polygonVector[index%numberOfPolygons()];};	//!< Get a weak pointer to a certain Polygon in polygonVector
+		const weak_ptr<Polyhedron<embedded,real>>& polyhedron(long index) const {return polyhedronVector[index%numberOfPolyhedrons()];}; //!< Get a weak pointer to a certain Polyhedron in polyhedronVector
 
-	
-	// OPERATOR
-	bool operator<(MeshPoint<embedded,real>& inputPoint); //!< it compares pointID
-	
-	
+		// OPERATOR
+		bool operator<(MeshPoint<embedded,real>& inputPoint); //!< it compares pointID
 };
 
-///////////////////
-// CONSTRUCTORS  //
-///////////////////
 
+// CONSTRUCTORS
 template <long embedded,typename real>
 MeshPoint<embedded,real>::MeshPoint(const array<real,embedded>& inputArray):Point<embedded,real>(inputArray),pointID(0),value(0),isBoundary(0),polygonVector({}),polyhedronVector({}) {
 }
 
 
-
-///////////////////////
-// STANDARD METHODS  //
-///////////////////////
-
-
+// STANDARD METHODS
 // addPolygon
 template <long embedded, typename real>
 void MeshPoint<embedded,real>::addPolygon(weak_ptr<Polygon<embedded, real>> inputPolygon) {
@@ -122,7 +108,5 @@ template <long embedded,typename real>
 bool MeshPoint<embedded,real>::operator<(MeshPoint<embedded,real>& inputPoint) {
 	return this->pointID<inputPoint.pointID;
 }
-
-
 
 #endif /* MeshPoint_h */

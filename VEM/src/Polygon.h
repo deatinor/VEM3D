@@ -1,4 +1,3 @@
-
 #ifndef Mesh_Polygon_h
 #define Mesh_Polygon_h
 
@@ -12,199 +11,187 @@ using namespace std;
 using std::shared_ptr;
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//									POLYGON										 //
-///////////////////////////////////////////////////////////////////////////////////
-
 /**	Class to represent a Polygon in a Mesh, embedded in 2D or 3D
  *
  *	It can be an element of the Mesh in 2D, or a face of a Polyhedron in 3D.
  *	The only way to initialize it is to call make_shared_Polygon
- *	Area, normal and centroid are computed during initialization and saved.
- *	Inheritance from enable_shared_from_this to obtain a shared_ptr from this.
+ *	Area, normal (normal vector) and centroid are computed during the initialization and saved.
+ *	Inherits from enable_shared_from_this to obtain a shared_ptr from this.
  */
 template <long embedded, typename real=double>
 class Polygon: public std::enable_shared_from_this<Polygon<embedded,real>> {
-private:
-	struct privateStruct {}; //!< Don't change, needed for make_shared_Polygon
-	
-protected:
-	// PROPERTIES
-	vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;	//!< Vector of <b>ordered</b> vertexes
-	bool isBoundary;	//!< Tells if the Polygon is on the boundary
-	real area;	//!< \return the area of the Polygon
-	Vector<3, real> normal;	//!< \return the <b>oriented</b> normal to the Polygon
-	Point<embedded, real> centroid;	//!< \return the centroid of the Polygon
+	private:
+		struct privateStruct {}; //!< Do not change, needed for make_shared_Polygon
+		
+	protected:
+		// PROPERTIES
+		vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;	//!< Vector of <b>ordered</b> vertices
+		bool isBoundary;	//!< Tells if the Polygon is on the boundary
+		real area;	//!< \return the area of the Polygon
+		Vector<3, real> normal;	//!< \return the <b>oriented</b> normal to the Polygon
+		Point<embedded, real> centroid;	//!< \return the centroid of the Polygon
 
-	/** Vector of Polyhedrons with this Polygon as face
-	 *
-	 *	weak_ptr necessary to not create loop pointers
-	 */
-	vector<weak_ptr<Polyhedron<embedded,real>>> polyhedronVector;
-	
-public:
-	// PROPERTIES
-	long numberOfPoints;	//!< \return the number of vertexes of the Polygon
-	
-public:
-	// CONSTRUCTORS
-	/** Constructor from a vector of shared_ptr. DO NOT USE.
-	 *
-	 *	Called by make_shared_Polygon
-	 */
-	Polygon(const privateStruct &,const vector<shared_ptr<MeshPoint<embedded,real>>>& vertexVector);
-	
-	/** Empty constructor. DO NOT USE.
-	 *
-	 *	Called by make_shared_Polygon
-	 */
-	Polygon(const privateStruct&):pointVector({}),numberOfPoints(0),polyhedronVector({}),isBoundary(false),area(0){};
-	/** Constructor with variadic template. DO NOT USE.
-	 *
-	 *	Source:
-	 *	http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
-	 *	Called by make_shared_Polygon
-	 */
-	template <typename... Args>
-	Polygon(const privateStruct&,Args... arguments):pointVector{arguments...},polyhedronVector({}),area(0),isBoundary(false) {
-		if (sizeof...(Args)<3) {
-			cout<<endl<<endl<<"Minimum 3 points required"<<endl<<endl;
+		/** Vector of Polyhedrons with this Polygon as face
+		 *
+		 *	weak_ptr necessary to avoid the creation of loop pointers
+		 */
+		vector<weak_ptr<Polyhedron<embedded,real>>> polyhedronVector;
+		
+	public:
+		// PROPERTIES
+		long numberOfPoints;	//!< \return the number of vertexes of the Polygon
+		
+	public:
+		// CONSTRUCTORS
+		/** Constructor from a vector of shared_ptr. DO NOT USE.
+		 *
+		 *	Called by make_shared_Polygon
+		 */
+		Polygon(const privateStruct &,const vector<shared_ptr<MeshPoint<embedded,real>>>& vertexVector);
+		
+		/** Empty constructor. DO NOT USE.
+		 *
+		 *	Called by make_shared_Polygon
+		 */
+		Polygon(const privateStruct&):pointVector({}),numberOfPoints(0),polyhedronVector({}),isBoundary(false),area(0){};
+		/** Constructor with variadic template. DO NOT USE.
+		 *
+		 *	Source:
+		 *	http://stackoverflow.com/questions/8158261/templates-how-to-control-number-of-constructor-args-using-template-variable
+		 *	Called by make_shared_Polygon
+		 */
+		template <typename... Args>
+		Polygon(const privateStruct&,Args... arguments):pointVector{arguments...},polyhedronVector({}),area(0),isBoundary(false) {
+			if (sizeof...(Args)<3) {
+				cout<<endl<<endl<<"Minimum 3 points required"<<endl<<endl;
+			}
+			numberOfPoints=sizeof...(Args);
+		};
+		
+		/** The <b>only</b> constructor for Polygon
+		 *
+		 *	Using the variadic template it accepts as input a vector of shared_ptr to MeshPoints or a sequence of MeshPoints.
+		 *	Then it calls the right constructor. It initialize the Polygon calling the method initialize
+		 *
+		 *	\return A shared pointer to the Polygon
+		 */
+		template <typename... Args>
+		static shared_ptr<Polygon<embedded,real>> make_shared_Polygon(Args... arguments) {
+			shared_ptr<Polygon<embedded,real>> polygon=make_shared<Polygon<embedded,real>>(privateStruct{},arguments...);
+			polygon->initialize();
+			return polygon;
 		}
-		numberOfPoints=sizeof...(Args);
-	};
-	
-public:
-	/** The <b>only</b> constructor for Polygon
-	 *
-	 *	Using the variadic template it accepts as input a vector of shared_ptr to MeshPoints or a sequence of MeshPoints.
-	 *	Then it calls the right constructor. It initialize the Polygon calling the method initialize
-	 *
-	 *	\return A shared pointer to the Polygon
-	 */
-	template <typename... Args>
-	static shared_ptr<Polygon<embedded,real>> make_shared_Polygon(Args... arguments) {
-		shared_ptr<Polygon<embedded,real>> polygon=make_shared<Polygon<embedded,real>>(privateStruct{},arguments...);
-		polygon->initialize();
-		return polygon;
-	}
 
-	
-	
-public:
-	// STANDARD METHODS
-	void addPoint(const shared_ptr<MeshPoint<embedded,real>>& p1); //!< Add a new vertex to the Polygon
-	void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> polyhedron);	//!< Add a new Polyhedron having this as face
-	
-	/** Compute centroid of a Polygon
-	 *
-	 *	Source:
-	 *	https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
-	 *
-	 *	For the 3D case the Polygon is projected on one of the xy, xz or yz plane to determine 2 of the components.
-	 *	Then it's projected on an another plane to determine the last component.
-	 */
-	Vector<embedded,real> computeCentroid();
-	
-	/** Compute area of the Polygon
-	 *
-	 *	Gauss formula: https://en.wikipedia.org/wiki/Shoelace_formula
-	 *	For the 3D case:
-	 *		- Project the Polygon on a plane
-	 *		- Compute the area with Gauss formula
-	 *		- Divide by an apposite scale factor
-	 *
-	 */
-	real computeArea();
-	real getDiameter();
-	real hTriangle(); //!< Compute the maximum distance between 2 vertexes. Necessary for the paramether h of the Mesh
-	
-	void initialize(); //<! Put this Polygon to the polygonVector in each MeshPoint. Computes area, normal and centroid
+		// STANDARD METHODS
+		void addPoint(const shared_ptr<MeshPoint<embedded,real>>& p1); //!< Add a new vertex to the Polygon
+		void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> polyhedron);	//!< Add a new Polyhedron having this as face
+		
+		/** Compute centroid of a Polygon
+		 *
+		 *	Source:
+		 *	https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
+		 *
+		 *	For the 3D case the Polygon is projected on one of the xy, xz or yz plane to determine 2 of its components.
+		 *	Then it is projected on an another plane to determine the last component.
+		 */
+		Vector<embedded,real> computeCentroid();
+		
+		/** Compute area of the Polygon
+		 *
+		 *	Gauss formula: https://en.wikipedia.org/wiki/Shoelace_formula
+		 *	For the 3D case:
+		 *		- Project the Polygon on a plane
+		 *		- Compute the area with Gauss formula
+		 *		- Divide by an apposite scale factor
+		 *
+		 */
+		real computeArea();
+		real getDiameter();
+		real hTriangle(); //!< Compute the maximum distance between 2 vertices. Necessary for the paramether h of the Mesh
+		
+		void initialize(); //!< Put this Polygon to the polygonVector in each MeshPoint. Computes area, normal and centroid
 
-	bool isConflictPoint(Point<embedded,real>& point);
+		bool isConflictPoint(Point<embedded,real>& point);
 
-	shared_ptr<MeshPoint<embedded,real>> isPointAVertex(Point<embedded,real>& point);	//!< Given a simple Point return if the Point coincides with a vertex.
-	bool isPointInside(Point<embedded,real>& point);
-	array<shared_ptr<MeshPoint<embedded,real>>,2> isPointOnBoundary(Point<embedded,real>& point);
-	
-	/** Normal computed with Newell's algorithm
-	 *
-	 *	Source:
-	 *	http://www.gamedev.net/topic/416131-calculating-a-polygon-normal/?p=3771628
-	 *
-	 *	Nx = (Yn-Yn+1)*(Zn+Zn+1)
-	 *	Ny = (Zn-Zn+1)*(Xn+Xn+1)
-	 *	Nz = (Xn-Xn+1)*(Yn+Yn+1)
-	 *
-	 *	In the 2D case it's sufficient to compute the Z component.
-	 *
-	 */
-	Vector<3,real> computeNormal();
-	
-	void shrink_to_fit();
-	
-	/**	Area of the Polygon
-	 *
-	 *	This is a common method to Polygon and Polyhedron. In this way one of two can be passed as a template paramether and this method can be called to get area in case of Polygon and volume in case of Polyhedron
-	 */
-	real space() {return area;}
-	void switchPointsOrder(); //!< Invert the orientation of the Polygon
-	
-	/** Output to string
-	 *
-	 *	\return std::string representing the Point
-	 *
-	 */
-	string write();
-	
-	// GET-SET METHODS
-	bool getIsBoundary() const {return isBoundary;};
-	void setIsBoundary(bool inputIsBoundary) {isBoundary=inputIsBoundary;};
-	long numberOfPolyhedrons() const {return polyhedronVector.size();};
-	real getArea() const {return area;};
-	const Vector<3, real>& getNormal() const {return normal;};
-	const Point<embedded, real>& getCentroid() const {return centroid;};
-	
-	/** Get a shared pointer to a Point in pointVector
-	 */
-	const shared_ptr<MeshPoint<embedded,real>>& point(long index) {return pointVector[index%numberOfPoints];};
-	
-	/** Get a weak pointer to a Polyhedron in polyhedronVector
-	 */
-	const weak_ptr<Polyhedron<embedded,real>>& polyhedron(long index) {return polyhedronVector[index%numberOfPolyhedrons()];};
-	
-	// OPERATORS
-	/** Get the MeshPoint with a particular index
-	 */
-	shared_ptr<MeshPoint<embedded,real>> operator[](long index) {
-		if (index<0) {
-			index+=numberOfPoints;
-		}
-		return pointVector[index%numberOfPoints];
-	};
-	
-	bool operator==(const Polygon<embedded,real>& polygon); //!< Check if equal operator
-	/** Check if different operator
-	 */
-	bool operator!=(const Polygon<embedded,real>& polygon){return !(*this==polygon);};
-	
-	// EXTERNAL METHODS
-	template <long embedded2, typename real2>
-	friend ostream& operator<<(ostream& os,const Polygon<embedded2,real2>&polygon); //!< Output operator
+		shared_ptr<MeshPoint<embedded,real>> isPointAVertex(Point<embedded,real>& point);	//!< Given a simple Point, tell if the Point coincides with a vertex.
+		bool isPointInside(Point<embedded,real>& point);
+		array<shared_ptr<MeshPoint<embedded,real>>,2> isPointOnBoundary(Point<embedded,real>& point);
+		
+		/** Normal vector computed with Newell's algorithm
+		 *
+		 *	Source:
+		 *	http://www.gamedev.net/topic/416131-calculating-a-polygon-normal/?p=3771628
+		 *
+		 *	Nx = (Yn-Yn+1)*(Zn+Zn+1)
+		 *	Ny = (Zn-Zn+1)*(Xn+Xn+1)
+		 *	Nz = (Xn-Xn+1)*(Yn+Yn+1)
+		 *
+		 *	In the 2D case it is sufficient to compute the z-component.
+		 *
+		 */
+		Vector<3,real> computeNormal();
+		
+		void shrink_to_fit();
+		
+		/**	Area of the Polygon
+		 *
+		 *	This is a common method to Polygon and Polyhedron. In this way, one of two can be passed as a template parameter and this method can be called to get the area in case of a Polygon and the volume in case of a Polyhedron
+		 */
+		real space() {return area;}
+		void switchPointsOrder(); //!< Invert the orientation of the Polygon
+		
+		/** Output to string
+		 *
+		 *	\return std::string representing the Point
+		 *
+		 */
+		string write();
+		
+		// GET-SET METHODS
+		bool getIsBoundary() const {return isBoundary;};
+		void setIsBoundary(bool inputIsBoundary) {isBoundary=inputIsBoundary;};
+		long numberOfPolyhedrons() const {return polyhedronVector.size();};
+		real getArea() const {return area;};
+		const Vector<3, real>& getNormal() const {return normal;};
+		const Point<embedded, real>& getCentroid() const {return centroid;};
+		
+		/** Get a shared pointer to a Point in pointVector
+		 */
+		const shared_ptr<MeshPoint<embedded,real>>& point(long index) {return pointVector[index%numberOfPoints];};
+		
+		/** Get a weak pointer to a Polyhedron in polyhedronVector
+		 */
+		const weak_ptr<Polyhedron<embedded,real>>& polyhedron(long index) {return polyhedronVector[index%numberOfPolyhedrons()];};
+		
+		// OPERATORS
+		/** Get the MeshPoint with a particular index
+		 */
+		shared_ptr<MeshPoint<embedded,real>> operator[](long index) {
+			if (index<0) {
+				index+=numberOfPoints;
+			}
+			return pointVector[index%numberOfPoints];
+		};
+		
+		bool operator==(const Polygon<embedded,real>& polygon); //!< Equal operator
+		/** Operator not equal
+		 */
+		bool operator!=(const Polygon<embedded,real>& polygon){return !(*this==polygon);};
+		
+		// EXTERNAL METHODS
+		template <long embedded2, typename real2>
+		friend ostream& operator<<(ostream& os,const Polygon<embedded2,real2>&polygon); //!< Output operator
 };
 
-//////////////////
-// CONSTRUCTORS //
-//////////////////
-			
+
+// CONSTRUCTORS
 template <long embedded, typename real>
 Polygon<embedded,real>::Polygon(const privateStruct&,const vector<shared_ptr<MeshPoint<embedded,real>>>& vertexVector):pointVector(vertexVector),polyhedronVector({}),isBoundary(false) {
 	numberOfPoints=(long)pointVector.size();
 }
 
-//////////////////////
-// STANDARD METHODS //
-//////////////////////
 
+// STANDARD METHODS
 // addPoint
 template <long embedded,typename real>
 void Polygon<embedded,real>::addPoint(const shared_ptr<MeshPoint<embedded, real>>& p1) {
@@ -238,7 +225,6 @@ Point<embedded,real> Polygon<embedded,real>::computeCentroid() {
 			minNormalIndex=i;
 			minNormalValue=abs(normal[i]);
 		}
-
 	}
 	
 	long indexX=0;
@@ -293,8 +279,8 @@ Point<embedded,real> Polygon<embedded,real>::computeCentroid() {
 	returnPoint[indexX]=valueX;
 	returnPoint[indexY]=valueY;
 
-	// I repeat the procedure to find indexZ (maxNormalIndex), indexX must be the minimum
-	// se il minimo e' 0 deve esserci un indice su di lui! Altrimenti l'area viene 0
+	// Repeat the procedure to find indexZ (maxNormalIndex), indexX must be the minimum
+	// if the minimum is 0, it should have an index! Otherwise, the area comes 0
 	if (indexX!=minNormalIndex) {
 		indexX=indexY;
 	}
@@ -330,58 +316,48 @@ real Polygon<embedded,real>::computeArea() {
 		}
 		area+=pointVector[0]->y()*pointVector[pointVector.size()-1]->x()-pointVector[0]->x()*pointVector[pointVector.size()-1]->y();
 		return abs(area/2);
-	}
-	
-	
-	
-
-	else if (embedded==3) {
-	// Obtain the scale factor.
-	// Put to 0 the index with higher normal index.
-	// The Polygon then becomes a 2D Polygon.
-	long maxNormalIndex=0;
-	real maxNormalValue=0;
-	for (int i=0;i<3;i++) {
-		if (abs(normal[i])>maxNormalValue) {
-			maxNormalIndex=i;
-			maxNormalValue=abs(normal[i]);
+	} else if (embedded==3) {
+		// Obtain the scale factor.
+		// Put to 0 the index with higher normal index.
+		// The Polygon then becomes a 2D Polygon.
+		long maxNormalIndex=0;
+		real maxNormalValue=0;
+		for (int i=0;i<3;i++) {
+			if (abs(normal[i])>maxNormalValue) {
+				maxNormalIndex=i;
+				maxNormalValue=abs(normal[i]);
+			}
 		}
-	}
-	//real normalReduced=abs(normal[maxNormalIndex]);
-	real scaleFactor=maxNormalValue/(normal.norm());
-
-	
-	real reducedArea=0;
-	long index1=0;
-	long index2=1;
-	if (maxNormalIndex==0) {
-		index1=1;
-		index2=2;
-	} else if (maxNormalIndex==1){
-		index2=2;
-	}
-	for (int i=0;i<pointVector.size()-1;i++) {
-		reducedArea+=(*pointVector[i])[index1]*(*pointVector[i+1])[index2]-(*pointVector[i+1])[index1]*(*pointVector[i])[index2];
-	}
-	reducedArea+=(*pointVector[0])[index2]*(*pointVector[pointVector.size()-1])[index1]-(*pointVector[0])[index1]*(*pointVector[pointVector.size()-1])[index2];
-	
-	//  Compute the area.
-	area=reducedArea/scaleFactor;
-	return abs(area)/2;
+		real scaleFactor=maxNormalValue/(normal.norm());
+		
+		real reducedArea=0;
+		long index1=0;
+		long index2=1;
+		if (maxNormalIndex==0) {
+			index1=1;
+			index2=2;
+		} else if (maxNormalIndex==1){
+			index2=2;
+		}
+		for (int i=0;i<pointVector.size()-1;i++) {
+			reducedArea+=(*pointVector[i])[index1]*(*pointVector[i+1])[index2]-(*pointVector[i+1])[index1]*(*pointVector[i])[index2];
+		}
+		reducedArea+=(*pointVector[0])[index2]*(*pointVector[pointVector.size()-1])[index1]-(*pointVector[0])[index1]*(*pointVector[pointVector.size()-1])[index2];
+		
+		//  Compute the area.
+		area=reducedArea/scaleFactor;
+		return abs(area)/2;
 	}
 }
 
 // computeNormal
 template <long embedded,typename real>
 Vector<3,real> Polygon<embedded,real>::computeNormal(){
-	
 	Vector<3,real> newNormal(0,0,0);
 	
 	if (embedded==3) {
-		
 		// NEWELL'S ALGORITHM
 		// http://www.gamedev.net/topic/416131-calculating-a-polygon-normal/?p=3771628
-		
 		for (int i=0; i<numberOfPoints; i++) {
 			auto& p1=*pointVector[i];
 			auto& p2=*pointVector[(i+1)%numberOfPoints];
@@ -396,14 +372,12 @@ Vector<3,real> Polygon<embedded,real>::computeNormal(){
 			auto& p1=*pointVector[i];
 			auto& p2=*pointVector[(i+1)%numberOfPoints];
 			newNormal[2]+=(p1[0]-p2[0])*(p1[1]+p2[1]);
-	
-			// vertexes ALWAYS sorted counterclockwise
+			// vertices ALWAYS sorted counterclockwise
 		}
 		if (newNormal[2]<0) {
 			switchPointsOrder();
 			newNormal[2]=-newNormal[2];
 		}
-
 	}
 	return newNormal/newNormal.norm();
 }
@@ -469,7 +443,7 @@ template <long embedded,typename real>
 bool Polygon<embedded,real>::isPointInside(Point<embedded, real> &point) {
 	static_assert(embedded==2 || embedded==3,"computing isPointInside possible only for embedded=2,3");
 
-	// I obtain the maxNormalIndex
+	// Obtain the maxNormalIndex
 	long maxNormalIndex=0;
 	real maxNormalValue=0;
 	for (int i=0;i<3;i++) {
@@ -497,7 +471,7 @@ bool Polygon<embedded,real>::isPointInside(Point<embedded, real> &point) {
 		if (i==numberOfPoints-1) {
 			point2=*pointVector[0];
 		} else point2=*pointVector[i+1];
-		// first if to see if it's intersected by a straight (retta), second if to see the (semiretta)
+		// the first "if" is present to know if it is intersected by a line, the second "if" to know if it is intersected by a half-line
 		if ( (point1[indexY]<pointY && point2[indexY]>pointY) || (point1[indexY]>pointY && point2[indexY]<pointY)) {
 			if (point1[indexX]<pointX && point2[indexX]<pointX) {
 				intersectionCounter=!intersectionCounter;
@@ -507,7 +481,7 @@ bool Polygon<embedded,real>::isPointInside(Point<embedded, real> &point) {
 				continue;
 			}
 			
-			// lineX è l'ascissa del segmento tra point1 e point2 con ordinata pointY
+			// lineX is the abscissae of the segment between point1 and point2 with ordinate pointY
 			real lineX=point1[indexX]+(pointY-point1[indexY])/(point2[indexY]-point1[indexY])*(point2[indexX]-point1[indexX]);
 			if (lineX<pointX) {
 				intersectionCounter=!intersectionCounter;
@@ -523,7 +497,7 @@ template <long embedded,typename real>
 array<shared_ptr<MeshPoint<embedded,real>>, 2> Polygon<embedded,real>::isPointOnBoundary(Point<embedded, real> &point) {
 	static_assert(embedded==2 || embedded==3,"computing isPointOnBoundary possible only for embedded=2,3");
 
-	// I obtain the maxNormalIndex
+	// Obtain the maxNormalIndex
 	long maxNormalIndex=0;
 	real maxNormalValue=0;
 	for (int i=0;i<3;i++) {
@@ -575,7 +549,7 @@ bool Polygon<embedded,real>::isConflictPoint(Point<embedded, real> &point) {
 		return true;
 	}
 	
-	// I obtain the maxNormalIndex
+	// Obtain the maxNormalIndex
 	long maxNormalIndex=0;
 	real maxNormalValue=0;
 	for (int i=0;i<3;i++) {
@@ -584,7 +558,7 @@ bool Polygon<embedded,real>::isConflictPoint(Point<embedded, real> &point) {
 			maxNormalValue=abs(normal[i]);
 		}
 	}
-	// the index1 is the compare one
+	// index1 is the comparison index
 	long indexX=0;
 	long indexY=1;
 	if (maxNormalIndex==1) {
@@ -636,9 +610,7 @@ string Polygon<embedded,real>::write() {
 			
 			
 
-///////////////
-// OPERATORS //
-///////////////
+// OPERATORS
 			
 template <long embedded, typename real>
 bool Polygon<embedded,real>::operator==(const Polygon<embedded, real> &polygon) {
@@ -658,33 +630,20 @@ bool Polygon<embedded,real>::operator==(const Polygon<embedded, real> &polygon) 
 		
 	}
 	return true;
-	
 }
 			
-	
-//////////////////////
-// EXTERNAL METHODS //
-//////////////////////
+
+// EXTERNAL METHODS
 			
 template <long embedded, typename real>
 ostream& operator<<(ostream& os,const Polygon<embedded,real>&polygon) {
 	cout<<endl<<endl;
 	for (int i=0; i<polygon.numberOfPoints; i++) {
-		cout<<"P"<<i+1<<":"<<*polygon.pointVector[i];
+		cout << "P" << i+1 << ":" << *polygon.pointVector[i];
 	}
 	cout<<endl;
 	return os;
 }
 
 
-
-			
-
-			
-
-			
-			
-			
-			
-			
-#endif
+#endif /* Mesh_Polygon_h */
