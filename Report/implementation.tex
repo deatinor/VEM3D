@@ -102,9 +102,9 @@ protected:
 
   // STANDARD METHODS
   void addPolygon(weak_ptr<Polygon<embedded,real>> inputPolygon); 
-//!< It inserts in polygon vector a new Polygon
+//!< It inserts a new Polygon in polygon vector 
   void addPolyhedron(weak_ptr<Polyhedron<embedded,real>> inputPolyhedron); 
-//!< It insert in polyhedron vector a new Polyhedron
+//!< It insert a new Polyhedron in polyhedron vector 
 \end{lstlisting}
 
 \noindent\rule{16cm}{1pt}\\
@@ -128,8 +128,8 @@ protected:
 	
   bool isBoundary;	// Tells if the Polygon is on the boundary
   real area;	// \return the area of the Polygon
-  Vector<3, real> normal;	// oriented normal to the Polygon
-  Point<embedded, real> centroid;	// centroid of the Polygon
+  Vector<3, real> normal;	// return the oriented normal to the Polygon
+  Point<embedded, real> centroid;	// return the centroid of the Polygon
   vector<weak_ptr<Polyhedron<embedded,real>>> polyhedronVector;
 
 public:
@@ -183,9 +183,9 @@ protected:
   vector<shared_ptr<Polygon<embedded,real>>> polygonVector; 
 	
   bool isBoundary;	// Tells if the Polygon is on the boundary
-  real volume;	// volume of the Polyhedron
+  real volume;	// return the volume of the Polyhedron
   Point<embedded,real> centroid;	// Not the real centroid, only the mean
-// of the vertexes.
+// of the vertexes. It returns the centroid of the Polyhedron
 
   // Stores the vertexes of the Polyhedron
   vector<shared_ptr<MeshPoint<embedded,real>>> pointVector;	
@@ -203,10 +203,10 @@ public:
 make_shared_Polyhedron;
 
   // STANDARD METHODS
-  // Add a new vertex to the Polygon
+  // Add a new Polygon face to the Polyhedron 
   void addPolygon(shared_ptr<Polygon<embedded,real>>& 
 inputPolygon);
-  // Add a new Polyhedron having this as face
+  // Add a new vertex to the Polyhedron
   void addPoint(shared_ptr<MeshPoint<embedded,real>>& 
 inputPoint);
   Point<embedded,real> computeCentroid();	// return the centroid
@@ -214,7 +214,7 @@ inputPoint);
   real getDiameter();		// return the maximum distance between 2 Points
   // Makes the normal to each face pointing towards the external of the Polyhedron
   void fixExternalNormal();	
-  // Makes the normal of each face pointing in the same direction (or inward or 
+  // Makes the normal of each face pointing in the same direction (either inward or 
 // outward)
   void fixFacesOrientation();	
   // Maximum distance between vertexes. Necessary for the mesh.
@@ -255,13 +255,13 @@ public:
 
     virtual real hTriangle();	// paramether h of the Mesh
 	
-    // Method that calls the functions that read the file
+    // Method that calls the functions that read the input file
     void initialize(string pointFile,string connection,
 MeshType meshType=ANYTHING3D);
 
-    // It obtains the pointVector from file
+    // It obtains the pointVector from a file
     virtual void setPointVector(string file);	
-    // It obtains the elementVector from connections
+    // It obtains the elementVector from the connections
     virtual void setElementVector(string connections, MeshType
 meshType);
     
@@ -379,17 +379,17 @@ public:
 
     virtual void computeSolution();
     virtual void operator()();  // Method to execute the method.
-FreeFem style.
+    //FreeFem style.
 
     //  It displays the error after the computation
     virtual void displayError(std::function<real(Point<embedded,
 real>&)>
  realSolutionFunction);
-    // full output to file 
+    // full output to given files 
     virtual void write(string outputPoints,string 
 outputConnections,
 string outputSolution);	
-    // Output to file of the solution
+    // Output the solution to a file
     virtual void writeSolution(string outputSolution="solution.
 sol");
 \end{lstlisting}
@@ -443,7 +443,8 @@ template <long embedded,typename baseElement,typename real=
 double>
 class Monomials {
 public:
-    const shared_ptr<baseElement>& element; //!< Polygon or Polyhedron
+    const shared_ptr<baseElement>& element; //!< Element is a pointer
+// on a Polygon or Polyhedron 
     real diameter;  //!< Diameter of the element
     Point<embedded,real> centroid;  //!< Centroid of the element
     // It's the gradient of the monomial. It's 1/diameter
@@ -551,7 +552,7 @@ public:
     SolverVEM(std::function<real(const Point<embedded,real>&)>
 inputForceTerm);
 	
-    // This is to compute the local stiffness matrix
+    // Compute the local stiffness matrix
     virtual Matrix<real,Dynamic,Dynamic> computeLocalK(const
 shared_ptr<baseElement>& element); 
     //!< Virtual method to compute the known term.
@@ -647,16 +648,17 @@ inputMesh,std::function<real(Point<embedded,real>&)>
 inputBoundaryFunction);
 
 public:
-    // This is to decide if to add the Kloc computed to the matrix
+    // Decide wheter the computed Kloc will be added to the global matrix.
+    // It depends on the boundary condition.	
     virtual void addToTripletList(Matrix<real,Dynamic,
 Dynamic>& Kloc, MeshElement& element,vector<Triplet<real>>& 
 tripletList)=0;
 	
-    // Changes the stiffnessMatrix to keep into account the boundary condition.
+    // Changes the stiffnessMatrix to take into account the boundary condition.
     virtual void assignBoundaryConditionOnStiffnessMatrix
 (vector<Triplet<real>>& tripletList)=0;
 	
-    // Changes the known term to keep into account the boundary condition
+    // Changes the known term to take into account the boundary condition
     virtual void assignBoundaryConditionOnKnownTerm
 (VectorX<real>& knownTerm)=0; 		
 };
@@ -681,15 +683,15 @@ public:
     Dirichlet(const MeshType& mesh,std::function<real(Point
 <embedded,real>&)> boundaryFunction);
 	
-    // This is to decide if to add the Kloc computed to the matrix.
+    // Decide wheter the computed Kloc will be added to the global matrix.
     virtual void addToTripletList(Matrix<real,Dynamic,Dynamic>& 
 Kloc, MeshElement& element,vector<Triplet<real>>& tripletList);
 	
-    // Changes the stiffnessMatrix to keep into account the boundary condition.
+    // Changes the stiffnessMatrix to take into account the boundary condition.
     virtual void assignBoundaryConditionOnStiffnessMatrix
 (vector<Triplet<real>>& tripletList);
 	
-    // Changes the known term to keep into account the boundary condition
+    // Changes the known term to take into account the boundary condition
     virtual void assignBoundaryConditionOnKnownTerm(VectorX
 <real>& knownTerm);	
 };
