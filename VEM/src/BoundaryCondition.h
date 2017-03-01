@@ -1,11 +1,3 @@
-//
-//  BoundaryCondition.h
-//  Mesh3
-//
-//  Created by Stefano on 16/08/15.
-//  Copyright (c) 2015 Stefano. All rights reserved.
-//
-
 #ifndef Mesh3_BoundaryCondition_h
 #define Mesh3_BoundaryCondition_h
 
@@ -18,7 +10,7 @@ using VectorX=Matrix<real, Dynamic, 1>;
  *
  *  This class does 3 main things:
  *	- It processes the Kloc matrices after their creation from Solver (e.g in Dirichlet condition the upper part of the stiffness matrix is diagonal and there is no need to add the corresponding terms)
- *	- Once the K matrix is completed, it processes the full matrix to assign boundary condition (e.g in the same example it makes the upper part diagonal)
+ *	- Once the K matrix is assembled, it processes the full matrix to assign boundary condition (e.g in the same example it makes the upper part diagonal)
  *	- It imposes boundary condition also on the known term
  *
  *	\param embedded Dimension of the space

@@ -25,107 +25,9 @@
 #include "carthesianParserInterface.h"
 #include "sphericalParserInterface.h"
 
- /*
-// FUNCTIONS
-template <long embedded,typename real=double>
-real forceTermSphere(const Point<embedded,real>& inputPoint) {
-	auto ro=inputPoint.norm();
-		
-	return 6;
-	
-}
-
-template <long embedded,typename real=double>
-real forceTermSquare(const Point<embedded,real>& inputPoint) {
-	if (embedded==2) {
-		auto x=inputPoint[0];
-		auto y=inputPoint[1];
-		
-		
-		return M_PI*M_PI/2*cos(M_PI*x/2)*cos(M_PI*y/2);
-		
-		//return -2*(y*y-1)-2*(x*x-1);
-	}
-	else {
-		auto x=inputPoint[0];
-		auto y=inputPoint[1];
-		auto z=inputPoint[2];
-		
-		return -(exp(x*y)*(cos(z)*(pow(x,4)*(y*y-1)*(z*z-1)+4*pow(x,3)*y*(z*z-1)+x*x*(pow(y,4)*(z*z-1)+y*y*(5-3*z*z)+4*z*z-6)+4*x*y*(y*y-2)*(z*z-1)-pow(y,4)*(z*z-1)+y*y*(4*z*z-6)-5*z*z+7)-4*(x*x-1)*(y*y-1)*z*sin(z)));
-		
-		//return -2*(y*y-1)*(z*z-1)-2*(x*x-1)*(z*z-1)-2*(x*x-1)*(y*y-1);
-	}
-}
-
-template <long embedded,typename real=double>
-real forceTermConvergence(const Point<embedded,real>& inputPoint) {
- 	if (embedded==2) {
- 		auto x=inputPoint[0];
- 		auto y=inputPoint[1];
- 		
- 		return 98*M_PI*M_PI*sin(7*M_PI*x)*sin(7*M_PI*y);
- 	} else {
- 		auto x=inputPoint[0];
- 		auto y=inputPoint[1];
- 		auto z=inputPoint[2];
- 		
- 		return 147*M_PI*M_PI*sin(7*M_PI*x)*sin(7*M_PI*y)*sin(7*M_PI*z);
-	}
-}
-
-template <long embedded,typename real=double>
-real solutionSphere(const Point<embedded,real>& inputPoint) {
-	auto ro=inputPoint.norm();
-		
-	return 1-ro*ro;
-	
-}
-
-template <long embedded,typename real=double>
-real solutionSquare(const Point<embedded,real>& inputPoint) {
-	if (embedded==2) {
-		auto x=inputPoint[0];
-		auto y=inputPoint[1];
-		
-		return cos(x*M_PI/2)*cos(y*M_PI/2);
-		
-		//return (x*x-1)*(y*y-1);
-	}
-	else {
-		auto x=inputPoint[0];
-		auto y=inputPoint[1];
-		auto z=inputPoint[2];
-	
-		return (x*x-1)*(y*y-1)*(z*z-1)*exp(x*y)*cos(z);
-		
-		//return (x*x-1)*(y*y-1)*(z*z-1);
-	}
-}
-
-template <long embedded,typename real=double>
-real solutionConvergence(const Point<embedded,real>& inputPoint) {
-	if (embedded==2) {
- 		auto x=inputPoint[0];
- 		auto y=inputPoint[1];
- 		
- 		return sin(7*M_PI*x)*sin(7*M_PI*y);
- 	} else {
- 		auto x=inputPoint[0];
- 		auto y=inputPoint[1];
- 		auto z=inputPoint[2];
- 	
- 		return sin(7*M_PI*x)*sin(7*M_PI*y)*sin(7*M_PI*z);
-  	}
-}
-*/
-
-////////////////////////////////////////////////////
-///////                 MAIN                 ///////
-
-
 int main(int argc, const char * argv[]) {
 	
-	////////////  PARAMETERS TO BE READ  /////////////
+	/* ------------  PARAMETERS TO BE READ  ----------- */
 	
 	long embedded=3;
 	string inputPoint;
@@ -146,7 +48,7 @@ int main(int argc, const char * argv[]) {
 	string real;
 	
 	
-	////////////  READ THE FILE  ///////////////////
+	/* ------------ READ THE FILE  ------------ */
 	string parametroInput,valore,linea;
 	ifstream inputFile("Datafile/datafile.dat");
 	
@@ -215,7 +117,7 @@ int main(int argc, const char * argv[]) {
 			} // any other parametroInput is ignored
 		}
 
-	//////////////  CREATE THE APPROPRIATES CLASSES  ///////////////////
+	/* -------  CREATE THE APPROPRIATES CLASSES  */
 		// Obtain the fileType
 		MeshType fileTypeMesh=TETRAHEDRON;
 		if (fileType=="TETRAHEDRON") {

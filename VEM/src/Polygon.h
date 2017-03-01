@@ -280,7 +280,7 @@ Point<embedded,real> Polygon<embedded,real>::computeCentroid() {
 	returnPoint[indexY]=valueY;
 
 	// Repeat the procedure to find indexZ (maxNormalIndex), indexX must be the minimum
-	// if the minimum is 0, it should have an index! Otherwise, the area comes 0
+	// If the minimum is 0, it should have an index! Otherwise, the area comes 0.
 	if (indexX!=minNormalIndex) {
 		indexX=indexY;
 	}

@@ -8,7 +8,7 @@
 
 /** Generic muParserInterface that can take into account any type of coordinates (ex: spherical, carthesian, etc)
  *
- *	It uses the library muParser. It reads and evaluate any mathematical expression.
+ *	It uses the library muParser (see README). It reads and evaluate any mathematical expression.
  *
  *	\param embedded Dimension of the space
  *	\param real double or long double

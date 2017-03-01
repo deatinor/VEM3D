@@ -73,8 +73,8 @@ class Polyhedron: public enable_shared_from_this<Polyhedron<embedded,real>> {
 		}
 		
 		// STANDARD METHODS
-		void addPolygon(shared_ptr<Polygon<embedded,real>>& inputPolygon);	//!< Add a new vertex to the Polygon
-		void addPoint(shared_ptr<MeshPoint<embedded,real>>& inputPoint);	//!< Add a new Polyhedron having this as face
+		void addPolygon(shared_ptr<Polygon<embedded,real>>& inputPolygon);	//!< Add a new Polygon face to the Polyhedron
+		void addPoint(shared_ptr<MeshPoint<embedded,real>>& inputPoint);	//!< Add a new vertex to the Polyhedron
 		Point<embedded,real> computeCentroid();	//!< \return the centroid
 		/** Computes the volume of the Polyhedron
 		 *
@@ -89,8 +89,9 @@ class Polyhedron: public enable_shared_from_this<Polyhedron<embedded,real>> {
 		 *
 		 *	Ray casting algorithm:
 		 *		- Consider the first face and a random point on it
-		 *		- Consider the normal starting 
+		 *		- Consider the normal starting in the random point
 		 *		- If the line intersects a vertex or an edge consider an another random point
+		 * 		- If not, count the number of intersected faces. If it is even, the normal is external. Otherwise, it is internal.
 		 *
 		 */
 		void fixExternalNormal();

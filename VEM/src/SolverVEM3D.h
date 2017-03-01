@@ -17,8 +17,6 @@ class SolverVEM3D: public SolverVEM<3,3,Polyhedron<3,real>,Monomial3D<real>,real
 		 */
 		virtual Matrix<real,3,3> computeGPolygon(MonomialsPolygon<real>& monomial);
 		/** Complex and computationally expensive function
-		 *
-		 *	2 ways of computing the boundary term
 		 */
 		virtual Matrix<real,4,Dynamic> computeB(const shared_ptr<Polyhedron<3,real>>& polyhedron,Monomial3D<real>& monomial);
 		virtual Matrix<real,3,Dynamic> computeBPolygon(const shared_ptr<Polygon<3,real>>& polyhedron,MonomialsPolygon<real>& monomial);	//!< It is an integral on the boundary of a polygon. Similar to computeB in the 2D case.
@@ -112,8 +110,7 @@ Matrix<real,4,Dynamic> SolverVEM3D<real>::computeB(const shared_ptr<Polyhedron<3
 		real area=face->getArea();
 		auto& normal=face->getNormal();
 		
-		// WAY 2
-		// More complicated, we have to compute the interpolation polynomial. Let's choose 2 monomials from x,y,z. We do not have to choose the one corresponding to maxNormalIndex. Suppose we choose x and y:
+		// We have to compute the interpolation polynomial. Let's choose 2 monomials from x,y,z. We do not have to choose the one corresponding to maxNormalIndex. Suppose we choose x and y:
 		// the other monomials are a basis of degree 1 in the space of the polynomials.
 		// For G, we have computed three tangential gradient (1-Nx*Nx). The product of the gradient of x with the gradient of y is NOT 0. We have to project it on the plane.
 		// For D, no changes with respect to the standard case
@@ -143,10 +140,6 @@ Matrix<real,4,Dynamic> SolverVEM3D<real>::computeB(const shared_ptr<Polyhedron<3
 			// normal derivative of the monomial, always the same
 			real normalCoefficient=monomial.gradient*normal[i-1];
 			real integralCoefficient=normalCoefficient*area; // summing area
-			
-			// WAY 1
-			// not correct in general with complex figures.
-			real addTerm1=integralCoefficient/facePoints;
 			
 			// the point indices are not the same. m is similar to j in the next cycle, but they do not coincide, so it is necessary to use another cycle
 			for (int m=0; m<facePoints; m++) {
