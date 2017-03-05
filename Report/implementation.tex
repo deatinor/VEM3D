@@ -381,17 +381,14 @@ public:
     virtual void operator()();  // Method to execute the method.
     //FreeFem style.
 
-    //  It displays the error after the computation
-    virtual void displayError(std::function<real(Point<embedded,
-real>&)>
- realSolutionFunction);
-    // full output to given files 
-    virtual void write(string outputPoints,string 
-outputConnections,
-string outputSolution);	
-    // Output the solution to a file
-    virtual void writeSolution(string outputSolution="solution.
-sol");
+    virtual void displayError(muParserInterface<embedded,real>&
+realSolutionFunction,string outputError="error.err",string errorAction="append"); 
+//!<  It displays the error after the computation and prints it to a file
+	virtual void write(string outputPoints="points.point",string 
+outputConnections="connections.conn",string outputSolution="solution.sol");	
+//!< Full output to given files
+	virtual void writeSolution(string outputSolution="solution.sol"); 
+//!< Output the solution to a file
 \end{lstlisting}
 \noindent\rule{16cm}{1pt}\\
 
@@ -408,14 +405,22 @@ private:
 public:
     // Vector used to fast build the stifnessMatrix.
     vector<Triplet<real>> tripletList; 
+    long numberOfElements;
     BoundaryConditionType boundaryCondition;
     SolverType solver;
 
-    // Standard constructor
-    Laplace(const MeshType& inputMesh,std::function<real(const 
-Point<embedded,real>&)> inputForceTerm,std::function<real(const 
-Point<embedded,real>&)> 
-inputBoundaryFunction,real inputDiffusionCoeff=1)
+    // CONSTRUCTORS
+	/* Standard constructor
+	 *
+	 * \param inputMesh Mesh on which the problem is defined
+	 * \param inputForceTerm muParserInterface containing the expression of 
+the ForceTerm
+	 * \param inputBoundaryFunction muParserInterface containing the 
+expression of the boundary conditions
+	 */
+    Laplace(const MeshType& inputMesh,muParserInterface<embedded,real>& 
+inputForceTerm,muParserInterface<embedded,real>& inputBoundaryFunction,real 
+inputDiffusionCoeff=1);
 
     // General method. It invokes the methods of the Solver.
     void computeStiffnessMatrix();
@@ -504,11 +509,12 @@ template <long embedded,typename baseElement,typename
 MatrixType,typename real>
 class Solver {
 protected:
-    std::function<real(const Point<embedded,real>&)> forceTerm;
+    muParserInterface<embedded,real>& forceTerm; //!< ForceTerm function to use, 
+// in the form of a muParserInterface expression
 	
 public:
-    Solver(std::function<real(const Point<embedded,real>&)> 
-inputForceTerm);
+    Solver(muParserInterface<embedded,real>& inputForceTerm); //!< Very generic 
+// constructor
 
     // Main virtual method. To be implemented in subclasses
     virtual MatrixType computeLocalK(const shared_ptr
@@ -548,9 +554,12 @@ Matrix<real,elementDimension+1,Dynamic>&PIStar,
 Matrix<real,Dynamic,elementDimension+1>&D);
 	
 public:
-    //Basic constructor. A lot of paramethers are given as template.
-    SolverVEM(std::function<real(const Point<embedded,real>&)>
-inputForceTerm);
+    /**	Basic constructor. A lot of parameters are given as template.
+	*
+	* \param inputForceTerm muParserInterface containing the expression 
+	* of the ForceTerm
+	*/
+    SolverVEM(muParserInterface<embedded,real>& inputForceTerm);
 	
     // Compute the local stiffness matrix
     virtual Matrix<real,Dynamic,Dynamic> computeLocalK(const
@@ -575,8 +584,7 @@ public:
 <Polygon<2,real>>& polygon,Monomial2D<real>& monomial);
 
 public:
-     SolverVEM2D(std::function<real(const Point<2,real>&)> 
-inputForceTerm);
+     SolverVEM2D(muParserInterface<2,real>& inputForceTerm);
     
      virtual real computeKnownTerm(const shared_ptr<Polygon<2,
 real>>& element,
@@ -611,8 +619,7 @@ MonomialsPolygon<real>& monomial);
 <real,3,3>&G, Matrix<real,3,Dynamic>&B);
 	
 public:
-    SolverVEM3D(std::function<real(const Point<3,real>&)> 
-inputForceTerm);
+    SolverVEM3D(muParserInterface<3,real>& inputForceTerm);
  
     virtual real computeKnownTerm(const shared_ptr<Polyhedron
 <3, real>>& element, const shared_ptr<MeshPoint<3,real>>& 
@@ -641,10 +648,9 @@ typename real=double>
 class BoundaryCondition {
 protected:
     const MeshType& mesh;
-    std::function<real(Point<embedded,real>&)> boundaryFunction;
+    muParserInterface<embedded,real>& boundaryFunction;
 
-    BoundaryCondition(const MeshType&
-inputMesh,std::function<real(Point<embedded,real>&)> 
+    BoundaryCondition(const MeshType& inputMesh,muParserInterface<embedded,real>& 
 inputBoundaryFunction);
 
 public:
@@ -680,8 +686,8 @@ MeshElement,real> {
 
 public:
     // Standard constructor
-    Dirichlet(const MeshType& mesh,std::function<real(Point
-<embedded,real>&)> boundaryFunction);
+    Dirichlet(const MeshType& mesh,muParserInterface<embedded,real>& 
+boundaryFunction);
 	
     // Decide wheter the computed Kloc will be added to the global matrix.
     virtual void addToTripletList(Matrix<real,Dynamic,Dynamic>& 
@@ -725,8 +731,7 @@ protected:
     VectorX<real> difference;
     const vector<shared_ptr<MeshPoint<embedded,real>>>& 
 pointVector;
-    std::function<real(Point<embedded,real>&)> 
-realSolutionFunction;
+    muParserInterface<embedded,real>& realSolutionFunction;
 	
     SparseMatrix<real>& stiffnessMatrix;
 	
@@ -734,12 +739,9 @@ realSolutionFunction;
     void computeRealSolution(); 
 	
 public:
-    Error(const VectorX<real>& inputSolution,
-const vector<shared_ptr<MeshPoint<embedded,real>>>& 
-inputPointVector,
-std::function<real(Point<embedded,real>&)> 
-inputRealSolutionFunction,
-SparseMatrix<real>& inputStiffnessMatrix);
+    Error(const VectorX<real>& inputSolution,const vector<shared_ptr<MeshPoint
+<embedded,real>>>& inputPointVector,muParserInterface<embedded,real>& 
+inputRealSolutionFunction,SparseMatrix<real>& inputStiffnessMatrix);
 
     // L infinite norm of the error
     real LInfinity();

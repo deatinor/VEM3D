@@ -35,7 +35,6 @@ Convergence/OutputSquare/solution3D-ne128.txt
 *.DS_Store
 
 # Ignore LaTeX stuff
-*.pdf
 *.log
 *.aux
 *.gz
