@@ -59,7 +59,7 @@ If changes are restricted to these properties there is *no need to recompile the
 It is sufficient to change the datafile and then run again with `./vem`.
 For more information about the datafile, see the information in the example file.
 
-## `Doxygen/`
+## `src/Doxygen/`
 
 We used Doxygen to provide the documentation.
 To get it in the VEM/src/Doxygen folder run:
