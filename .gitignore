@@ -60,4 +60,4 @@ Python/Old/
 # Don't ignore README
 !READMEvem.txt 
 !READMEvisualization.txt
-!VEM/VEM/Doxyfile
+!VEM/Doxyfile
