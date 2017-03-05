@@ -5,7 +5,7 @@ This folder `VEM/` is about the whole C++ program.
 This folder is composed of 4 subfolders:
 * src
 * Datafile
-* Doxygen
+* src/Doxygen
 * Output
 
 ## `src/`
@@ -62,7 +62,7 @@ For more information about the datafile, see the information in the example file
 ## `Doxygen/`
 
 We used Doxygen to provide the documentation.
-To get it under the VEM folder run:
+To get it in the VEM/src/Doxygen folder run:
 
 `doxygen Doxyfile`
 
